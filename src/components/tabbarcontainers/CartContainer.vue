@@ -1,6 +1,6 @@
 <template>
   <div>
-      Hello Vue
+      购物车
   </div>
 </template>
 
