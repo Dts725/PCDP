@@ -2,14 +2,14 @@ import Vue from "vue";
 
 //引入根组件
 import App from "./App.vue"
-
 // import login from "./components/login.vue"
 //引入路由配置
 import router from "./routers/router.js"
 
-
+import './img/icon/iconfont.css'
 //引入mint-ui
 import MintUI from 'mint-ui'
+import "./commn.css";
 import 'mint-ui/lib/style.css'
 
 Vue.use(MintUI);

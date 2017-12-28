@@ -16,7 +16,8 @@ import NewsInfo from "../components/news/NewsInfo.vue"
 
 
 import PicList from "../components/pictures/PicList.vue"
-import login from "../components/login.vue";
+import login from "../components/login.vue"
+import Reset from "../components/comment/passwordReset.vue"
 
 //<pm added at 2017年11月16日16:38:30  关于什么什么的代码>
 //</pm>
@@ -32,6 +33,10 @@ export default new VueRouter({
             component: login
         },
        
+        {
+            path: "/reset",
+            component: Reset
+        },
        
         {
             path: "/home",
@@ -61,6 +66,10 @@ export default new VueRouter({
             path: "/home/piclist/:id?",
             component: PicList
         },
+        // {
+        //     path: "/comment/PasswordReset.vue",
+        //     component: passwordReset
+        // },
   
     ]
 });

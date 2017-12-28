@@ -5,7 +5,7 @@
       <mt-button icon="more" slot="right"></mt-button> -->
     <!-- </mt-header> -->
 
-      <router-view class="main"/>
+      <router-view/>
 
     <!-- <nav class="mui-bar mui-bar-tab">
 			<router-link class="mui-tab-item1" to="/home">
@@ -24,7 +24,7 @@
 				<span class="mui-icon mui-icon-search"></span>
 				<span class="mui-tab-label">搜索</span>
 			</router-link> -->
-		</nav>
+		<!-- </nav> -->
   </div>
 </template>
 

@@ -29,5 +29,8 @@
     "vue-template-compiler": "^2.5.3",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.4"
+  },
+  "dependencies": {
+    "mint-ui": "^2.2.13"
   }
 }
