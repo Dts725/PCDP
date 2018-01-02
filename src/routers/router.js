@@ -5,19 +5,12 @@ import Vue from "vue"
 //使用Vue.use方法加载VueRouter模块
 Vue.use(VueRouter)
 
-import HomeContainer from "../components/tabbarcontainers/HomeContainer.vue"
-import CartContainer from "../components/tabbarcontainers/CartContainer.vue"
-import MemberContainer from "../components/tabbarcontainers/MemberContainer.vue"
-import SearchContainer from "../components/tabbarcontainers/SearchContainer.vue"
-
-
-import NewsList from "../components/news/NewsList.vue"
-import NewsInfo from "../components/news/NewsInfo.vue"
-
-
-import PicList from "../components/pictures/PicList.vue"
-import login from "../components/login.vue"
-import Reset from "../components/comment/passwordReset.vue"
+import Pieces from "../components/tabbarcontainers/ToPieces.vue"
+import Sign from "../components/tabbarcontainers//Sign.vue"
+import Detention from "../components/tabbarcontainers//Detention.vue"
+import Mine from "../components/tabbarcontainers/Mine.vue"
+import Login from "../components/login.vue"
+import Reset from "../components/comment/PasswordReset.vue"
 
 //<pm added at 2017年11月16日16:38:30  关于什么什么的代码>
 //</pm>
@@ -30,47 +23,29 @@ export default new VueRouter({
         },
         {
             path: "/login",
-            component: login
+            component: Login
         },
        
         {
             path: "/reset",
             component: Reset
         },
-       
         {
-            path: "/home",
-            component: HomeContainer
+            path: "/pieces",
+            component: Pieces
         },
         {
-            path: "/cart",
-            component: CartContainer,
+            path: "/sign",
+            component: Sign
         },
         {
-            path: "/member",
-            component: MemberContainer
+            path: "/detention",
+            component: Detention
         },
         {
-            path: "/search",
-            component: SearchContainer
-        },
-        {
-            path: "/home/newslist",
-            component: NewsList
-        },
-        {
-            path: "/home/newsinfo/:id",
-            component: NewsInfo
-        },
-        {
-            path: "/home/piclist/:id?",
-            component: PicList
-        },
-        // {
-        //     path: "/comment/PasswordReset.vue",
-        //     component: passwordReset
-        // },
-  
+            path: "/mine",
+            component: Mine
+        }
     ]
 });
 
