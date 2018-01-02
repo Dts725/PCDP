@@ -17,11 +17,12 @@
 
 <script>
 import { Toast } from 'mint-ui';
+
 export default {
   data () {
-      return {
-        pieces : "到件"
-      }
+    return {
+
+    }
   },
   methods: {
       openToast() {

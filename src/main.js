@@ -11,7 +11,6 @@ import './img/icon/iconfont.css'
 import MintUI from 'mint-ui'
 import "./commn.css";
 import 'mint-ui/lib/style.css'
-
 Vue.use(MintUI);
 
 

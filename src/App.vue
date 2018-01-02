@@ -5,7 +5,7 @@
       
       <router-view/>
 
-     <nav v-if="true" class="mui-bar mui-bar-tab" >
+     <nav v-show="flag()" class="mui-bar mui-bar-tab" >
 			  <router-link class="mui-tab-item1" to="/pieces" >
 				  <span class="iconfont mui-icon"> &#xe605;</span>
 				  <span class="mui-tab-label" >到件</span>
@@ -28,25 +28,31 @@
 </template>
 
 <script>
+import  coo from  './config'
+
+
 export default {
 data () {
-   
-
   return {
-     message : [
-      "到件",
-      "签收",
-      "滞留",
-      "我的"
-    ]
+
+
   }
   
 },
 methods : {
-  tittle(){
 
+
+  flag(){
+    
+      console.log( coo.getDataUrl())
+      // location.href
+    return   coo.getDataUrl();
   }
+  
+
+
 }
+
 };
 </script>
 
@@ -92,5 +98,13 @@ html body {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
+.mui-bar .mui-icon {
+    font-size: 24px;
+    position: relative;
+    z-index: 20;
+    padding-top: 10px;
+    left: 0%;
+    transform: translateY(0px);
+    padding-bottom: 10px;
+}
 </style>
