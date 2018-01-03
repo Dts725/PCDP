@@ -1,20 +1,54 @@
+ import axios from 'axios'
 export default {
-   
- getDataUrl : ()=> {
+    //判断是否显示app 首页的组件
+
+    //var LoginUrl = 'http://10.224.66.135:8081/pcp-web/'; //涛爷本地环境IP地址
+    LoginUrl : 'http://10.230.34.166:8080/pcp-web/',//测试环境IP地址
+    //var LoginUrl ='https://pcp.deppon.com/pcp-web/';//线上地址；
+    depponVersion : '0.0.1.0' ,//版本号；
+    sysCode  : "APP",
+    refreshImgUrlID: 'http://10.230.34.166:8080/pcp-web/pcpmobile/getGenerateSessionId.action',//测试获取验证码ID地址
+    refreshImgUrl: 'http://10.230.34.166:8080/pcp-web/pcpmobile/securityCode.action?sessionId=',//测试刷新验证码地址
+    //封装缓存
+    testLoginUrl: 'http://10.230.34.166:8080/pcp-web/pcpmobile/userLogin.action',
+    getCache :(key) =>{
+      return  window.localStorage.getItem(key)
+    },
+    setCache : (key,values) => {
+        window.localStorage.setItem(key,values)
+    },
+    getDataUrl : ()=> {
  
         var url = window.location.href;
-        console.log(url);
+        // console.log(url);
      if (url.substr(-6) === "/login" || url.substr(-1) === "/" || url.substr(-6) === "/reset"   ){
          return false;
      } else {
-      
-  
             //   self.location.reload(); 
-              return true;
-    
-        
+            return true;
      }
 
     },
-   
+    //点击获取后台sessionId
+    getSessionId: (url ) => {
+        let sessionId
+        axios({
+            methods: "post",
+            url: url
+        }).then(res => {
+            // console.log(res.data.success ===true)
+            // console.log(res.status === 200)
+
+            if ((res.data.success === true) && (res.status === 200)) {
+               sessionId = res.data.sessionId;
+                window.localStorage.setItem("sessionId", sessionId)
+
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+        
+        return sessionId
+    },
+    
 }

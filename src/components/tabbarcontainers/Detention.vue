@@ -1,9 +1,5 @@
 <template>
   <div>
- <mt-header  title="滞留">
-         <!-- <mt-button icon="back" slot="left" v-show="false">返回</mt-button> -->
-         <!-- <mt-button icon="more" slot="right"></mt-button>  -->
-      </mt-header>
   </div>
 </template>
 

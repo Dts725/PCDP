@@ -1,24 +1,26 @@
 <template>
   <div class="top-app">
- 
+     <mt-header v-show="flag()"  v-bind:title="mesage[forTittle()]">
+    
+      </mt-header>
 
       
       <router-view/>
 
      <nav v-show="flag()" class="mui-bar mui-bar-tab" >
-			  <router-link class="mui-tab-item1" to="/pieces" >
+			  <router-link class="mui-tab-item1" to="/pieces?0" >
 				  <span class="iconfont mui-icon"> &#xe605;</span>
 				  <span class="mui-tab-label" >到件</span>
 		  	</router-link>
-			  <router-link class="mui-tab-item1" to="/sign">
+			  <router-link class="mui-tab-item1" to="/sign?1">
 			  	<span class="mui-icon iconfont">&#xe773;</span>
 			  	<span class="mui-tab-label">签收</span>
 		  	</router-link>
-		  	<router-link class="mui-tab-item1" to="/detention">
+		  	<router-link class="mui-tab-item1" to="/detention?2">
 				  <span class="mui-icon iconfont">&#xe654;<span class="mui-badge">9</span></span>
 				  <span class="mui-tab-label">滞留</span>
 		  	</router-link>
-	  		<router-link class="mui-tab-item1" to="/mine">
+	  		<router-link class="mui-tab-item1" to="/mine?3">
 			  	<span class="mui-icon iconfont">&#xe611;</span>
 				  <span class="mui-tab-label">我的</span>
 		  	</router-link> 
@@ -34,18 +36,23 @@ import  coo from  './config'
 export default {
 data () {
   return {
-
+    mesage : [
+      "到件",
+      "签收",
+      "滞留",
+      "我的"
+    ]
 
   }
   
 },
 methods : {
-
-
+  //再出拿到哈希值 决定tittle 的名字
+  forTittle(){
+    return  location.hash.substr(-1);
+  },
+  //判断模块显示隐藏
   flag(){
-    
-      console.log( coo.getDataUrl())
-      // location.href
     return   coo.getDataUrl();
   }
   

@@ -11,15 +11,33 @@ import Detention from "../components/tabbarcontainers//Detention.vue"
 import Mine from "../components/tabbarcontainers/Mine.vue"
 import Login from "../components/login.vue"
 import Reset from "../components/comment/PasswordReset.vue"
+import Hello  from '../components/Hello.vue'
 
-//<pm added at 2017年11月16日16:38:30  关于什么什么的代码>
-//</pm>
+// const routes = [
+//     {
+//         path: '/',
+//         name: "欢迎",
+//         meta: {
+//             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+//         },
+//         component: resolve => require(["../components/Hello.vue"], resolve)
+//     },
+//     {
+//         path: '/login',
+//         name: "登录",
+//         // meta: {
+//         //   requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+//         //  },
+//         component: resolve => require(["../components/login.vue"], resolve)
+//     }
+// ]
 
 export default new VueRouter({
+
     routes: [
-        {
+            {
             path: "/",
-            redirect: "/login"
+            component: Login
         },
         {
             path: "/login",
@@ -28,22 +46,35 @@ export default new VueRouter({
        
         {
             path: "/reset",
+           
             component: Reset
         },
         {
             path: "/pieces",
+            meta: {
+                requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            },
             component: Pieces
         },
         {
             path: "/sign",
+            meta: {
+                requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            },
             component: Sign
         },
         {
             path: "/detention",
+            meta: {
+                requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            },
             component: Detention
         },
         {
             path: "/mine",
+            meta: {
+                requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            },
             component: Mine
         }
     ]

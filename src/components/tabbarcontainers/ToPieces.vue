@@ -1,10 +1,8 @@
 <template>
  
   <div class="top">
-    <mt-header  title="到件">
-         <!-- <mt-button icon="back" slot="left" v-show="false">返回</mt-button> -->
-         <!-- <mt-button icon="more" slot="right"></mt-button>  -->
-      </mt-header>
+
+    
     <div>
         <mt-search v-model="value" cancel-text="取消" placeholder="请输入运单号">
         </mt-search>

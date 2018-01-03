@@ -18,6 +18,24 @@ Vue.use(MintUI);
 import "../libs/mui/css/mui.css"
 import "../libs/mui/css/icons-extra.css"
 
+    router.beforeEach((to, from, next) => {
+        // console.log(to.meta.requireAuth)
+        if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
+            if (false) { // 通过vuex state获取当前的token是否存在
+                next();
+            }
+            else {
+                next({
+                    path: '/login',
+                    query: { redirect: to.VueRouter } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+                })
+            }
+        }
+        else {
+            next();
+        }
+    })
+
 var vm = new Vue({
     el: "#app",
     router,

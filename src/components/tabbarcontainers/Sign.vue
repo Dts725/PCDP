@@ -1,9 +1,6 @@
 <template>
   <div>
-   <mt-header  title="签收">
-         <!-- <mt-button icon="back" slot="left" v-show="false">返回</mt-button> -->
-         <!-- <mt-button icon="more" slot="right"></mt-button>  -->
-      </mt-header>
+签收
   </div>
 </template>
 

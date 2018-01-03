@@ -5,13 +5,13 @@
       </span>
      <div class="page-part login-ipt"  >
        <div class="iconfont">&#xe611;</div>
-       <mt-field style="border:0px 0px 0px 0px;"   placeholder="登录邮箱"   type="email"> 
+       <mt-field style="border:0px 0px 0px 0px;"   v-model="info.userName"  placeholder="输入账号"   type="email"> 
       </mt-field>
       <div class="iconfont">&#xe621;</div>
-      <mt-field placeholder="密码" type="password">
+      <mt-field placeholder="输入密码"  v-model="info.userPassword" type="password">
       </mt-field>     
       <div class="iconfont">&#xe67b;</div>
-      <mt-field placeholder="验证码" v-model="Verification" type="text">
+      <mt-field placeholder="输入验证码" v-model="info.Verification" type="text">
         <img  @click="refreshImg" v-bind:src="VerificationImg"     class="loginSecurityCode">
       </mt-field>
     <router-link to="/pieces">
@@ -29,68 +29,90 @@
 <script>
 import axios from "axios";
 import { Toast } from 'mint-ui';
+import coo from '../config.js'
 export default {
  data () {
 
-
-   var test = true; //true的时候就是本地联调，false的时候就是正式
-   //var LoginUrl = 'http://10.224.66.135:8081/pcp-web/'; //涛爷本地环境IP地址
-    var LoginUrl = 'http://10.230.34.166:8080/pcp-web/'; //测试环境IP地址
-    //var LoginUrl ='https://pcp.deppon.com/pcp-web/';//线上地址；
-    var depponVersion = '0.0.1.0'; //版本号；
-    var sysCode = "APP";
     return {
-         Verification : "",
-         VerificationImg :  'http://10.230.34.166:8080/pcp-web/pcpmobile/securityCode.action?sessionId=RrXrLzVnCpxEYDk3RUQYXCdS1514509483146&amp;'
-    }
- },
-  methods : {
-      openToast() {
-          message: '请输入验证码',
-        Toast('提示信息');
+      VerificationImg : "",
+      info :{
+      sessionId       : "",
+      userName        : "",
+      userPassword    : "",
+      Verification    : "",
+
+      },
+      
+      openToast : () => {
+        Toast('请检查输入');
       },
 
-      openToastWithIcon() {
+      openToastWithIcon : () => {
         Toast({
-          message: '请输入验证码',
+          message: '登陆失败请重新输入',
           iconClass: 'mintui mintui-success'
         });
       },
 
-      openBottomToast() {
+      openBottomToast : () => {
         Toast({
           message: '请输入验证码',
           position: 'bottom'
         });
       },
-      //发送登陆情趣
+   
+   
+    }
+ },
+ //页面元素显示前执行内容
+ created () {
+
+   this.refreshImg();
+ },
+  methods : {
+
+      //发送登陆请求
      loading () {
-        //校验验证码
-       if(Verification===""){
-          openToast();
-          return
+       var dataArray=[]
+        //检查输入是否为空
+       if(this.Verification==="" || this.userName === "" || this.userPassword === ""){
+          this.openToast();
+          return;
+       }
+       for (let key in this.info) {
+         dataArray.push(this.info[key]);
        }
        //发送请求
        axios({
          methods : "post",
-         url : LoginUrl,
-         data : {
-
-         }
+         url :coo.testLoginUrl ,
+         data : JSON.stringify(dataArray.join())
+          // {
+          //   "mobileLoginName" : this.userName,
+          //   "mobileLoginPwd"  : this.userPassword,
+          //   "securityCode"    : this.Verification,
+          //   "sessionId"       : this.sessionId
+          // }
        }).then(res =>{
-          if(res.success==true){
+         console.log(res);
+          if(res.data.success==true){
 
           }
        }).catch(err => {
+         this.openToastWithIcon();
          console.log(err);
        })
 
      },
-     //点击更换验证码
+   
       refreshImg () {
-        // console.log("date=" + new Date().getTime());
-    
-      this.VerificationImg ='http://10.230.34.166:8080/pcp-web/pcpmobile/securityCode.action?sessionId=RrXrLzVnCpxEYDk3RUQYXCdS1514509483146&amp;'+"date=" + new Date().getTime()
+        //获取sessionId
+         coo.getSessionId(coo.refreshImgUrlID);
+        // coo.getSessionId(coo.refreshImgUrlID);
+        this.info.sessionId=coo.getCache("sessionId");
+        this.VerificationImg =coo. refreshImgUrl+ this.info.sessionId +";date=" + new Date().getTime()
+   
+          console.log(this.info.sessionId)
       }
   }
 
