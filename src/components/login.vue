@@ -5,17 +5,17 @@
       </span>
      <div class="page-part login-ipt"  >
        <div class="iconfont">&#xe611;</div>
-       <mt-field style="border:0px 0px 0px 0px;"   v-model="info.userName"  placeholder="输入账号"   type="email"> 
+       <mt-field style="border:0px 0px 0px 0px;"   v-model.trim="userName"  placeholder="输入账号"   type="email"> 
       </mt-field>
       <div class="iconfont">&#xe621;</div>
-      <mt-field placeholder="输入密码"  v-model="info.userPassword" type="password">
+      <mt-field placeholder="输入密码"  v-model.trim="userPassword" type="password">
       </mt-field>     
       <div class="iconfont">&#xe67b;</div>
-      <mt-field placeholder="输入验证码" v-model="info.Verification" type="text">
+      <mt-field placeholder="输入验证码"  v-model.trim="Verification" type="text">
         <img  @click="refreshImg" v-bind:src="VerificationImg"     class="loginSecurityCode">
       </mt-field>
-    <router-link to="/pieces">
-      <mt-button type="primary" size="large" @click="loading">登录</mt-button>
+    <router-link  to="/pieces">
+      <mt-button type="primary"  @click="loading" size="large">登录</mt-button>
     </router-link>
     </div>
     <router-link style= "  font-size: 80%;
@@ -35,13 +35,12 @@ export default {
 
     return {
       VerificationImg : "",
-      info :{
+      info            : "",
       sessionId       : "",
       userName        : "",
       userPassword    : "",
       Verification    : "",
 
-      },
       
       openToast : () => {
         Toast('请检查输入');
@@ -49,7 +48,7 @@ export default {
 
       openToastWithIcon : () => {
         Toast({
-          message: '登陆失败请重新输入',
+          message: coo.getCache("message"),
           iconClass: 'mintui mintui-success'
         });
       },
@@ -71,32 +70,40 @@ export default {
  },
   methods : {
 
-      //发送登陆请求
+      //登陆
      loading () {
-       var dataArray=[]
         //检查输入是否为空
        if(this.Verification==="" || this.userName === "" || this.userPassword === ""){
           this.openToast();
           return;
        }
-       for (let key in this.info) {
-         dataArray.push(this.info[key]);
-       }
+        this.info={
+           "userReq": {
+             "mobileLoginName" : this.userName,
+            "mobileLoginPwd"  : this.userPassword,
+           },
+           "securityCode"    : this.Verification,
+            "sessionId"       : this.sessionId
+          }
+        this.info= JSON.stringify(this.info)
+          console.log(this.info)
        //发送请求
        axios({
-         methods : "post",
+         method : "POST",
+         headers: {'Content-Type':'application/json; charset=UTF-8'},
          url :coo.testLoginUrl ,
-         data : JSON.stringify(dataArray.join())
-          // {
-          //   "mobileLoginName" : this.userName,
-          //   "mobileLoginPwd"  : this.userPassword,
-          //   "securityCode"    : this.Verification,
-          //   "sessionId"       : this.sessionId
-          // }
+         data :  this.info
        }).then(res =>{
-         console.log(res);
-          if(res.data.success==true){
+           if(res.data.success==true && res.status){
 
+               coo.setCache("cooperateCode",res.data.cooperateCode);
+               coo.setCache("accessToken",res.data.accessToken)
+               coo.setCache("mobileUserName",res.data.mobileUserName)
+               coo.setCache("roleAuth",res.data.roleAuth)
+              
+          }else {
+               coo.setCache("message",res.data.message)
+              openToastWithIcon();
           }
        }).catch(err => {
          this.openToastWithIcon();
@@ -104,15 +111,24 @@ export default {
        })
 
      },
-   
+        //图片刷新
       refreshImg () {
-        //获取sessionId
-         coo.getSessionId(coo.refreshImgUrlID);
-        // coo.getSessionId(coo.refreshImgUrlID);
-        this.info.sessionId=coo.getCache("sessionId");
-        this.VerificationImg =coo. refreshImgUrl+ this.info.sessionId +";date=" + new Date().getTime()
+
+          //获取后台图片ID
+        axios({
+            method: "post",
+            url: coo.refreshImgUrlID
+        }).then(res => {
+            if ((res.data.success === true) && (res.status === 200)) {
+                this.sessionId=res.data.sessionId;
+                // 得到刷新图片的地址
+                this.VerificationImg =coo. refreshImgUrl+ this.sessionId +"&date:" + new Date().getTime()
+            // console.log(this.sessionId)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
    
-          console.log(this.info.sessionId)
       }
   }
 

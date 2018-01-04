@@ -30,25 +30,6 @@ export default {
 
     },
     //点击获取后台sessionId
-    getSessionId: (url ) => {
-        let sessionId
-        axios({
-            methods: "post",
-            url: url
-        }).then(res => {
-            // console.log(res.data.success ===true)
-            // console.log(res.status === 200)
-
-            if ((res.data.success === true) && (res.status === 200)) {
-               sessionId = res.data.sessionId;
-                window.localStorage.setItem("sessionId", sessionId)
-
-            }
-        }).catch(err => {
-            console.log(err)
-        })
-        
-        return sessionId
-    },
+   
     
 }

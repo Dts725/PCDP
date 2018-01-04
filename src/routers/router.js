@@ -13,25 +13,6 @@ import Login from "../components/login.vue"
 import Reset from "../components/comment/PasswordReset.vue"
 import Hello  from '../components/Hello.vue'
 
-// const routes = [
-//     {
-//         path: '/',
-//         name: "欢迎",
-//         meta: {
-//             requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-//         },
-//         component: resolve => require(["../components/Hello.vue"], resolve)
-//     },
-//     {
-//         path: '/login',
-//         name: "登录",
-//         // meta: {
-//         //   requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
-//         //  },
-//         component: resolve => require(["../components/login.vue"], resolve)
-//     }
-// ]
-
 export default new VueRouter({
 
     routes: [
