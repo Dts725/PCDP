@@ -1,18 +1,19 @@
 <template>
-<div  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+<div   ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
 
 
    <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore"
   infinite-scroll-disabled="loading">
-    <ul >
+    <ul class="wrap">
       <li  class = "info"  v-for="item in proCopyright" :key="item.index">
            <ul>
                   <li><span>运单号  </span>     <span v-cloak>  : {{item.wayBillNo}}    </span></li>
-                  <li><span class="iconfont"> &#xe610;</span><span v-cloak> :  {{item.recipients}}   </span></li>
-                  <li><span class="iconfont"> &#xe632;</span><span v-cloak> : {{item.recipientsPhone}} </span></li>
-                  <li><span>到件操作  </span>   <span v-cloak >  : {{item.arriveTime | formatDate}}   </span></li>
-                  <li><span>签收操作  </span>   <span v-cloak >  : {{item.signforTime | formatDate}}  </span></li>
-                  <li><span  class="iconfont">&#xe620; </span>   <span v-cloak> : {{item.receiveAddress}}  </span></li>
+                  <li><span class="iconfont"> &#xe610;</span><span v-cloak> : &nbsp; {{item.recipients}}   </span></li>
+                  <li><span class="iconfont"> &#xe632;</span><span v-cloak> : &nbsp;<a :href="'tel:' +item.recipientsPhone">{{item.recipientsPhone}}</a> </span></li>
+                   <!-- <li><span class="iconfont"> &#xe632;</span><span v-cloak> : &nbsp;{{item.recipientsPhone}}</span></li> -->
+                  <li><span class="iconfont"> &#xe61c; :</span>   <span v-cloak > &nbsp;到件操作  &nbsp; {{item.arriveTime | formatDate}}   </span></li>
+                  <li><span class="iconfont" > &#xe606; :</span>   <span v-cloak > &nbsp;签收操作  &nbsp; {{item.signforTime | formatDate}}  </span></li>
+                  <li><span  class="iconfont">&#xe620;</span> <span v-cloak> : &nbsp;{{item.receiveAddress}}  </span></li>
                   <li v-show="item.status == 3" class = "sign-detention">  
                            <router-link to="">
                                 <span>签收</span>
@@ -42,6 +43,7 @@
         data () {
 
             return {
+                flagMounted : true,
                 loading : false,            //默认false 滑动加载
                 flag : false,               //flag  为true  上拉刷新加载数据 默认false
                 wrapperHeight : 0,          //页面scroll 数据
@@ -71,7 +73,8 @@
             },
         methods : {
             loadMoreMore : function () {
-                //滚动加载
+                console.log("出发了scroll");
+                
                 // this.loading =true;
                     if(this.totalpage == 1){
                          this.pageNo = 1;
@@ -93,7 +96,7 @@
                 
             },
             loadBottom : function () {
-                // console.log("上来刷新执行了");
+                console.log("上来刷新执行了");
                   if(this.totalpage == 1){
                     this.pageNo = 1;
                     this.allLoaded = true;
@@ -109,36 +112,45 @@
 
                               
                                  //此处若用 请给给上拉事件加节流阀
-                                //   setTimeout (() => {
-
-                                //   }, 2500)
+                               
                                   this.upLoadMore();
                       } 
-                    this.$refs.loadmore.onBottomLoaded();// 固定方法，查询完要调用一次，用于重新定位
-                      
+                         setTimeout (() => {
+                                    this.$refs.loadmore.onBottomLoaded();// 固定方法，查询完要调用一次，用于重新定位
+
+                                  }, 2500)
 
             },
             //下拉刷新执行
             loadTop : function  () {
-                // console.log("下拉刷新执行了");
-                
+                console.log("下拉刷新执行了");
+                this.loadPageList()
                 if(this.totalpage == 1){
                          this.pageNo = 1;
                          this.allLoaded = true;
                        
-                       } else if (this.pageNo >=this.totalpage){
-                                this.$refs.loadmore.onTopLoaded();                                    
-                            }else{
-                                    //   console.log("more方法查询的")
+                       } else{      
+                           if (this.pageNo >=this.totalpage){
+                                setTimeout (() => {
+                                         
+                           this.$refs.loadmore.onTopLoaded();
+                                         },300)                                 
+                            }else {
+                                   //   console.log("more方法查询的")
                                     this.pageNo = parseInt(this.pageNo) + 1;
                                     this.start = this.start +8;
                                     this.flag = true;
-                                    //此处若用 请给给下拉事件加节流阀
-                                    //   setTimeout (() => {
-                                    //       },2500)
                                     this.upLoadMore();
+                                  setTimeout (() => {
+                                         
+                                    this.$refs.loadmore.onTopLoaded();
+                                         },300)  
+                            }
+                                 
+                                    //此处若用 请给给下拉事件加节流阀
+                                     
                       }
-                this.$refs.loadmore.onTopLoaded();
+                       
 
             },
 
@@ -165,8 +177,13 @@
                              data    :   JSON.stringify(data)
                         }).then(res => {
                               if(res.status == 200 && res.data.success == true) {
-                                 this.totalpage = Math.ceil(res.data.totalCount/this.limit);  //计算出需要刷新的次数              
-                                 this.proCopyright = res.data.wayBillInfoList;
+
+                                  if(!this.flag  && this.flagMounted) {
+                                      this.flagMounted = false;
+                                      this.proCopyright = res.data.wayBillInfoList;
+                                  } 
+                                      this.totalpage = Math.ceil(res.data.totalCount/this.limit);  //计算出需要刷新的次数              
+                                
                                 }
                             }).catch( function (error) {
             
@@ -206,7 +223,8 @@
                         data    :   JSON.stringify(data)
                     }).then(res => {
                             if(res.status == '200' && res.data.success == true) {
-                             // this.totalpage = Math.ceil(res.data.totalCount/this.limit);
+
+                                // this.totalpage = Math.ceil(res.data.totalCount/this.limit);
                                 if(this.flag){
                                     this.proCopyright =res.data.wayBillInfoList.concat(this.proCopyright);
                                     this.flag = false;
@@ -214,9 +232,9 @@
 
                                     this.proCopyright = this.proCopyright.concat(res.data.wayBillInfoList);
                                 }
-                            // console.log(this.totalpage);
-                            // console.log(this.pageNo);
-                            // console.log(this.proCopyright);
+                            console.log(this.totalpage);
+                            console.log(this.pageNo);
+                            console.log(this.proCopyright);
                     
                             }
                         }).catch( err => {
@@ -231,6 +249,7 @@
 </script>
 <style slot-scope>
     .info{
+        letter-spacing: 0.1px;
       /* display: flex; */
       font-size: 80%;
       /* width: 90%; */
@@ -239,15 +258,12 @@
       border-top: 1px solid #ddd;
       border-bottom: 1px solid #ddd;
       margin-bottom:5px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
       color : #444;
       box-sizing: border-box;
       padding: 5px 15px;
     }
       .info  ul > li{
-          line-height: 1.5em;
+          line-height: 2em;
       }
     .info  ul > li:nth-of-type(1) {
         height: 3em;
@@ -266,9 +282,16 @@
  
         
     }
-    /* .info  ul >li:nth-of-type(2) span:nth-last-of-type(1){
-
-    } */
+    .info  ul >li:nth-of-type(2) {
+       word-break:break-all;
+       height: auto;
+  
+    }
+       .info  ul >li:nth-of-type(6) {
+       word-break:break-all;
+       height: auto;
+       
+    }
     ul {
         list-style: none;
     }
@@ -287,11 +310,16 @@
          color : #fff;
      }
     .sign-detention a {
+        margin-top: 1em;
         background-color: #387ef5;
         width: 45%;
+        line-height: 2.2em;
         border-radius: 4px;
         text-align: center;
-        /* color: #fff; */
+        color: #fff;
+    }
+    .wrap {
+        margin-bottom: 49px;
     }
 </style>
 
