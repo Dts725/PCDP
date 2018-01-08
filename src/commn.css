@@ -174,3 +174,11 @@ input,
 select {
     vertical-align: middle;
 }
+.clearfix::after {
+content: "";
+display: block;
+width: 0;
+height: 0;
+clear: both;
+
+}

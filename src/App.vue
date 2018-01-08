@@ -1,11 +1,13 @@
 <template>
   <div class="top-app">
-     <mt-header v-show="flag()"  v-bind:title="mesage[forTittle()]">
+     <mt-header  v-show="flag()"  v-bind:title="mesage[forTittle()]">
     
       </mt-header>
 
-      
-      <router-view/>
+          <div class="router-view">
+             <router-view/>
+        </div>   
+       
 
      <nav v-show="flag()" class="mui-bar mui-bar-tab" >
 			  <router-link class="mui-tab-item1" to="/pieces?0" >
@@ -113,5 +115,18 @@ html body {
     left: 0%;
     transform: translateY(0px);
     padding-bottom: 10px;
+}
+.router-view{
+    overflow: auto;
+    box-sizing: border-box;
+    padding-bottom: 50px;
+    padding-top: 40px; 
+    /* z-index: -2; */
+
+}
+.mint-header {
+    position: fixed;
+    z-index: 20;
+    width: 100%;
 }
 </style>

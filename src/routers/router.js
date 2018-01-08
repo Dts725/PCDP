@@ -11,7 +11,7 @@ import Detention from "../components/tabbarcontainers//Detention.vue"
 import Mine from "../components/tabbarcontainers/Mine.vue"
 import Login from "../components/login.vue"
 import Reset from "../components/comment/PasswordReset.vue"
-import Hello  from '../components/Hello.vue'
+
 
 export default new VueRouter({
 

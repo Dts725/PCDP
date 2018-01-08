@@ -14,7 +14,7 @@
       <mt-field placeholder="输入验证码"  v-model.trim="Verification" type="text">
         <img  @click="refreshImg" v-bind:src="VerificationImg"     class="loginSecurityCode">
       </mt-field>
-    <router-link  to="/pieces">
+    <router-link  to="/pieces?0">
       <mt-button type="primary"  @click="loading" size="large">登录</mt-button>
     </router-link>
     </div>
