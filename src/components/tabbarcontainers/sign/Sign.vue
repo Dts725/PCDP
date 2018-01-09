@@ -125,8 +125,14 @@
                             // console.log(data);
                          
                          data = JSON.stringify(data)
+                            let signUrl = "";
+                         if(statusCode === "700"){
+                             signUrl ="pcpmobile/signforWayBill.action"; //签收接口
+                         }else {
+                           signUrl = "pcpmobile/retentionWayBill.action"; //滞留接口
+                         }
                         //调用签收接口
-                        coo.sign(data,(coo.LoginUrl+"pcpmobile/signforWayBill.action")).then(res => {
+                        coo.sign(data,(coo.LoginUrl+signUrl)).then(res => {
                             if( res.status == 200 && res.data.success == true){
                                 if (statusCode === "700") {
                                      this.proCopyright[this.$index].status= '7';
@@ -222,7 +228,10 @@
                 if(this.totalpage == 1){
                          this.pageNo = 1;
                          this.allLoaded = true;
-                       
+                        setTimeout (() => {
+                                         
+                           this.$refs.loadmore.onTopLoaded();
+                                         },300)  
                        } else{      
                            if (this.pageNo >=this.totalpage){
                                 setTimeout (() => {
