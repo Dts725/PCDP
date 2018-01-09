@@ -5,15 +5,15 @@
    <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore"
   infinite-scroll-disabled="loading">
     <ul class="wrap">
-      <li  class = "info"  v-for="item in proCopyright" :key="item.index">
+      <li  class = "info-sign"  v-for="item in proCopyright" :key="item.index">
            <ul>
-                  <li><span>运单号  </span>     <span v-cloak>  : {{item.wayBillNo}}    </span></li>
-                  <li><span class="iconfont"> &#xe610;</span><span v-cloak> : &nbsp; {{item.recipients}}   </span></li>
-                  <li><span class="iconfont"> &#xe632;</span><span v-cloak> : &nbsp;<a :href="'tel:' +item.recipientsPhone">{{item.recipientsPhone}}</a> </span></li>
+                  <li><span>运单号  </span><span >  :{{item.wayBillNo}}    </span></li>
+                  <li><span class="iconfont" v-cloak>&#xe610; :&nbsp; {{item.recipients}}   </span></li>
+                  <li><span class="iconfont" v-cloak>&#xe632; : <a :href="'tel:' +item.recipientsPhone">{{item.recipientsPhone}}</a> </span></li>
                    <!-- <li><span class="iconfont"> &#xe632;</span><span v-cloak> : &nbsp;{{item.recipientsPhone}}</span></li> -->
-                  <li><span class="iconfont"> &#xe61c; :</span>   <span v-cloak > &nbsp;到件操作  &nbsp; {{item.arriveTime | formatDate}}   </span></li>
-                  <li><span class="iconfont" > &#xe606; :</span>   <span v-cloak > &nbsp;签收操作  &nbsp; {{item.signforTime | formatDate}}  </span></li>
-                  <li><span  class="iconfont">&#xe620;</span> <span v-cloak> : &nbsp;{{item.receiveAddress}}  </span></li>
+                  <li><span class="iconfont" v-cloak>&#xe61c; : &nbsp;到件操作  &nbsp; {{item.arriveTime | formatDate}}   </span></li>
+                  <li><span class="iconfont" v-cloak >&#xe606; : &nbsp;签收操作  &nbsp; {{item.signforTime | formatDate}}  </span></li>
+                  <li><span  class="iconfont" v-cloak>&#xe620; : &nbsp;{{item.receiveAddress}}  </span></li>
                   <li v-show="item.status == 3" class = "sign-detention">  
                            <router-link to="">
                                 <span>签收</span>
@@ -43,7 +43,7 @@
         data () {
 
             return {
-                flagMounted : true,
+                flagMounted : true,         //判断是否首次刷新页面
                 loading : false,            //默认false 滑动加载
                 flag : false,               //flag  为true  上拉刷新加载数据 默认false
                 wrapperHeight : 0,          //页面scroll 数据
@@ -73,7 +73,7 @@
             },
         methods : {
             loadMoreMore : function () {
-                console.log("出发了scroll");
+                // console.log("出发了scroll");
                 
                 // this.loading =true;
                     if(this.totalpage == 1){
@@ -96,7 +96,7 @@
                 
             },
             loadBottom : function () {
-                console.log("上来刷新执行了");
+                // console.log("上来刷新执行了");
                   if(this.totalpage == 1){
                     this.pageNo = 1;
                     this.allLoaded = true;
@@ -123,7 +123,8 @@
             },
             //下拉刷新执行
             loadTop : function  () {
-                console.log("下拉刷新执行了");
+                // console.log("下拉刷新执行了");
+                this.flag = true;
                 this.loadPageList()
                 if(this.totalpage == 1){
                          this.pageNo = 1;
@@ -139,7 +140,6 @@
                                    //   console.log("more方法查询的")
                                     this.pageNo = parseInt(this.pageNo) + 1;
                                     this.start = this.start +8;
-                                    this.flag = true;
                                     this.upLoadMore();
                                   setTimeout (() => {
                                          
@@ -232,9 +232,9 @@
 
                                     this.proCopyright = this.proCopyright.concat(res.data.wayBillInfoList);
                                 }
-                            console.log(this.totalpage);
-                            console.log(this.pageNo);
-                            console.log(this.proCopyright);
+                            // console.log(this.totalpage);
+                            // console.log(this.pageNo);
+                            // console.log(this.proCopyright);
                     
                             }
                         }).catch( err => {
@@ -248,8 +248,9 @@
     }
 </script>
 <style slot-scope>
-    .info{
-        letter-spacing: 0.1px;
+    .info-sign{
+    
+     letter-spacing: 0.1px;
       /* display: flex; */
       font-size: 80%;
       /* width: 90%; */
@@ -262,14 +263,24 @@
       box-sizing: border-box;
       padding: 5px 15px;
     }
-      .info  ul > li{
+      .info-sign  ul > li{
           line-height: 2em;
       }
-    .info  ul > li:nth-of-type(1) {
+      .info-sign  ul > li span {
+          font-size: 90%;
+          /* display: block; */
+
+      }
+    .info-sign ul>li:nth-of-type(1)~li >span {
+        position: relative;
+        left: 0;
+        top :0 ;
+    }
+    .info-sign  ul > li:nth-of-type(1) {
         height: 3em;
         line-height: 2.5em;
     }
-    .info  ul > li:nth-of-type(2) {
+    .info-sign  ul > li:nth-of-type(2) {
         height: 2em;
         line-height: 2em;
     }
@@ -277,17 +288,19 @@
         height: 2em;
         line-height: 2em;
     }
-    .info  ul > li:nth-of-type(1) span:nth-of-type(2){
+    .info-sign  ul > li:nth-of-type(1) span:nth-of-type(2){
         font-weight: 700;
  
         
     }
-    .info  ul >li:nth-of-type(2) {
+    .info-sign  ul >li:nth-of-type(2) {
        word-break:break-all;
        height: auto;
+        /* color: red; */
+     
   
     }
-       .info  ul >li:nth-of-type(6) {
+       .info-sign  ul >li:nth-of-type(6) {
        word-break:break-all;
        height: auto;
        
@@ -313,6 +326,7 @@
         margin-top: 1em;
         background-color: #387ef5;
         width: 45%;
+        font-size: 95%;
         line-height: 2.2em;
         border-radius: 4px;
         text-align: center;
@@ -321,5 +335,15 @@
     .wrap {
         margin-bottom: 49px;
     }
+   
+
+  
+    /* .info-sign ul >li .iconfont {
+        display: block;
+        float: left;
+        width: 1.2em;
+    } */
+    
+  
 </style>
 

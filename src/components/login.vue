@@ -67,7 +67,10 @@ export default {
  created () {
 
    this.refreshImg();
+
  },
+ 
+ 
   methods : {
 
       //登陆

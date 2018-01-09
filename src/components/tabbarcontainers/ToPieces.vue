@@ -22,6 +22,9 @@ export default {
 
     }
   },
+    // mounted(){
+    //      window.location.reload();
+    // },
   methods: {
       openToast() {
         Toast('请输入运单号');
