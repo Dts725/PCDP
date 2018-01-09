@@ -5,7 +5,8 @@
    <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore"
   infinite-scroll-disabled="loading">
     <ul class="wrap">
-      <li  class = "info-sign"  v-for="item in proCopyright" :key="item.index">
+      <li  class = "info-sign"  v-for="(item,index) in proCopyright" :key="item.id" >
+          <img :src="isImg(item.status)" alt="">
            <ul>
                   <li><span>运单号  </span><span >  :{{item.wayBillNo}}    </span></li>
                   <li><span class="iconfont" v-cloak>&#xe610; :&nbsp; {{item.recipients}}   </span></li>
@@ -14,13 +15,18 @@
                   <li><span class="iconfont" v-cloak>&#xe61c; : &nbsp;到件操作  &nbsp; {{item.arriveTime | formatDate}}   </span></li>
                   <li><span class="iconfont" v-cloak >&#xe606; : &nbsp;签收操作  &nbsp; {{item.signforTime | formatDate}}  </span></li>
                   <li><span  class="iconfont" v-cloak>&#xe620; : &nbsp;{{item.receiveAddress}}  </span></li>
-                  <li v-show="item.status == 3" class = "sign-detention">  
-                           <router-link to="">
+                  <li v-show="item.status == 3" class = "sign-detention"  @click="getSignInfo(index,item.id,item.wayBillNo)">  
+                       <mt-button @click.native="openConfirm('是否进行签收操作?','700')" size="large">
+                            
                                 <span>签收</span>
-                           </router-link>
-                            <router-link to="">
+                         
+                       </mt-button>
+                        <mt-button @click.native="openConfirm('是否进行滞留操作?','900')" size="large">
                                 <span>滞留件</span>
-                            </router-link>
+                          </mt-button>
+
+ 
+                            
                   </li>
                   
 
@@ -35,29 +41,36 @@
     
     import { Loadmore } from 'mint-ui';
     import {wrapper} from 'mint-ui'
-    import {formatDate}  from '../../date.js'
+    import {formatDate}  from '../../../date.js'
     import axios from 'axios'
-    import coo   from '../../config.js'
+    import coo   from '../../../config.js'
+    import { MessageBox } from 'mint-ui' //confirm
+
+    import { Toast } from 'mint-ui';
  
     export default {
         data () {
 
             return {
-                flagMounted : true,         //判断是否首次刷新页面
-                loading : false,            //默认false 滑动加载
-                flag : false,               //flag  为true  上拉刷新加载数据 默认false
-                wrapperHeight : 0,          //页面scroll 数据
-                start  : 0,                 //数据加载开始的位置
-                limit  : 8,                 // 每页允许的加载数据条数
+                $index               : 0,                    //获取当前项的index
+                $id                  :  "" ,  
+                $wayBillNo           :  0,              //获取当前项的id
+                // signStatus : true,              //判断是否签收
+                flagMounted          : true,         //判断是否首次刷新页面
+                loading              : false,            //默认false 滑动加载
+                flag                 : false,               //flag  为true  上拉刷新加载数据 默认false
+                wrapperHeight        : 0,          //页面scroll 数据
+                start                : 0,                 //数据加载开始的位置
+                limit                : 8,                 // 每页允许的加载数据条数
                 accessToken          :    coo.getCache('accessToken'),
                 cooperateCode        :    coo.getCache('cooperateCode'),
                 mobileUserName       :    coo.getCache('mobileUserName'),
                 roleAuth             :    coo.getCache('roleAuth'),
-                pageNo:1,                   //加载的页数  判断刷新次数 pangeNo ++
-                proCopyright:[],            //用来存储后台接受的数据
-                allLoaded: false,           //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
-                scrollMode:"auto",          //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
-                totalpage:1,                //计算出来应有的 刷新次数   
+                pageNo               :1,                   //加载的页数  判断刷新次数 pangeNo ++
+                proCopyright         :[],            //用来存储后台接受的数据
+                allLoaded            : false,           //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
+                scrollMode           :"auto",          //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
+                totalpage            :1,                //计算出来应有的 刷新次数   
             }
         },
 
@@ -72,6 +85,86 @@
                       this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;//组件更新动态计算页面scroll 数据
             },
         methods : {
+            //获取当前索引值
+            getSignInfo : function ($index,$id,$wayBillNo){
+                    this.$index     = $index;
+                    this.$id        = $id;
+                    this.$wayBillNo = $wayBillNo;
+             
+            },
+             openToast(msg) {
+                 Toast({
+                    message: msg,
+                    duration: 900,
+                    className : "open-tosat"
+            });
+              
+            },
+              openConfirm(msg,statusCode) {
+                  //提示信息
+                 MessageBox.confirm(msg).then(action=> {
+                        
+                        let  data ={
+            
+                  
+                             "accessToken"        :    this.accessToken,
+                             "cooperateCode"      :    this.cooperateCode,
+                             "mobileUserName"     :    this.mobileUserName,
+                             "operationRequest"   :     {
+                                 "operationId"          :  this.$id,
+                                 "operationStatus"      :  statusCode,
+                                 "operationWayBillNo"   :  this.$wayBillNo
+                             }
+          
+                         };
+                            // console.log(statusCode);
+                            
+                            // console.log(this.$index);
+                            // console.log(this.$id);
+                            // console.log(this.$wayBillNo);
+                            // console.log(data);
+                         
+                         data = JSON.stringify(data)
+                        //调用签收接口
+                        coo.sign(data,(coo.LoginUrl+"pcpmobile/signforWayBill.action")).then(res => {
+                            if( res.status == 200 && res.data.success == true){
+                                if (statusCode === "700") {
+                                     this.proCopyright[this.$index].status= '7';
+                                    this.openToast("已签收");  
+                                }else {
+                                     this.proCopyright[this.$index].status= '7';
+                                     this.openToast("已滞留");  
+                                }
+                            }
+                            
+                         
+                        }).catch(err => {
+
+                            if(statusCode === "700"){
+
+                                this.openToast("签收失败 请重试!");
+                            } else {
+                                this.openToast("滞留失败 请重试!");
+                                
+                            }
+                            console.log(err);
+                        })
+                     
+
+                 
+                 });
+             },
+            //添加水印图片地址
+            isImg :  function (data) {
+                let src= "";
+                if (data == 7 ) {
+                    
+                    src= '../../../img/imgQian@2x.png'
+                }else{
+                    src = '../../../img/imgWatie@2x.png'
+                }
+                return src
+            },
             loadMoreMore : function () {
                 // console.log("出发了scroll");
                 
@@ -244,12 +337,17 @@
                         })
    
             },
+        
+    
+
+
+    
         }
     }
 </script>
 <style slot-scope>
     .info-sign{
-    
+        position: relative;
      letter-spacing: 0.1px;
       /* display: flex; */
       font-size: 80%;
@@ -262,6 +360,13 @@
       color : #444;
       box-sizing: border-box;
       padding: 5px 15px;
+    }
+    .info-sign>img {
+        width: 4.5em;
+        position: absolute;
+        right:1em;
+        top: 50%;
+        transform: translateY(-50%);
     }
       .info-sign  ul > li{
           line-height: 2em;
@@ -309,6 +414,8 @@
         list-style: none;
     }
     .sign-detention{
+    /* position: absolute; */
+    /* z-index: 100; */
      display: flex;
      justify-content: space-around ;
      align-items: center;
@@ -319,31 +426,50 @@
      /* text-align: center; */
      background-color:#fff;
     }
-    .sign-detention  span {
-         color : #fff;
-     }
-    .sign-detention a {
+  
+
+    .mint-button--default {
         margin-top: 1em;
         background-color: #387ef5;
         width: 45%;
         font-size: 95%;
-        line-height: 2.2em;
-        border-radius: 4px;
+        height: 2.2em;
+        border-radius: 3px;
         text-align: center;
         color: #fff;
-    }
+}
     .wrap {
         margin-bottom: 49px;
     }
-   
+    .mint-button::after {
+    background-color: #dcdeef;
+    content: " ";
+    opacity: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+}
+.mint-msgbox {
+
+    width: 75%;
+    font-size: 80%;
+}
+.mint-msgbox-message {
+    color: #646161;
+    margin: 0;
+    text-align: center;
+    line-height: 36px;
+}
 
   
-    /* .info-sign ul >li .iconfont {
-        display: block;
-        float: left;
-        width: 1.2em;
-    } */
-    
-  
+   .className{
+       height: 100%;
+       width: 100%;
+   }
+  .open-tosat{
+      font-size: 100%;   
+  }
 </style>
 

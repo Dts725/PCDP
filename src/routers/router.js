@@ -5,10 +5,10 @@ import Vue from "vue"
 //使用Vue.use方法加载VueRouter模块
 Vue.use(VueRouter)
 
-import Pieces from "../components/tabbarcontainers/ToPieces.vue"
-import Sign from "../components/tabbarcontainers//Sign.vue"
-import Detention from "../components/tabbarcontainers//Detention.vue"
-import Mine from "../components/tabbarcontainers/Mine.vue"
+import Pieces from "../components/tabbarcontainers/topieces/ToPieces.vue"
+import Sign from "../components/tabbarcontainers/sign/Sign.vue"
+import Detention from "../components/tabbarcontainers/detention/Detention.vue"
+import Mine from "../components/tabbarcontainers/mine/Mine.vue"
 import Login from "../components/login.vue"
 import Reset from "../components/comment/PasswordReset.vue"
 
