@@ -15,13 +15,13 @@
                   <li><span class="iconfont" v-cloak>&#xe61c; : &nbsp;到件操作  &nbsp; {{item.arriveTime | formatDate}}   </span></li>
                   <li><span class="iconfont" v-cloak >&#xe606; : &nbsp;签收操作  &nbsp; {{item.signforTime | formatDate}}  </span></li>
                   <li><span  class="iconfont" v-cloak>&#xe620; : &nbsp;{{item.receiveAddress}}  </span></li>
-                  <li v-show="item.status == 3" class = "sign-detention"  @click="getSignInfo(index,item.id,item.wayBillNo)">  
-                       <mt-button @click.native="openConfirm('是否进行签收操作?','700')" size="large">
+                  <li v-show="item.status == 3" class = "sign-detention">  
+                       <mt-button @click.native="openConfirm('是否进行签收操作?','700',item.id,item.wayBillNo,index)" size="large">
                             
                                 <span>签收</span>
                          
                        </mt-button>
-                        <mt-button @click.native="openConfirm('是否进行滞留操作?','900')" size="large">
+                        <mt-button @click.native="openConfirm('是否进行滞留操作?','900',item.id,item.wayBillNo,index)" size="large">
                                 <span>滞留件</span>
                           </mt-button>
 
@@ -52,9 +52,9 @@
         data () {
 
             return {
-                $index               : 0,                    //获取当前项的index
-                $id                  :  "" ,  
-                $wayBillNo           :  0,              //获取当前项的id
+                // $index               : 0,                    //获取当前项的index
+                // $id                  :  "" ,  
+                // $wayBillNo           :  0,              //获取当前项的id
                 // signStatus : true,              //判断是否签收
                 flagMounted          : true,         //判断是否首次刷新页面
                 loading              : false,            //默认false 滑动加载
@@ -86,12 +86,12 @@
             },
         methods : {
             //获取当前索引值
-            getSignInfo : function ($index,$id,$wayBillNo){
-                    this.$index     = $index;
-                    this.$id        = $id;
-                    this.$wayBillNo = $wayBillNo;
+            // getSignInfo : function ($index,$id,$wayBillNo){
+            //         this.$index     = $index;
+            //         this.$id        = $id;
+            //         this.$wayBillNo = $wayBillNo;
              
-            },
+            // },
              openToast(msg) {
                  Toast({
                     message: msg,
@@ -100,7 +100,7 @@
             });
               
             },
-              openConfirm(msg,statusCode) {
+              openConfirm(msg,statusCode,$id,$wayBillNo,$index) {
                   //提示信息
                  MessageBox.confirm(msg).then(action=> {
                         
@@ -111,9 +111,9 @@
                              "cooperateCode"      :    this.cooperateCode,
                              "mobileUserName"     :    this.mobileUserName,
                              "operationRequest"   :     {
-                                 "operationId"          :  this.$id,
+                                 "operationId"          :  $id,
                                  "operationStatus"      :  statusCode,
-                                 "operationWayBillNo"   :  this.$wayBillNo
+                                 "operationWayBillNo"   :  $wayBillNo
                              }
           
                          };
@@ -131,39 +131,44 @@
                          }else {
                            signUrl = "pcpmobile/retentionWayBill.action"; //滞留接口
                          }
-                        //调用签收接口
-                        coo.sign(data,(coo.LoginUrl+signUrl)).then(res => {
-                            if( res.status == 200 && res.data.success == true){
-                                if (statusCode === "700") {
-                                     this.proCopyright[this.$index].status= '7';
-                                    this.openToast("已签收");  
-                                }else {
-                                     this.proCopyright[this.$index].status= '7';
-                                     this.openToast("已滞留");  
-                                }
-                            }
-                            
+                    
                          
-                        }).catch(err => {
+                        //调用签收接口
+                              coo.sign(data,(coo.LoginUrl+signUrl)).then(res => {
+                                        // console.log(res);
+                                        // console.log("还知道求情成功了回来");
+                                        
+                                        
+                                        if( res.status == 200 && res.data.success == true){
+                                            if (statusCode === "700") {
+                                                this.proCopyright[$index].status= '7';
+                                                this.openToast("已签收");  
+                                            }else {
+                                                this.proCopyright[$index].status= '7';
+                                                this.openToast("已滞留");  
+                                                this.proCopyright.splice($index,1);
+                                        }
+                                    }
+                         
+                                 }).catch(err => {
+                                            // console.log("你干嘛进来");
+                            
 
-                            if(statusCode === "700"){
+                                            if(statusCode === "700"){
 
-                                this.openToast("签收失败 请重试!");
-                            } else {
-                                this.openToast("滞留失败 请重试!");
+                                                this.openToast("签收失败 请重试!");
+                                            } else {
+                                                this.openToast("滞留失败 请重试!");
                                 
-                            }
-                            console.log(err);
-                        })
-                     
-
-                 
-                 });
+                                            }
+                                            console.log(err);
+                                        })                 
+                                });
              },
             //添加水印图片地址
             isImg :  function (data) {
                 let src= "";
-                if (data == 7 ) {
+                if (data === "7" ) {
                     
                     src= '../../../img/imgQian@2x.png'
                 }else{

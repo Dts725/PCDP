@@ -1,6 +1,6 @@
 <template>
    <div class="query">
-        <mt-button @click="openToast" size="large">查询运单</mt-button>
+     <mt-button @click="openToast" size="large">查询运单</mt-button>
     </div>
 </template>
 <script>

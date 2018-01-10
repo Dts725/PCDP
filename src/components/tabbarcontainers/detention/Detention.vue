@@ -138,7 +138,7 @@
                                      this.proCopyright[this.$index].status= '7';
                                     this.openToast("已签收");  
                                 }else {
-                                     this.proCopyright[this.$index].status= '7';
+                                     this.proCopyright[this.$index].status= '11';
                                      this.openToast("已退件");  
                                 }
                             }
@@ -163,10 +163,10 @@
             //添加水印图片地址
             isImg :  function (data) {
                 let src= "";
-                if (data == 9 ) {
+                if (data ===  "9" ) {
                     
                     src= '../../../img/imgZhiliu@2x.png'
-                }else if(data == 11){
+                }else if(data === "11"){
                     src = '../../../img/imgTui@2x.png'
                 } else{
                     src = '../../../img/imgQian@2x.png'

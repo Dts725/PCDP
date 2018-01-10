@@ -38,7 +38,16 @@ export default {
             data        : data
             
         })
-    } 
-   
+    },
+   //封装全局网络报错提示信息
+
+    Toast :  (msg,times) => {
+        times  = times || 900;
+        Toast({
+            message: msg,
+            position: 'middle',
+            duration: parseInt(times)
+        });
+    }
     //LoginUrl + "pcpmobile/signforWayBill.action",
 }

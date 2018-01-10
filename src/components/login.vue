@@ -82,11 +82,11 @@ export default {
        }
         this.info={
            "userReq": {
-             "mobileLoginName" : this.userName,
-            "mobileLoginPwd"  : this.userPassword,
+             "mobileLoginName"  : this.userName,
+            "mobileLoginPwd"    : this.userPassword,
            },
-           "securityCode"    : this.Verification,
-            "sessionId"       : this.sessionId
+           "securityCode"       : this.Verification,
+            "sessionId"         : this.sessionId
           }
         this.info= JSON.stringify(this.info)
           console.log(this.info)
