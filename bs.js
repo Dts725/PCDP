@@ -2,7 +2,7 @@
 * @Author: 田田
 * @Date:   2018-01-05 21:56:23
  * @Last Modified by: mikey.zhaopeng
- * @Last Modified time: 2018-01-06 09:17:01
+ * @Last Modified time: 2018-01-11 14:22:34
 */
 // require 加载 browser-sync 模块
 var bs = require('browser-sync').create();

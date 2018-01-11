@@ -81,8 +81,9 @@
                        }  
             },
         mounted(){
-                     this.loadPageList();  //初次访问查询列表
-                      this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;//组件更新动态计算页面scroll 数据
+            
+                    this.loadPageList();  //初次访问查询列表
+                    this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;//组件更新动态计算页面scroll 数据
             },
         methods : {
             //获取当前索引值
@@ -275,14 +276,18 @@
                     "roleAuth"           :    this.roleAuth
           
                          };
+                         data = JSON.stringify(data);
+
                         // 查询数据
 
-                       axios({
-                             method  :  'POST',
-                             headers : {'Content-Type':'application/json; charset=UTF-8'},
-                             url     :   coo.LoginUrl    +   "pcpmobile/querySignWayBillInfo.action",//获取签收数据接口,
-                             data    :   JSON.stringify(data)
-                        }).then(res => {
+                    //    axios({
+                    //          method  :  'POST',
+                    //          headers : {'Content-Type':'application/json; charset=UTF-8'},
+                    //          url     :   coo.LoginUrl    +   "pcpmobile/querySignWayBillInfo.action",//获取签收数据接口,
+                    //          data    :   JSON.stringify(data)
+                    //     })
+
+                        coo.sign(data,( coo.LoginUrl    +   "pcpmobile/querySignWayBillInfo.action")).then(res => {
                               if(res.status == 200 && res.data.success == true) {
 
                                   if(!this.flag  && this.flagMounted) {
@@ -320,15 +325,17 @@
                     "roleAuth"           :    this.roleAuth
           
                      };
-        
+                        data = JSON.stringify(data)
                      // console.log(this.pageNo);
                      //  console.log( this.totalpage );
-                axios({
-                        method  :  'POST',
-                        headers : {'Content-Type':'application/json; charset=UTF-8'},
-                        url     :   coo.LoginUrl    +   "pcpmobile/querySignWayBillInfo.action",//获取签收数据接口,
-                        data    :   JSON.stringify(data)
-                    }).then(res => {
+                // axios({
+                //         method  :  'POST',
+                //         headers : {'Content-Type':'application/json; charset=UTF-8'},
+                //         url     :   coo.LoginUrl    +   "pcpmobile/querySignWayBillInfo.action",//获取签收数据接口,
+                //         data    :   JSON.stringify(data)
+                //     })
+                    
+                    coo.sign(data,(coo.LoginUrl    +   "pcpmobile/querySignWayBillInfo.action")).then(res => {
                             if(res.status == '200' && res.data.success == true) {
 
                                 // this.totalpage = Math.ceil(res.data.totalCount/this.limit);
@@ -359,7 +366,7 @@
         }
     }
 </script>
-<style slot-scope>
+<style slot-scope >
     .info-sign{
         position: relative;
      letter-spacing: 0.1px;

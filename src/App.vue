@@ -48,6 +48,9 @@ data () {
   }
   
 },
+created () {
+    
+},
 methods : {
   //再出拿到哈希值 决定tittle 的名字
   forTittle(){
@@ -129,4 +132,5 @@ html body {
     z-index: 20;
     width: 100%;
 }
+
 </style>

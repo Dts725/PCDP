@@ -5,7 +5,7 @@
       </span>
      <div class="page-part login-ipt"  >
        <div class="iconfont">&#xe611;</div>
-       <mt-field style="border:0px 0px 0px 0px;"   v-model.trim="userName"  placeholder="输入账号"   type="email"> 
+       <mt-field style="border:0px 0px 0px 0px;"   v-model.trim="userName"  placeholder="输入账号"   type="number"> 
       </mt-field>
       <div class="iconfont">&#xe621;</div>
       <mt-field placeholder="输入密码"  v-model.trim="userPassword" type="password">
@@ -14,9 +14,9 @@
       <mt-field placeholder="输入验证码"  v-model.trim="Verification" type="text">
         <img  @click="refreshImg" v-bind:src="VerificationImg"     class="loginSecurityCode">
       </mt-field>
-    <router-link  to="/pieces?0">
+   
       <mt-button type="primary"  @click="loading" size="large">登录</mt-button>
-    </router-link>
+    
     </div>
     <router-link style= "  font-size: 80%;
   float: right;" class="reset-password" to="/reset">
@@ -30,6 +30,8 @@
 import axios from "axios";
 import { Toast } from 'mint-ui';
 import coo from '../config.js'
+import { Indicator } from 'mint-ui';
+import router  from 'router'
 export default {
  data () {
 
@@ -45,7 +47,7 @@ export default {
       openToast : () => {
         Toast('请检查输入');
       },
-
+     //封装错误提示信息
       openToastWithIcon : () => {
         Toast({
           message: coo.getCache("message"),
@@ -64,9 +66,13 @@ export default {
     }
  },
  //页面元素显示前执行内容
- created () {
+ mounted () {
 
    this.refreshImg();
+   this.userName = coo.getCache("mobileUserName")
+   this.userPassword = coo.getCache("userPassword")
+ 
+  
 
  },
  
@@ -82,7 +88,7 @@ export default {
        }
         this.info={
            "userReq": {
-             "mobileLoginName"  : this.userName,
+            "mobileLoginName"  : this.userName,
             "mobileLoginPwd"    : this.userPassword,
            },
            "securityCode"       : this.Verification,
@@ -91,22 +97,33 @@ export default {
         this.info= JSON.stringify(this.info)
           console.log(this.info)
        //发送请求
-       axios({
-         method : "POST",
-         headers: {'Content-Type':'application/json; charset=UTF-8'},
-         url :coo.testLoginUrl ,
-         data :  this.info
-       }).then(res =>{
+    //    axios({
+    //      method : "POST",
+    //      headers: {'Content-Type':'application/json; charset=UTF-8'},
+    //      url :coo.testLoginUrl ,
+    //      data :  this.info
+    //    })
+        coo.sign(this.info,coo.testLoginUrl).then(res =>{
            if(res.data.success==true && res.status){
-
-               coo.setCache("cooperateCode",res.data.cooperateCode);
+            //    console.log("就来执行了");
                coo.setCache("accessToken",res.data.accessToken)
+               
+               coo.setCache("cooperateCode",res.data.cooperateCode);
                coo.setCache("mobileUserName",res.data.mobileUserName)
-               coo.setCache("roleAuth",res.data.roleAuth)
-              
+               coo.setCache("roleAuth",res.data.roleAuth) 
+               coo.setCache("userPassword",this.userPassword) 
+               coo.setCache("cooperateName",res.data.cooperateName) 
+                
+            //    Indicator.open('加载中...');
+            //    setTimeout (function (){
+            //         Indicator.close();
+            //    },500)
+                   this.$router.push('pieces?0');
+               
           }else {
-               coo.setCache("message",res.data.message)
-              openToastWithIcon();
+              this.refreshImg();
+              coo.setCache("message",res.data.message)
+               openToastWithIcon();
           }
        }).catch(err => {
          this.openToastWithIcon();
@@ -140,7 +157,7 @@ export default {
 
 <style lang="css" sloat-scope>
 .body {
-  margin: 20% auto;
+  margin: 0 auto;
   width: 80%;
 }
 .body span img {
@@ -150,7 +167,7 @@ export default {
 .login-ipt {
   margin-top: 20%;
 }
-input[type="email"],
+input[type="number"],
 input[type="password"],
 input[type="text"] {
   

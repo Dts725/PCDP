@@ -1,16 +1,93 @@
 <template>
-  <div>
+  <div class="mine">
 
-      我的
+
+      <ul>
+
+                <li>
+                    <mt-button v-cloak size="large" class="mine-button" type="default" style="line-height : 1.6em;margin-top : 0.5em">  
+                        <span  class="iconfont" style="font-size : 1.4em;margin-right : 15px;"> &#xe61b;&nbsp;&nbsp;&nbsp;: </span>
+                        <span  v-cloak style=""> {{userName}} {{userPhone}}</span>
+                    </mt-button>
+                 </li>
+        
+               <li>
+                   <router-link to="">
+                    <mt-button v-cloak size="large" class="mine-button" type="default" style="line-height : 1.6em;margin-top : 0.5em">  
+                        <span  class="iconfont" style="font-size : 1.4em;margin-right : 15px;"> &#xe65a;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+                        <span >统计</span>
+                    </mt-button>
+                    </router-link>
+                </li>
+                
+               <li> 
+                    <mt-button size="large" @click="quick" type="danger" style="margin-top :2.5em; text-align : center " >  
+               
+                        退出
+                    </mt-button>
+                </li>
+      </ul>
+     <!-- <button @click="quick"> 退出</button>
+
+     <button @click="what"> 点击查看版本</button> -->
   </div>
 </template>
 
 <script>
+import coo from '../../../config.js'
+import { Button } from 'mint-ui'
+
 export default {
-  
+    data () {
+      return {
+            userName    :   null,
+            userPhone   :   null
+      }
+    },
+    created ()  {
+        this.userName = coo.getCache("cooperateName");
+        this.userPhone = (coo.getCache("mobileUserName").substr(0,3)+ '****' +coo.getCache("mobileUserName").substr(-4));
+    },
+    methods : {
+        quick : function () {
+            window.localStorage.removeItem("accessToken")
+            this.$router.push('/login')
+        },
+        what : function () {       
+            coo.whtasPhone();
+        }
+    }
 }
 </script>
 
-<style>
+<style slot-scope>
+    .mine ul{
+        margin-top: 20px;
+        width: 95%;
+        margin : 0 auto;
+        list-style-type: none;
+        letter-spacing: 2px;
+
+    }
+    .mint-button--large {
+        font-size : 0.9em;
+        text-indent: 10px;
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
+    .mint-button--default.mine-button{
+    margin-top: 1em;
+    width: 100%;
+    font-size: 95%;
+    height: 2.2em;
+    border-radius: 3px;
+    text-align: left;
+       color: #656b79;
+    background-color: #f6f8fa;
+    box-shadow: 0 0 1px #b8bbbf;
+}
+
+ 
 
 </style>

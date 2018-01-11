@@ -48,6 +48,27 @@ export default {
             position: 'middle',
             duration: parseInt(times)
         });
+    },
+    // 封装判断用户终端是ios 还是Android
+
+       whtasPhone: () => {
+        let u = navigator.userAgent;
+        let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+        let isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+
+           if (isAndroid){
+               // 安卓存储为 "1"
+               window.localStorage.setItem("Android","1")
+           }else {
+               //ios 存储为 "2"
+               window.localStorage.setItem("ios","2")
+               
+           }
+
+
+        // alert('是否是Android：' + isAndroid);
+        // alert('是否是iOS：' + isiOS);
     }
-    //LoginUrl + "pcpmobile/signforWayBill.action",
+ 
 }
+ 

@@ -250,13 +250,14 @@
           
                          };
                         
-
-                       axios({
-                             method  :  'POST',
-                             headers : {'Content-Type':'application/json; charset=UTF-8'},
-                             url     :   coo.LoginUrl    +   "pcpmobile/queryRetentionWayBillInfo.action",// 获取签收数据接口；
-                             data    :   JSON.stringify(data)
-                        }).then(res => {
+                    // JSON.stringify(data)
+                    //    axios({
+                    //          method  :  'POST',
+                    //          headers : {'Content-Type':'application/json; charset=UTF-8'},
+                    //          url     :   coo.LoginUrl    +   "pcpmobile/queryRetentionWayBillInfo.action",// 获取签收数据接口；
+                    //          data    :   JSON.stringify(data)
+                    //     })
+                        coo.sign(data,(coo.LoginUrl    +   "pcpmobile/queryRetentionWayBillInfo.action")).then(res => {
                               if(res.status == 200 && res.data.success == true) {
 
                                   if(!this.flag  && this.flagMounted) {
@@ -294,15 +295,17 @@
                     "roleAuth"           :    this.roleAuth
           
                      };
+                     JSON.stringify(data)
         
                      // console.log(this.pageNo);
                      //  console.log( this.totalpage );
-                axios({
-                        method  :  'POST',
-                        headers : {'Content-Type':'application/json; charset=UTF-8'},
-                        url     :   coo.LoginUrl    +  "pcpmobile/queryRetentionWayBillInfo.action",// 获取签收数据接口；
-                        data    :   JSON.stringify(data)
-                    }).then(res => {
+                // axios({
+                //         method  :  'POST',
+                //         headers : {'Content-Type':'application/json; charset=UTF-8'},
+                //         url     :   coo.LoginUrl    +  "pcpmobile/queryRetentionWayBillInfo.action",// 获取签收数据接口；
+                //         data    :   JSON.stringify(data)
+                //     })
+                    coo.sign(data,(coo.LoginUrl    +  "pcpmobile/queryRetentionWayBillInfo.action")).then(res => {
                             if(res.status == '200' && res.data.success == true) {
 
                                 // this.totalpage = Math.ceil(res.data.totalCount/this.limit);
