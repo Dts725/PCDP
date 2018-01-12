@@ -52,10 +52,6 @@
         data () {
 
             return {
-                // $index               : 0,                    //获取当前项的index
-                // $id                  :  "" ,  
-                // $wayBillNo           :  0,              //获取当前项的id
-                // signStatus : true,              //判断是否签收
                 flagMounted          : true,         //判断是否首次刷新页面
                 loading              : false,            //默认false 滑动加载
                 flag                 : false,               //flag  为true  上拉刷新加载数据 默认false
@@ -86,13 +82,6 @@
                     this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;//组件更新动态计算页面scroll 数据
             },
         methods : {
-            //获取当前索引值
-            // getSignInfo : function ($index,$id,$wayBillNo){
-            //         this.$index     = $index;
-            //         this.$id        = $id;
-            //         this.$wayBillNo = $wayBillNo;
-             
-            // },
              openToast(msg) {
                  Toast({
                     message: msg,
@@ -118,12 +107,7 @@
                              }
           
                          };
-                            // console.log(statusCode);
                             
-                            // console.log(this.$index);
-                            // console.log(this.$id);
-                            // console.log(this.$wayBillNo);
-                            // console.log(data);
                          
                          data = JSON.stringify(data)
                             let signUrl = "";
@@ -279,14 +263,6 @@
                          data = JSON.stringify(data);
 
                         // 查询数据
-
-                    //    axios({
-                    //          method  :  'POST',
-                    //          headers : {'Content-Type':'application/json; charset=UTF-8'},
-                    //          url     :   coo.LoginUrl    +   "pcpmobile/querySignWayBillInfo.action",//获取签收数据接口,
-                    //          data    :   JSON.stringify(data)
-                    //     })
-
                         coo.sign(data,( coo.LoginUrl    +   "pcpmobile/querySignWayBillInfo.action")).then(res => {
                               if(res.status == 200 && res.data.success == true) {
 
@@ -326,15 +302,6 @@
           
                      };
                         data = JSON.stringify(data)
-                     // console.log(this.pageNo);
-                     //  console.log( this.totalpage );
-                // axios({
-                //         method  :  'POST',
-                //         headers : {'Content-Type':'application/json; charset=UTF-8'},
-                //         url     :   coo.LoginUrl    +   "pcpmobile/querySignWayBillInfo.action",//获取签收数据接口,
-                //         data    :   JSON.stringify(data)
-                //     })
-                    
                     coo.sign(data,(coo.LoginUrl    +   "pcpmobile/querySignWayBillInfo.action")).then(res => {
                             if(res.status == '200' && res.data.success == true) {
 

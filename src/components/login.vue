@@ -15,14 +15,14 @@
         <img  @click="refreshImg" v-bind:src="VerificationImg"     class="loginSecurityCode">
       </mt-field>
    
-      <mt-button type="primary"  @click="loading" size="large">登录</mt-button>
+      <mt-button type="primary"  @click="loading" size="large" style="text-align : center">登录</mt-button>
     
     </div>
     <router-link style= "  font-size: 80%;
   float: right;" class="reset-password" to="/reset">
       <span>找回密码</span>
     </router-link>
-         <!-- <mt-button @click.native="openToast" size="large">点击弹出 Toast</mt-button> -->
+ 
   </div>
 </template>
 
@@ -97,12 +97,6 @@ export default {
         this.info= JSON.stringify(this.info)
           console.log(this.info)
        //发送请求
-    //    axios({
-    //      method : "POST",
-    //      headers: {'Content-Type':'application/json; charset=UTF-8'},
-    //      url :coo.testLoginUrl ,
-    //      data :  this.info
-    //    })
         coo.sign(this.info,coo.testLoginUrl).then(res =>{
            if(res.data.success==true && res.status){
             //    console.log("就来执行了");
@@ -113,11 +107,6 @@ export default {
                coo.setCache("roleAuth",res.data.roleAuth) 
                coo.setCache("userPassword",this.userPassword) 
                coo.setCache("cooperateName",res.data.cooperateName) 
-                
-            //    Indicator.open('加载中...');
-            //    setTimeout (function (){
-            //         Indicator.close();
-            //    },500)
                    this.$router.push('pieces?0');
                
           }else {

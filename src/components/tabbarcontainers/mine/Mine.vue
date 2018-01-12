@@ -6,16 +6,16 @@
 
                 <li>
                     <mt-button v-cloak size="large" class="mine-button" type="default" style="line-height : 1.6em;margin-top : 0.5em">  
-                        <span  class="iconfont" style="font-size : 1.4em;margin-right : 15px;"> &#xe61b;&nbsp;&nbsp;&nbsp;: </span>
-                        <span  v-cloak style=""> {{userName}} {{userPhone}}</span>
+                        <span  class="iconfont" style="font-size : 1.4em;margin-right : 15px;"> &#xe61b;&nbsp;&nbsp;&nbsp;:</span>
+                        <span  v-cloak style="">&nbsp;&nbsp;&nbsp;{{userName}}  {{userPhone}}</span>
                     </mt-button>
                  </li>
         
                <li>
-                   <router-link to="">
+                   <router-link to="/count">
                     <mt-button v-cloak size="large" class="mine-button" type="default" style="line-height : 1.6em;margin-top : 0.5em">  
                         <span  class="iconfont" style="font-size : 1.4em;margin-right : 15px;"> &#xe65a;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
-                        <span >统计</span>
+                        <span > &nbsp;&nbsp;&nbsp;统计</span>
                     </mt-button>
                     </router-link>
                 </li>
@@ -27,9 +27,6 @@
                     </mt-button>
                 </li>
       </ul>
-     <!-- <button @click="quick"> 退出</button>
-
-     <button @click="what"> 点击查看版本</button> -->
   </div>
 </template>
 
@@ -78,7 +75,7 @@ export default {
     }
     .mint-button--default.mine-button{
     margin-top: 1em;
-    width: 100%;
+    width: 100%; 
     font-size: 95%;
     height: 2.2em;
     border-radius: 3px;

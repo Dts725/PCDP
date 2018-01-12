@@ -250,13 +250,6 @@
           
                          };
                         
-                    // JSON.stringify(data)
-                    //    axios({
-                    //          method  :  'POST',
-                    //          headers : {'Content-Type':'application/json; charset=UTF-8'},
-                    //          url     :   coo.LoginUrl    +   "pcpmobile/queryRetentionWayBillInfo.action",// 获取签收数据接口；
-                    //          data    :   JSON.stringify(data)
-                    //     })
                         coo.sign(data,(coo.LoginUrl    +   "pcpmobile/queryRetentionWayBillInfo.action")).then(res => {
                               if(res.status == 200 && res.data.success == true) {
 
@@ -299,12 +292,6 @@
         
                      // console.log(this.pageNo);
                      //  console.log( this.totalpage );
-                // axios({
-                //         method  :  'POST',
-                //         headers : {'Content-Type':'application/json; charset=UTF-8'},
-                //         url     :   coo.LoginUrl    +  "pcpmobile/queryRetentionWayBillInfo.action",// 获取签收数据接口；
-                //         data    :   JSON.stringify(data)
-                //     })
                     coo.sign(data,(coo.LoginUrl    +  "pcpmobile/queryRetentionWayBillInfo.action")).then(res => {
                             if(res.status == '200' && res.data.success == true) {
 

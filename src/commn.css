@@ -188,3 +188,6 @@ clear: both;
     display: block;
     text-align: center;
 }
+ul {
+    list-style: none !important;
+}

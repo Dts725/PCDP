@@ -11,6 +11,7 @@ import Detention from "../components/tabbarcontainers/detention/Detention.vue"
 import Mine from "../components/tabbarcontainers/mine/Mine.vue"
 import Login from "../components/login.vue"
 import Reset from "../components/comment/PasswordReset.vue"
+import Count from "../components/tabbarcontainers/mine/Count.vue";
 
 
 export default new VueRouter({
@@ -57,7 +58,15 @@ export default new VueRouter({
                 requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
             },
             component: Mine
-        }
+        },
+        {
+            path: "/count",
+            meta: {
+                requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+            },
+            component: Count
+        },
+        
     ]
 });
 

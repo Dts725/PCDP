@@ -66,13 +66,6 @@ export default {
                         }
             };
             data = JSON.stringify(data);
-            // axios({
-            //     method  :   'POST',
-            //     headers :   {'Content-Type':'application/json; charset=UTF-8'},
-            //     url     :   coo.LoginUrl +"pcpmobile/arriveWayBill.action", //此处测试删除了n
-            //     data    :   data
-
-            // })
             coo.sign(data,coo.LoginUrl +"pcpmobile/arriveWayBill.action").then(res => {
                 if( res.status == 200 && res.data.success == true ) {
 
@@ -117,12 +110,6 @@ export default {
                     "roleAuth"           :    this.roleAuth
             }
           data  = JSON.stringify(data);
-        //     axios({
-        //         method  : 'POST',
-        //         headers : {'Content-Type':'application/json; charset=UTF-8'},
-        //         url     : coo.LoginUrl +"pcpmobile/searchWayBill.action", 
-        //         data    : data
-        //     })
             coo.sign(data,(coo.LoginUrl +"pcpmobile/searchWayBill.action")).then(res => {
                 
                 
