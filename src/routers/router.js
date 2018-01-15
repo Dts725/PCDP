@@ -12,6 +12,7 @@ import Mine from "../components/tabbarcontainers/mine/Mine.vue"
 import Login from "../components/login.vue"
 import Reset from "../components/comment/PasswordReset.vue"
 import Count from "../components/tabbarcontainers/mine/Count.vue";
+import ResetNext from "../components/comment/FindPasswordNext.vue";
 
 
 export default new VueRouter({
@@ -30,6 +31,10 @@ export default new VueRouter({
             path: "/reset",
            
             component: Reset
+        },
+        {
+            path: "/next",
+            component: ResetNext
         },
         {
             path: "/pieces",

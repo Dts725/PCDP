@@ -1,8 +1,8 @@
 <template>
           <div>
           <mt-header id="title-count" title="统计">
-                <router-link to="/mine?0" slot="left">
-                <mt-button class="iconfont"> &#xe6ba; 返回</mt-button>
+                <router-link to="/mine?3" class="iconfont" slot="left"> 
+                &#xe6ba; 返回
           </router-link>
         </mt-header>
                 <div id="top-selected-count">
@@ -26,7 +26,7 @@
                         <ul id="query-data-item"> 
                             <li > 运单号 : <span v-cloak>{{item.wayBillNo}}</span></li>
                             <li v-cloak>{{item.recipients}}</li>
-                            <li v-cloak class="iconfont"> &#xe632;<a :href="'tek:' + item.recipientsPhone">{{item.recipientsPhone}}</a></li>
+                            <li v-cloak class="iconfont"> &#xe632;<a :href="'tel:' + item.recipientsPhone">{{item.recipientsPhone}}</a></li>
                             <li><img :src="imgType(item)" id= "img-count" alt=""></li>
                         </ul>
                     </li>
@@ -42,6 +42,7 @@
 <script>
 import { Header } from 'mint-ui';
 import coo from '../../../config.js'
+
 
 export default {
     data () {
@@ -60,7 +61,12 @@ export default {
              {value   :     "QT_004",       text :  "已取回"},
              {value   :     "QT_005",       text :  "代签收"}
             
+         ],
+         detailNumber : [
+
          ]
+
+         
            
        }
        
@@ -84,11 +90,20 @@ export default {
             data = JSON.stringify(data);
             coo.sign(data,(coo.LoginUrl + "pcpmobile/cooperationDataTotalQuery.action")).then(res => {
                 
-                if (res.status === 200 && res.data.success == true) {
+                if (res.status === 200 && res.data.success == true) {   
                     //存入渲染数据
                     this.dataList = res.data.wayBillTotalResponse;
+
+                    this.queryType  =   [
+                        {value   :     "QT_000",       text :  "全部" + res.data.wayBillTotalResponse.allTotal},
+                        {value   :     "QT_002",       text :  "已签收" + res.data.wayBillTotalResponse.signforTotal},
+                        {value   :     "QT_004",       text :  "已取回" + res.data.wayBillTotalResponse.fetchbackTotal},
+                        {value   :     "QT_005",       text :  "代签收" + res.data.wayBillTotalResponse.waitSignTotal}
+             
+         ];
                     // console.log(this.dataList);
                     // console.log("你不该进来啦");
+
                 }
             }).catch(err => {
                 
@@ -111,7 +126,7 @@ export default {
 }
 </script>
 
-<style slot-scope>
+<style scoped>
 .clearfix::after {
 content: "";
 display: block;
@@ -142,7 +157,6 @@ clear: both;
    position: fixed;
    /* top: 40px;
    left: 0;; */
-    background-color: red;
     display: flex;
     box-sizing: border-box;
    z-index: 555;
@@ -164,6 +178,7 @@ clear: both;
     top: 0%;
     right: 0%;
     height: 100%;
+    z-index: -2;
     
 }
 #query-data-item {
@@ -171,7 +186,7 @@ clear: both;
     position: relative;
     top: 0;
     left: 0;
-    font-size: 50%;
+    font-size: 80%;
     padding: 5px 15px;
     /* border: 1px solid #ddd; */
     margin-bottom: 2px;
@@ -189,7 +204,7 @@ clear: both;
 
 }
 #query-data-item > li:nth-of-type(2) {
-
+    /* float: left; */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -197,15 +212,18 @@ clear: both;
 }
 #query-data-item > li:nth-of-type(3) {
     position: absolute;
-    top: 27px;
-    right: 5%;
-    z-index: 50;
-    text-align: right;
+    bottom: 0px;
+    right: 50%;
+    /* z-index: 556; */
+    height: 50%;
+    /* float: right; */
+    /* text-align: right; */
     width: 35%;
+    transform: translate(150%,25px)
 
 }
 #query-data-item > li:nth-of-type(3) a {
-    font-size: 50%;
+    font-size: 80%;
 }
 #title-count{
     z-index: 555;
@@ -215,6 +233,13 @@ clear: both;
 } */
 #query-datda-list {
     padding-top: 40px 0; 
+}
+.mint-button.iconfont{
+    top: -30px;
+}
+.mint-header-button > a {
+    color: inherit;
+    font-size: 100%;
 }
 </style>
 

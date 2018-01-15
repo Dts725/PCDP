@@ -20,11 +20,11 @@ export default {
  
         var url = window.location.href;
         // console.log(url);
-     if (url.substr(-6) === "/login" || url.substr(-1) === "/" || url.substr(-6) === "/reset" || url.substr(-6) === "/count" ){
-         return false;
+        if (url.substr(-7) === "/sign?1" || url.substr(-9) === "/pieces?0" || url.substr(-12) === "/detention?2" || url.substr(-7) === "/mine?3" ){
+         return true;
      } else {
             //   self.location.reload(); 
-            return true;
+            return false;
      }
 
     },
@@ -43,7 +43,7 @@ export default {
 
     Toast :  (msg,times) => {
         times  = times || 900;
-        Toast({
+     return   Toast({
             message: msg,
             position: 'middle',
             duration: parseInt(times)

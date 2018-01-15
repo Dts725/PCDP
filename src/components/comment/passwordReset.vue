@@ -1,6 +1,6 @@
 <template>
     
- <div>
+ <div class= "top-reset-pwd">
       <mt-header title="找回密码">
         <router-link to="/" slot="left">
         <mt-button icon="back" style="color:#fff">返回</mt-button>
@@ -14,14 +14,17 @@
           <span>找回密码</span>
         </div>
         <div class="page-part reset">
-           <mt-field placeholder="输入账号"   type="email"></mt-field>
-           <mt-field placeholder="输入验证码" type="password"></mt-field>
-            <img  @click="refreshImg" src="http://10.230.34.166:8080/pcp-web/pcpmobile/securityCode.action?sessionId=RrXrLzVnCpxEYDk3RUQYXCdS1514509483146&amp;date=1514510732325" class="loginSecurityCode">
+          <mt-field label="账号  :"  placeholder="请输入账号" v-model="userCode"></mt-field>
+           <mt-field label="验证码  :" placeholder="请输入验证码" v-model="securityCode">
+            <img    @click="refreshImg" :src="VerificationImg" height="150%" width="">
+            </mt-field>
+           <!-- <mt-field placeholder="输入验证码" type="password"></mt-field>
+            <img   @click="refreshImg" src="http://10.230.34.166:8080/pcp-web/pcpmobile/securityCode.action?sessionId=RrXrLzVnCpxEYDk3RUQYXCdS1514509483146&amp;date=1514510732325" class="loginSecurityCode"> -->
          </div>
-         <div class="forget-password-next"> 
-          <router-link to="/reset/next">
-          <span>下一步</span>
-          </router-link>
+         <div class="forget-password-next" @click="nextButton"> 
+      
+        <button>下一步</button>
+    
         </div>
     </div>
         
@@ -29,46 +32,123 @@
  </div>
 </template>
 <script>
-export default {};
+import { Field } from 'mint-ui'
+import coo from '../../config.js'
+import axios from 'axios'
+import { Toast } from 'mint-ui';
+export default {
+    data () {
+        return {
+
+            VerificationImg : null,
+            userCode  : "",
+            securityCode : "",
+            sessionId   : "",
+            openToast (msg,times) {
+             times  = times || 900;
+            Toast({
+            message: msg,
+            position: 'middle',
+            duration: parseInt(times)
+        })
+         }
+        
+            
+        }
+    },
+    created () {
+        this.refreshImg()
+    },
+    methods : {
+    refreshImg : function  () {
+
+          //获取后台图片ID
+        axios({
+            method: "post",
+            url: coo.refreshImgUrlID
+        }).then(res => {
+            if ((res.data.success === true) && (res.status === 200)) {
+                this.sessionId=res.data.sessionId;
+                // 得到刷新图片的地址
+                this.VerificationImg =coo.refreshImgUrl+ this.sessionId +"&date:" + new Date().getTime()
+            // console.log(this.sessionId)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+   
+      },
+      nextButton : function ()  {
+
+          if(!this.securityCode || !this.userCode) {
+            //   console.log("你进来");
+              
+              this.openToast("请检查输入",1500);
+       
+              return  
+          }
+          let data = {
+                "findMobileLoginName": this.userCode,
+                "securityCode": this.securityCode,
+                "sessionId": this.sessionId
+          };
+          data = JSON.stringify(data);  
+          coo.sign(data,(coo.LoginUrl+"pcpmobile/findUserInfo.action")).then(res => {
+              console.log(res);
+              
+              if(res.status === 200 && res.data.success === true) {
+                  
+                    coo.setCache('findSerialUID', res.data.findSerialUID);
+                    coo.setCache('findMobileLoginName', this.userCode);
+                    this.$router.push("/next")
+              } else {
+             
+                     this.refreshImg();
+                    this.Toast(res.data.message,1500);
+          
+              return  
+          
+              }
+
+          }).catch(err => {
+            console.log(err);
+            
+          })
+      }
+
+    }
+};
 </script>
-<style solt-scope>
+<style scoped>
 .body {
   margin: 0 auto;
   width: 90%;
   position: relative;
-  top: 0;
+  top: 0px;
   right: 0;
+  padding-top: 80px;
+
 }
-input[type="email"],
-input[type="password"],
-input[type="text"] {
-  border: 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 0;
-  font-weight: 700;
+.top-reset-pwd{
+    margin-top: -40px;
 }
-.forget-password {
-  width: 50%;
-  margin: 20% 0 0 6%;
-  font-weight: 700;
+.qrdcode {
+    float: left;
 }
-.page-part.reset {
-  margin: 10% 0 10% 0;
-}
-.loginSecurityCode {
-  position: absolute;
-  right: 2%;
-  top: 54%;
-}
-.loginSecurityCode img{
-    width: 20%;
-    height: 13%;
-}
-.forget-password-next{
-  width: 20%;
-  position: relative;
-  top:5%;
-  left:7%;
-  font-weight: 700;
-}
+
+  .forget-password-next {
+      margin-top: 15%;
+      width: 100%;
+     transform: translateX(5%);     width: 100%;
+  }
+ .forget-password-next button {
+    background-color: #68778382;
+    /* float: left; */
+ }
+ .forget-password {
+     text-align: center;
+     margin-bottom: 50px;
+     font-size: 20px;
+     font-weight: 700;
+ }
 </style>

@@ -22,7 +22,7 @@
   float: right;" class="reset-password" to="/reset">
       <span>找回密码</span>
     </router-link>
- 
+
   </div>
 </template>
 
