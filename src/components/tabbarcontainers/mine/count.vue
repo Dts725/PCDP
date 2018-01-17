@@ -27,7 +27,14 @@
                             <li > 运单号 : <span v-cloak>{{item.wayBillNo}}</span></li>
                             <li v-cloak>{{item.recipients}}</li>
                             <li v-cloak class="iconfont"> &#xe632;<a :href="'tel:' + item.recipientsPhone">{{item.recipientsPhone}}</a></li>
-                            <li><img :src="imgType(item)" id= "img-count" alt=""></li>
+                            <li>
+                                <img    v-if="item.status === '7' || item.status === '10'"  src= '../../../img/imgQian@2x.png' id= "img-count" alt="">
+                                <img    v-else-if="item.status === '9'"  src = '../../../img/imgZhiliu@2x.png' id= "img-count" alt="">
+                                <img    v-else-if="item.status === '3'"  src = '../../../img/imgWatie@2x.png' id= "img-count" alt="">
+                                <img    v-else-if="item.status === '11'"  src = '../../../img/imgTui@2x.png' id= "img-count" alt="">
+                                
+                                <!-- <img :src="imgType(item)" id= "img-count" alt=""> -->
+                                </li>
                         </ul>
                     </li>
                 </ul>
@@ -55,19 +62,8 @@ export default {
             {value    :   "QUERY_DATE_WEEK", text :  "最近一周"},
             {value    :   "QUERY_DATE_MONTH",text :  "最近一月" }
          ],
-         queryType  :   [
-             {value   :     "QT_000",       text :  "全部"},
-             {value   :     "QT_002",       text :  "已签收"},
-             {value   :     "QT_004",       text :  "已取回"},
-             {value   :     "QT_005",       text :  "代签收"}
-            
-         ],
-         detailNumber : [
-
-         ]
-
-         
-           
+         queryType  :   [],
+         detailNumber : [] 
        }
        
     },
@@ -107,21 +103,9 @@ export default {
                 }
             }).catch(err => {
                 
-                console.log(err)
+                console.log(err)    
             })
-        },
-    imgType  : function (item) {
-              let src= "";
-                if (item.status === "7" || item.status === "10" ) {
-                    
-                    src= '../../../img/imgQian@2x.png'
-                }else if(item.status === "9"){
-                    src = '../../../img/imgZhiliu@2x.png'
-                } else if(item.status === "11") {{
-                    src = '../../../img//imgTui@2x.png'
-                }}
-                return src
-    }  
+        }, 
     }
 }
 </script>

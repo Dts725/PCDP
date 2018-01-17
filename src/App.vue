@@ -19,7 +19,7 @@
 			  	<span class="mui-tab-label">签收</span>
 		  	</router-link>
 		  	<router-link class="mui-tab-item1" to="/detention?2">
-				  <span class="mui-icon iconfont">&#xe66c;<span class="mui-badge">9</span></span>
+				  <span class="mui-icon iconfont">&#xe66c;</span>
 				  <span class="mui-tab-label">滞留</span>
 		  	</router-link>
 	  		<router-link class="mui-tab-item1" to="/mine?3">

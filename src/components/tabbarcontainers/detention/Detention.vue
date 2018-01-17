@@ -6,7 +6,10 @@
   infinite-scroll-disabled="loading">
     <ul class="wrap">
       <li  class = "info-sign"  v-for="(item,index) in proCopyright" :key="item.id" >
-          <img :src="isImg(item.status)" alt="">
+          <img   v-if="item.status ===  '9'" src= '../../../img/imgZhiliu@2x.png' alt="">
+          <img   v-else-if="item.status ===  '11'" src = '../../../img/imgTui@2x.png' alt="">
+          <img   v-else   src = '../../../img/imgQian@2x.png' alt="">
+          <!-- <img :src="isImg(item.status)" alt=""> -->
            <ul>
                   <li><span>运单号  </span><span >  :{{item.wayBillNo}}    </span></li>
                   <li><span class="iconfont" v-cloak>&#xe610; :&nbsp; {{item.recipients}}   </span></li>
@@ -160,20 +163,7 @@
                  
                  });
              },
-            //添加水印图片地址
-            isImg :  function (data) {
-                let src= "";
-                if (data ===  "9" ) {
-                    
-                    src= '../../../img/imgZhiliu@2x.png'
-                }else if(data === "11"){
-                    src = '../../../img/imgTui@2x.png'
-                } else{
-                    src = '../../../img/imgQian@2x.png'
-                    
-                }
-                return src
-            },
+    
             loadMoreMore : function () {
                 // console.log("出发了scroll");
                 
@@ -199,7 +189,7 @@
             },
             //下拉刷新执行
             loadTop : function  () {
-                console.log("下拉刷新执行了");
+              
                 this.flag = true;
                 this.loadPageList()
                 if(this.totalpage == 1){
@@ -323,7 +313,7 @@
         }
     }
 </script>
-<style slot-scope>
+<style scoped>
     .info-sign{
         position: relative;
      letter-spacing: 0.1px;
@@ -449,5 +439,10 @@
   .open-tosat{
       font-size: 100%;   
   }
+  .mint-button--large {
+  
+    text-indent: 0px;
+
+}
 </style>
 

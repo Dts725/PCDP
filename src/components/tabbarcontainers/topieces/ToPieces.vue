@@ -31,6 +31,7 @@ import { Toast } from 'mint-ui'
 import coo   from '../../../config.js'
 import { MessageBox } from 'mint-ui';
 import axios from 'axios'
+import { Search } from 'mint-ui';   
 export default {
   data () {
     return {
@@ -146,23 +147,21 @@ export default {
 };
 </script>
 
-<style lang="css" solt-scope>
-element.style {
-    height: 45px;
-}
-input[type="search"] {
+<style>
+
+input[type='search']{
+    margin-bottom: 0; 
     font-size: 16px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-        height: 34px;
-    text-align: center;
+    height: 34px;
+    text-align: center; 
     border: 0;
     border-radius: 6px;
-    margin-bottom: 0px;
-    background-color: rgba(60, 24, 24, 0);
+    background-color: rgba(130, 201, 0,0);
 }
 .mint-search {
-    /* height: 100%; */
+    height: 100%;
     height: 100%;
     overflow: hidden;
 }
@@ -172,7 +171,8 @@ input[type="search"] {
     width: 80%;
 }
 .mint-searchbar-inner{
-    height: 40px;
+    height: 46px;
+    /* background-color: red; */
 }
 
 .query-button.mint-button--default {
@@ -229,7 +229,7 @@ ul {
     border: 1px solid #387ef5;
     border-radius: 3px;
     padding: 0 0.5em;
-    background-color: rgb(221, 101, 21);
+    /* background-color: rgb(221, 101, 21); */
     line-height: 2em;
     height: 2em;
     align-self: center;

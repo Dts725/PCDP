@@ -20,7 +20,7 @@
     </div>
     <router-link style= "  font-size: 80%;
   float: right;" class="reset-password" to="/reset">
-      <span>找回密码</span>
+      <span>重置密码</span>
     </router-link>
 
   </div>
@@ -154,7 +154,7 @@ export default {
   width: 100%;
 }
 .login-ipt {
-  margin-top: 20%;
+  margin-top: 10%;
 }
 input[type="number"],
 input[type="password"],
@@ -192,7 +192,7 @@ top: -18px;
 }
 .loginSecurityCode img{
 width: 20%;
-    height: 13%;
+height: 13%;
 }
 .mint-button--primary {
     color: #fff;

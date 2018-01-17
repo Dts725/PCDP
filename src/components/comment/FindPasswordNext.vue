@@ -1,11 +1,11 @@
 <template>
     
  <div class= "top-reset-pwd">
-      <mt-header title="重置密码">
+       <mt-header title="重置密码">
         <router-link to="/" slot="left">
-        <mt-button icon="back" style="color:#fff">返回</mt-button>
+        <mt-button class="iconfont count-header back-count">&#xe6ba;返回</mt-button>
         </router-link>
-        <mt-button icon="more" slot="right"></mt-button>
+     
       </mt-header>
     <div class="body">
 
@@ -61,45 +61,38 @@ export default {
     methods : {
       sureButton : function ()  {
       
-
-          if(!this.oldPassword|| !this.newPassword || !this.newPasswordNext) {
-           
-              
-            this.openToast("请检查输入");
-            return
-        
-          }else if ( !this.newPassword === this.newPasswordNext) {
-                this.openToast("两次密码输入不一样");
-                console.log("有执行吗");
-                return
-          
-             } else if(this.newPassword.length< 7) {
-                 console.log(this.newPassword);
-                 console.log(this.newPassword.length);
-                 
-                 this.openToast("新密码必须由大于8位的字母或数字组成",1500);
-                return   
-             } else {
-                   let data = {
+           let data = {
                    "oldPassword": this.oldPassword,
                     "newPassword": this.newPassword,
                     "findSerialUID": this.findSerialUID,
                     "findMobileLoginName": this.findMobileLoginName
           };
             data = JSON.stringify(data);  
-            coo.sign(data,(coo.LoginUrl+"pcpmobile/resetUserPassword.action")).then(res => {
-                if(res.status === "200" && res.data.success == true) {
+            
+                if(!this.oldPassword|| !this.newPassword || !this.newPasswordNext) {
+                    // console.log("进来第一层了");
+                    
+                    // if(!this.newPassword === this.newPasswordNext){
+                    //     console.log("进来第二层了");
+                        
+                    //     this.openToast("两次密码输入不一样请重新输入");
+                    //     return 
+                    // }
+                    this.openToast("请检查输入");
+                    return
+        
+                 } 
+                  console.log(data);
                   
-                    coo.setCache('findSerialUID', res.data.findSerialUID);
-                    coo.setCache('findMobileLoginName', res.data.findPsdNum);
-                    this.$router.push("/next")
+            coo.sign(data,(coo.LoginUrl+"pcpmobile/resetUserPassword.action")).then(res => {
+                if(res.status === 200 && res.data.success == true) {
+                    this.openToast("密码重置成功 请重新登陆",1500)
+                    window.localStorage.removeItem("userPassword")
+                    this.$router.push("/login")
                     } else {
              
                     
-                        this.openToast(res.data.message,1500);
-
-          
-                        return  
+                        this.openToast("修改失败请重试",1500);
           
               }
 
@@ -107,11 +100,11 @@ export default {
             console.log(err);
             
           })
-             }
+        }
         
-      }
-
     }
+
+    
 };
 </script>
 <style scoped>
@@ -146,4 +139,11 @@ export default {
      font-size: 20px;
      font-weight: 700;
  }
+ .count-header.back-count.iconfont {
+
+    background-color: #26a2ff;
+    transform: translateY(-1px);
+    width: 50%;
+    color: #fff;
+} 
 </style>

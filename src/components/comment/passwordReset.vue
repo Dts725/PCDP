@@ -1,21 +1,21 @@
 <template>
     
  <div class= "top-reset-pwd">
-      <mt-header title="找回密码">
+      <mt-header title="重置密码">
         <router-link to="/" slot="left">
-        <mt-button icon="back" style="color:#fff">返回</mt-button>
+        <mt-button class="iconfont count-header back-count">&#xe6ba;返回</mt-button>
         </router-link>
-        <mt-button icon="more" slot="right"></mt-button>
+     
       </mt-header>
     <div class="body">
 
 
         <div class="forget-password">
-          <span>找回密码</span>
+          <span>重置密码</span>
         </div>
         <div class="page-part reset">
-          <mt-field label="账号  :"  placeholder="请输入账号" v-model="userCode"></mt-field>
-           <mt-field label="验证码  :" placeholder="请输入验证码" v-model="securityCode">
+          <mt-field   placeholder="请输入账号" v-model="userCode"></mt-field>
+           <mt-field  placeholder="请输入验证码" v-model="securityCode">
             <img    @click="refreshImg" :src="VerificationImg" height="150%" width="">
             </mt-field>
            <!-- <mt-field placeholder="输入验证码" type="password"></mt-field>
@@ -104,7 +104,7 @@ export default {
               } else {
              
                      this.refreshImg();
-                    this.Toast(res.data.message,1500);
+                    this.openToast(res.data.message,1500);
           
               return  
           
@@ -151,4 +151,20 @@ export default {
      font-size: 20px;
      font-weight: 700;
  }
+ .mint-button--default {
+    margin-top: 0;
+    background-color: #387ef5;
+    width: 45%;
+    font-size: 95%;
+    height: 2.2em;
+    border-radius: 3px;
+    text-align: center;
+    color: #fff;
+}
+.count-header.back-count.iconfont {
+    /* margin-top: -40px; */
+    background-color: #26a2ff;
+    transform: translateY(-0px);
+    width: 50%;
+}
 </style>
