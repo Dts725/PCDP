@@ -1,3 +1,4 @@
+import   "babel-polyfill";
 import Vue from "vue";
 
 //引入根组件
@@ -20,6 +21,34 @@ import "../libs/mui/css/icons-extra.css"
 //添加一个响应拦截器
 
 import { Toast } from 'mint-ui';
+window.NativeConn = function () {
+    var callScanFun = function (data) {
+        console.log(data);
+    };
+    var NativeScanBar = function (callback) {
+        if (typeof callback != "function") {
+            return;
+        }
+        if (window.navigator.appVersion.indexOf("Android") !== -1) {
+            window.Android.scanTheCode("");
+        } else {
+            //调用IOS
+            iOSScanBarCode("");
+        }
+        callScanFun = callback;
+    };
+    var conn = {};
+    conn.NativeScanBar = NativeScanBar;
+    conn.callScanFun = callScanFun;
+    return conn;
+}();
+//统一回调
+window.iOSBarCodeString = function (data) {
+    var wayBillNum = data.split(",")[1];
+    window.NativeConn.callScanFun(wayBillNum);
+};
+
+
     router.beforeResolve ((to, from, next) => {
         /**
          * 1 注册全局路由事件

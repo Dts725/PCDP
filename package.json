@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "babel-loader": "^7.1.2",
+    "babel-polyfill": "^6.26.0",
     "better-scroll": "^1.7.2",
     "css-loader": "^0.28.8",
     "file-loader": "^1.1.6",

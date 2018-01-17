@@ -1,19 +1,27 @@
 <template>
   <div class="body">
       <span>
-          <img src="../img/Group 2@3x.png" alt="">
+          <img   class="img-login" src="../img/Group 2@3x.png" alt="">
       </span>
      <div class="page-part login-ipt"  >
-       <div class="iconfont">&#xe611;</div>
-       <mt-field style="border:0px 0px 0px 0px;"   v-model.trim="userName"  placeholder="输入账号"   type="number"> 
-      </mt-field>
-      <div class="iconfont">&#xe621;</div>
-      <mt-field placeholder="输入密码"  v-model.trim="userPassword" type="password">
-      </mt-field>     
-      <div class="iconfont">&#xe67b;</div>
-      <mt-field placeholder="输入验证码"  v-model.trim="Verification" type="text">
-        <img  @click="refreshImg" v-bind:src="VerificationImg"     class="loginSecurityCode">
-      </mt-field>
+       
+           <div class="iconfont">
+               <span>&#xe611;</span>
+                <input    v-model.trim="userName"  placeholder="输入账号"   type="number"> 
+            </div>
+  
+           <div class="iconfont">
+               <span>&#xe621;</span>
+               
+                <input placeholder="输入密码"  v-model.trim="userPassword" type="password">
+            </div>
+        <div class="iconfont">
+               <span>&#xe67b;</span>
+            
+            <input placeholder="输入验证码"  v-model.trim="Verification" type="text">
+
+            <img  @click="refreshImg" v-bind:src="VerificationImg"     class="loginSecurityCode">
+        </div>
    
       <mt-button type="primary"  @click="loading" size="large" style="text-align : center">登录</mt-button>
     
@@ -144,63 +152,59 @@ export default {
 };
 </script>
 
-<style lang="css" sloat-scope>
+<style lang="css" scoped>
 .body {
-  margin: 0 auto;
-  width: 80%;
+    width: 80%;
+    margin: 0 auto;
+    font-size: 80%; 
 }
-.body span img {
-  margin-top: 10%;
-  width: 100%;
-}
-.login-ipt {
-  margin-top: 10%;
-}
-input[type="number"],
-input[type="password"],
-input[type="text"] {
-  
-  border: 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 0;
-  text-indent: 20px;
-  position: relative;
-}
-
-
-
-span > img {
-  width: 100%;
-}
-
-.iconfont {
-  width: 5%;
-  position: relative;
-  left: 5%;
-  top: 0;
-  transform: translateY(30px);
-  z-index: 2;
- 
-
-
-}
-.loginSecurityCode {
-position: absolute;
-right:50%;
-top: -18px;
-
-}
-.loginSecurityCode img{
-width: 20%;
-height: 13%;
+.img-login {
+    width: 100%;
+    margin-bottom: 30px;
+    /* height: 100%; */
 }
 .mint-button--primary {
+    margin-bottom: 30px;
     color: #fff;
     background-color: #3a3f64;
-    font-size: 80%;
-    margin-top: 12%;
-    margin-bottom: 6%;
+    font-size: 85%;
 }
-
-
+input[type='number'],
+input[type='password'], 
+input[type='text'] {
+    text-indent: 25px;
+    font-size: 85%;
+    line-height: 21px;
+    width: 100%;
+    height: 40px;
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    -webkit-user-select: text;
+    border: 1px solid rgba(238, 11, 11, 0);
+    border-bottom: 1px solid #ddd;
+    border-radius: 3px;
+    outline: none;
+    background-color: #fff;
+    -webkit-appearance: none;
+    position: relative;
+}
+.iconfont {
+ 
+    position: relative;
+     top: 0px;
+    left: 0px;
+   
+} 
+.iconfont > span {
+    position: absolute;
+    top: 10px;
+    left: 12px; 
+    z-index: 2;
+}
+.loginSecurityCode{
+    position:absolute;
+    top: 6px;
+    right: 5PX;
+    z-index: 2;
+}
 </style>

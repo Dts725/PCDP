@@ -15,6 +15,7 @@ import Count from "../components/tabbarcontainers/mine/Count.vue";
 import ResetNext from "../components/comment/FindPasswordNext.vue";
 
 
+
 export default new VueRouter({
 
     routes: [
@@ -71,7 +72,6 @@ export default new VueRouter({
             },
             component: Count
         },
-        
     ]
 });
 

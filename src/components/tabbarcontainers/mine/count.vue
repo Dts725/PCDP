@@ -7,12 +7,12 @@
         </mt-header>
                 <div id="top-selected-count">
                      <div >
-                <select @click="queryDatePost" v-model="selectedDate">
+                <select v-model.lazy="selectedDate">
                     <option  v-for="item in queryDate" :key="item.id" :value="item.value" v-cloak>{{item.text}}</option>
                 </select>
                 </div>
                 <div>
-                <select @click="queryDatePost" v-model="selectedType">
+                <select  v-model.lazy="selectedType">
                     <option  v-for="item in queryType" :key="item.index" :value="item.value" v-cloak>{{item.text}}</option>
                 </select>
                 </div>
@@ -32,8 +32,6 @@
                                 <img    v-else-if="item.status === '9'"  src = '../../../img/imgZhiliu@2x.png' id= "img-count" alt="">
                                 <img    v-else-if="item.status === '3'"  src = '../../../img/imgWatie@2x.png' id= "img-count" alt="">
                                 <img    v-else-if="item.status === '11'"  src = '../../../img/imgTui@2x.png' id= "img-count" alt="">
-                                
-                                <!-- <img :src="imgType(item)" id= "img-count" alt=""> -->
                                 </li>
                         </ul>
                     </li>
@@ -62,13 +60,28 @@ export default {
             {value    :   "QUERY_DATE_WEEK", text :  "最近一周"},
             {value    :   "QUERY_DATE_MONTH",text :  "最近一月" }
          ],
-         queryType  :   [],
-         detailNumber : [] 
+         queryType  :    [
+                        {value   :     "QT_000",       text :  "全部"},
+                        {value   :     "QT_002",       text :  "已签收"},
+                        {value   :     "QT_004",       text :  "已取回"},
+                        {value   :     "QT_005",       text :  "代签收"}
+             
+         ],
+         detailNumber : []
        }
        
     },
     created () {
         this.queryDatePost ();
+    },
+    watch  : {
+        selectedDate : function () {
+            this.queryDatePost()
+        },
+        selectedType : function () {
+            this.queryDatePost()
+        }
+
     },
     methods  :   {
         queryDatePost : function () {

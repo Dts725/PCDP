@@ -59,7 +59,7 @@
                 flag                 : false,               //flag  为true  上拉刷新加载数据 默认false
                 wrapperHeight        : 0,          //页面scroll 数据
                 start                : 0,                 //数据加载开始的位置
-                limit                : 8,                 // 每页允许的加载数据条数
+                limit                : 20,                 // 每页允许的加载数据条数
                 accessToken          :    coo.getCache('accessToken'),
                 cooperateCode        :    coo.getCache('cooperateCode'),
                 mobileUserName       :    coo.getCache('mobileUserName'),
@@ -166,7 +166,7 @@
                             }else{
                             //   console.log("more方法查询的")
                               this.pageNo = parseInt(this.pageNo) + 1;
-                              this.start = this.start +8;
+                              this.start = this.start +20;
                             //   this.allLoaded = false;
                             //   setTimeout (() => {
                             //       //此处定时器客给可不给用来控制刷新加载的速度
@@ -187,7 +187,7 @@
                             }else{
                             //   console.log("more方法查询的")
                               this.pageNo = parseInt(this.pageNo) + 1;
-                              this.start = this.start +8;
+                              this.start = this.start +20;
                               this.allLoaded = false;
 
                               
@@ -222,7 +222,7 @@
                             }else {
                                    //   console.log("more方法查询的")
                                     this.pageNo = parseInt(this.pageNo) + 1;
-                                    this.start = this.start +8;
+                                    this.start = this.start +20;
                                     this.upLoadMore();
                                   setTimeout (() => {
                                          
@@ -296,14 +296,10 @@
                     coo.sign(data,(coo.LoginUrl    +   "pcpmobile/querySignWayBillInfo.action")).then(res => {
                             if(res.status == '200' && res.data.success == true) {
 
-                                // this.totalpage = Math.ceil(res.data.totalCount/this.limit);
-                                if(this.flag){
-                                    this.proCopyright =res.data.wayBillInfoList.concat(this.proCopyright);
-                                    this.flag = false;
-                                }else{
+                             
 
                                     this.proCopyright = this.proCopyright.concat(res.data.wayBillInfoList);
-                                }
+                                
                             // console.log(this.totalpage);
                             // console.log(this.pageNo);
                             // console.log(this.proCopyright);

@@ -14,10 +14,15 @@
           <span>重置密码</span>
         </div>
         <div class="page-part reset">
-          <mt-field   placeholder="请输入账号" v-model="userCode"></mt-field>
-           <mt-field  placeholder="请输入验证码" v-model="securityCode">
-            <img    @click="refreshImg" :src="VerificationImg" height="150%" width="">
-            </mt-field>
+       
+            <div class="iconfont">
+                <input  placeholder="请输入账号" v-model="userCode" type="number">
+            </div>
+            <div class="iconfont">
+                <input placeholder="请输入验证码" v-model="securityCode" type="number">
+                <img @click="refreshImg" :src="VerificationImg"  alt="">
+            </div>
+
            <!-- <mt-field placeholder="输入验证码" type="password"></mt-field>
             <img   @click="refreshImg" src="http://10.230.34.166:8080/pcp-web/pcpmobile/securityCode.action?sessionId=RrXrLzVnCpxEYDk3RUQYXCdS1514509483146&amp;date=1514510732325" class="loginSecurityCode"> -->
          </div>
@@ -121,50 +126,39 @@ export default {
 </script>
 <style scoped>
 .body {
+
   margin: 0 auto;
-  width: 90%;
+  margin-top: -40px;
+  width: 80%;
   position: relative;
   top: 0px;
   right: 0;
   padding-top: 80px;
 
 }
-.top-reset-pwd{
-    margin-top: -40px;
-}
-.qrdcode {
-    float: left;
-}
 
-  .forget-password-next {
-      margin-top: 15%;
-      width: 100%;
-     transform: translateX(5%);     width: 100%;
-  }
- .forget-password-next button {
-    background-color: #68778382;
-    /* float: left; */
- }
- .forget-password {
-     text-align: center;
-     margin-bottom: 50px;
-     font-size: 20px;
-     font-weight: 700;
- }
- .mint-button--default {
-    margin-top: 0;
-    background-color: #387ef5;
-    width: 45%;
-    font-size: 95%;
-    height: 2.2em;
-    border-radius: 3px;
-    text-align: center;
-    color: #fff;
+.router-link-active {
+    color: #fff !important;
 }
-.count-header.back-count.iconfont {
-    /* margin-top: -40px; */
-    background-color: #26a2ff;
-    transform: translateY(-0px);
-    width: 50%;
+.forget-password {
+    text-align: center;
+    margin-bottom: 30px; 
+}
+.iconfont {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+.iconfont > input {
+    border: none;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    text-indent: 15px;
+    font-size: 80%;
+} 
+.iconfont  > img    {
+    position: absolute;
+    top: 3px;
+    right: 0;
 }
 </style>

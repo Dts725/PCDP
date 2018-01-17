@@ -6,6 +6,7 @@
     <div>
         <mt-search v-model.trim="value" cancel-text="取消" placeholder="请输入运单号">
         </mt-search>
+          <div id="scan-topieces" @click="scanTopeieces"></div>
     </div >
     <div class="query">
         <mt-button  class="query-button"  @click="openToast()" size="large">查询运单</mt-button>
@@ -32,7 +33,7 @@ import coo   from '../../../config.js'
 import { MessageBox } from 'mint-ui';
 import axios from 'axios'
 import { Search } from 'mint-ui';   
-export default {
+export default { 
   data () {
     return {
  
@@ -48,6 +49,53 @@ export default {
     //      window.location.reload();
     // },
   methods: {
+      scanTopeieces : function () {
+          //调用原生扫描
+        //   window.NativeConn.NativeScanBar(function(data){console.log(data)});
+         window.NativeConn.NativeScanBar(function (datas) {
+            console.log(datas);   
+            
+          let data = {
+                    "searchWayBillNo"    :    parseInt(datas),
+                    "accessToken"        :    coo.getCache("accessToken"),
+                    "cooperateCode"      :    coo.getCache("cooperateCode"),
+                    "mobileUserName"     :    coo.getCache("mobileUserName"),
+                    "roleAuth"           :    coo.getCache("roleAuth")
+            }
+          data  = JSON.stringify(data);
+          coo.sign(data,(coo.LoginUrl +"pcpmobile/searchWayBill.action")).then(res => {
+                
+                
+                if(res.status == 200) {
+                    if(res.data.success == true){  
+                        this.dataList.unshift(res.data.wayBillInfo);
+                        this.value = null;
+
+                    } else {
+                        Toast ({
+                            message     : res.data.message,
+                            position    : 'middle',
+                            duration    : 1000,
+                        
+                       })
+                            this.value = null;
+                    }  
+                     
+                }
+
+            }).catch(err => {
+                 Toast ({
+                            message     : "查询运单信息失败请重试 !",
+                            position    : 'middle',
+                            duration    : 1200,
+                        
+                       })
+                    this.value = null;
+                    console.log(err);
+            })
+                     
+        });
+      },
      
       toPieces (itemId,wayBillNo,$index) {
           //判断页面确定执行then 后面的内容
@@ -256,6 +304,15 @@ ul {
 }
 .mint-msgbox {
     width: 75%;
-    font-size: 80%;
+    font-size: 90%;
+}
+#scan-topieces {
+    /* background: red; */
+    width: 36px;
+    height: 36px;
+    position: absolute;
+
+    transform: translate(13px,-50px);
+    z-index: 2;
 }
 </style>
