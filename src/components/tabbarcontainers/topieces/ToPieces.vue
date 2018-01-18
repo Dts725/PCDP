@@ -39,62 +39,98 @@ export default {
  
         value                   :    "",
         dataList                :    [],
+        dataPiecesValueList     :    [],
         accessToken             :    coo.getCache('accessToken'),
         cooperateCode           :    coo.getCache('cooperateCode'),
         mobileUserName          :    coo.getCache('mobileUserName'),
          roleAuth               :    coo.getCache('roleAuth'),
     }
   },
-    // mounted(){
-    //      window.location.reload();
-    // },
+  created () {
+      //页面选渲染时获取缓存 缓存写在 login 页面的created 中
+      if (coo.getCache("dataListToPieces")) {
+          this.dataList =  JSON.parse( coo.getCache("dataListToPieces"));
+      };
+      if (coo.getCache("dataPiecesValueList")) {
+          this.dataPiecesValueList =  JSON.parse( coo.getCache("dataPiecesValueList"));          
+      }
+  },
+    beforeDestroy () {
+        //页面消亡前保存数据
+        coo.setCache("dataListToPieces",JSON.stringify(this.dataList))
+        coo.setCache("dataPiecesValueList",JSON.stringify (this.dataPiecesValueList))
+  },
+
   methods: {
       scanTopeieces : function () {
-          //调用原生扫描
-        //   window.NativeConn.NativeScanBar(function(data){console.log(data)});
+        let that = this;
          window.NativeConn.NativeScanBar(function (datas) {
-            console.log(datas);   
-            
-          let data = {
-                    "searchWayBillNo"    :    parseInt(datas),
-                    "accessToken"        :    coo.getCache("accessToken"),
-                    "cooperateCode"      :    coo.getCache("cooperateCode"),
-                    "mobileUserName"     :    coo.getCache("mobileUserName"),
-                    "roleAuth"           :    coo.getCache("roleAuth")
+             scanWaybillNumberFn (datas)
+        });
+        let scanWaybillNumberFn = function (datas) {
+            //  console.log(datas);
+            let valueTmp =that.dataPiecesValueList.indexOf(datas);
+             //禁止重复查询订单
+            if (valueTmp != -1) {
+                Toast ({
+                        message     : "请勿重复输入该订单!",
+                        position    : 'middle',
+                        duration    : 1000,
+                           
+                    })
+                 that.value = null;
+                 return
+             } else {
+                 //判断数组长度
+                 if(that.dataPiecesValueList.length <50) {
+                     that.dataPiecesValueList.push(datas);
+                 }else {
+                     that.dataPiecesValueList.shift(); 
+                     that.dataPiecesValueList.push(datas); 
+                     
+                 }
+             }
+            let data = {
+                "searchWayBillNo": parseInt(datas),
+                "accessToken": that.accessToken,
+                "cooperateCode": that.cooperateCode,
+                "mobileUserName": that.mobileUserName,
+                "roleAuth": that.roleAuth
             }
-          data  = JSON.stringify(data);
-          coo.sign(data,(coo.LoginUrl +"pcpmobile/searchWayBill.action")).then(res => {
-                
-                
-                if(res.status == 200) {
-                    if(res.data.success == true){  
-                        this.dataList.unshift(res.data.wayBillInfo);
-                        this.value = null;
+            data = JSON.stringify(data);
+            coo.sign(data, (coo.LoginUrl + "pcpmobile/searchWayBill.action")).then(res => {
+
+
+                if (res.status == 200) {
+                    if (res.data.success == true) {
+                        
+
+                        that.dataList.unshift(res.data.wayBillInfo);
+                        that.value = null;
 
                     } else {
-                        Toast ({
-                            message     : res.data.message,
-                            position    : 'middle',
-                            duration    : 1000,
-                        
-                       })
-                            this.value = null;
-                    }  
-                     
+                        Toast({
+                            message: res.data.message,
+                            position: 'middle',
+                            duration: 1000,
+
+                        })
+                        that.value = null;
+                    }
+
                 }
 
             }).catch(err => {
-                 Toast ({
-                            message     : "查询运单信息失败请重试 !",
-                            position    : 'middle',
-                            duration    : 1200,
-                        
-                       })
-                    this.value = null;
-                    console.log(err);
+                Toast({
+                    message: "查询运单信息失败请重试 !",
+                    position: 'middle',
+                    duration: 1200,
+
+                })
+                that.value = null;
+                console.log(err);
             })
-                     
-        });
+        }
       },
      
       toPieces (itemId,wayBillNo,$index) {
@@ -142,13 +178,35 @@ export default {
       openToast() {
           if(this.value == ""){
               Toast ({
-                            message     : "请输入运单号查询!",
+                  message     : "请输入运单号查询!",
                             position    : 'middle',
                             duration    : 1000,
                            
                        })
               return
           }
+            let valueTmp =this.dataPiecesValueList.indexOf(this.value);
+             //禁止重复查询订单
+            if (valueTmp != -1) {
+                Toast ({
+                        message     : "请勿重复输入该订单!",
+                        position    : 'middle',
+                        duration    : 1000,
+                           
+                    })
+                 this.value = null;
+                 return
+             } else {
+                 if(this.dataPiecesValueList.length <50) {
+                     this.dataPiecesValueList.push(this.value);
+                 }else {
+                     this.dataPiecesValueList.shift();
+                     this.dataPiecesValueList.push(this.value);
+                     
+                 }
+             }
+             
+             
           //发送查询请求
 
           let data = {
@@ -163,9 +221,14 @@ export default {
                 
                 
                 if(res.status == 200) {
-                    if(res.data.success == true){  
-                        this.dataList.unshift(res.data.wayBillInfo);
-                        this.value = null;
+                    if(res.data.success == true){ 
+                        
+                        console.log(this.dataList);
+                            this.dataList.unshift(res.data.wayBillInfo);
+                            this.value = null;
+                        
+                  
+                      
 
                     } else {
                         this.value = null;

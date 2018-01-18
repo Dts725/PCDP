@@ -6,24 +6,24 @@
           </router-link>
         </mt-header>
                 <div id="top-selected-count">
-                     <div >
-                <select v-model.lazy="selectedDate">
+                     <div  class="select-down-row" >
+                <select v-model="selectedDate">
                     <option  v-for="item in queryDate" :key="item.id" :value="item.value" v-cloak>{{item.text}}</option>
                 </select>
                 </div>
-                <div>
-                <select  v-model.lazy="selectedType">
+                <div class="select-down-row">
+                <select  v-model="selectedType">
                     <option  v-for="item in queryType" :key="item.index" :value="item.value" v-cloak>{{item.text}}</option>
                 </select>
                 </div>
                 </div>
                
          
-        <ul id="data-father-count">
+        <ul id="data-father-count" v-cloak>
             <li>
                 <ul class="query-datda-list" style="padding-top: 42px;">
                     <li v-for="item in dataList.wayBillArray" :key="item.list">
-                        <ul id="query-data-item"> 
+                        <ul id="query-data-item" v-cloak> 
                             <li > 运单号 : <span v-cloak>{{item.wayBillNo}}</span></li>
                             <li v-cloak>{{item.recipients}}</li>
                             <li v-cloak class="iconfont"> &#xe632;<a :href="'tel:' + item.recipientsPhone">{{item.recipientsPhone}}</a></li>
@@ -47,6 +47,7 @@
 <script>
 import { Header } from 'mint-ui';
 import coo from '../../../config.js'
+
 
 
 export default {
@@ -156,7 +157,7 @@ clear: both;
    left: 0;; */
     display: flex;
     box-sizing: border-box;
-   z-index: 555;
+    z-index: 555;
     width: 100%;
     
 }
@@ -238,6 +239,18 @@ clear: both;
     color: inherit;
     font-size: 100%;
 }
+#top-selected-count .select-down-row {
+    position: relative;
+    top: 0;
+    left: 0;
+}
+select {
+    background: url('../../../img/downRow.png') no-repeat  90% center ;
+    background-size: 15px;
+    background-color: #fff;
+ 
+}
+
 </style>
 
 

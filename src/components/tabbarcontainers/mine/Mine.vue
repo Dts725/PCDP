@@ -48,6 +48,7 @@ export default {
     methods : {
         quick : function () {
             window.localStorage.removeItem("accessToken")
+            window.localStorage.removeItem("dataListToPieces")
             this.$router.push('/login')
         },
         what : function () {       

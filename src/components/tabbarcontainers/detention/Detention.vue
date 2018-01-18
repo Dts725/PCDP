@@ -59,9 +59,9 @@
                 $id                  :  "" ,  
                 $wayBillNo           :  0,              //获取当前项的id
                 // signStatus : true,              //判断是否签收
-                flagMounted          : true,         //判断是否首次刷新页面
+              
                 loading              : false,            //默认false 滑动加载
-                flag                 : false,               //flag  为true  上拉刷新加载数据 默认false
+                 
                 wrapperHeight        : 0,          //页面scroll 数据
                 start                : 0,                 //数据加载开始的位置
                 limit                : 20,                 // 每页允许的加载数据条数
@@ -77,15 +77,30 @@
             }
         },
 
+        
+            created () {
+                if (coo.getCache("dataDetentionList")) {
+                    
+                    this.proCopyright = JSON.parse(coo.getCache("dataDetentionList"));
+                } else { 
+                    this.loadPageList();
+                
+
+                }
+            },
+            beforeDestroy () {
+                coo.setCache ("dataDetentionList",JSON.stringify(this.proCopyright))
+            },
+         mounted(){
+                // this.loadPageList();
+             
+                this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;//组件更新动态计算页面scroll 数据
+            },
          filters : {
                  formatDate (time) {
                      let date = new Date(time);
                     return formatDate (date, 'yyyy-MM-dd hh:mm')
                        }  
-            },
-        mounted(){
-                     this.loadPageList();  //初次访问查询列表
-                      this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;//组件更新动态计算页面scroll 数据
             },
         methods : {
             //获取当前索引值
@@ -189,39 +204,14 @@
             },
             //下拉刷新执行
             loadTop : function  () {
-              
-                this.flag = true;
-                this.loadPageList()
-                if(this.totalpage == 1){
-                         this.pageNo = 1;
-                         this.allLoaded = true;
-                        setTimeout (() => {
-                                         
-                           this.$refs.loadmore.onTopLoaded();
-                                         },300)  
-                       
-                       } else{      
-                           if (this.pageNo >=this.totalpage){
-                                setTimeout (() => {
-                                         
-                           this.$refs.loadmore.onTopLoaded();
-                                         },300)                                 
-                            }else {
-                                   //   console.log("more方法查询的")
-                                    this.pageNo = parseInt(this.pageNo) + 1;
-                                    this.start = this.start +20;
-                                    this.upLoadMore();
-                                  setTimeout (() => {
-                                         
-                                    this.$refs.loadmore.onTopLoaded();
-                                         },300)  
-                            }
-                                 
-                                    //此处若用 请给给下拉事件加节流阀
-                                     
-                      }
-                       
-
+           
+                this.pageNo =1;
+                console.log("下拉刷新执行了");
+                this.start = 0;
+                this.loadPageList();
+                setTimeout (() => {           
+                        this.$refs.loadmore.onTopLoaded();
+                    },300)  
             },
 
              loadPageList:function (){
@@ -243,10 +233,8 @@
                         coo.sign(data,(coo.LoginUrl    +   "pcpmobile/queryRetentionWayBillInfo.action")).then(res => {
                               if(res.status == 200 && res.data.success == true) {
 
-                                  if(!this.flag  && this.flagMounted) {
-                                      this.flagMounted = false;
                                       this.proCopyright = res.data.wayBillInfoList;
-                                  } 
+                                  
                                       this.totalpage = Math.ceil(res.data.totalCount/this.limit);  //计算出需要刷新的次数              
                                 
                                 }
@@ -285,7 +273,6 @@
                     coo.sign(data,(coo.LoginUrl    +  "pcpmobile/queryRetentionWayBillInfo.action")).then(res => {
                             if(res.status == '200' && res.data.success == true) {
 
-                                // this.totalpage = Math.ceil(res.data.totalCount/this.limit);
 
                                     this.proCopyright = this.proCopyright.concat(res.data.wayBillInfoList);
                                

@@ -35,7 +35,7 @@ window.NativeConn = function () {
             //调用IOS
             iOSScanBarCode("");
         }
-        callScanFun = callback;
+        window.NativeConn.__proto__.constructor.callScanFun = callback;
     };
     var conn = {};
     conn.NativeScanBar = NativeScanBar;
@@ -45,7 +45,7 @@ window.NativeConn = function () {
 //统一回调
 window.iOSBarCodeString = function (data) {
     var wayBillNum = data.split(",")[1];
-    window.NativeConn.callScanFun(wayBillNum);
+    window.NativeConn.__proto__.constructor.callScanFun(wayBillNum);
 };
 
 

@@ -97,37 +97,12 @@ export default {
     //         currentData(wayBillNum);
     //     }();
 
+    // // }
+    // scanToPieces: () => {
+       
+       
+
     // }
-    scan : () => {
-        window.NativeConn = function () {
-            var callScanFun = function (data) {
-                console.log(data);
-            };
-            var NativeScanBar = function (callback) {
-                if (typeof callback != "function") {
-                    return;
-                }
-                if (window.navigator.appVersion.indexOf("Android") !== -1) {
-                    window.Android.scanTheCode("");
-                } else {
-                    //调用IOS
-                    iOSScanBarCode("");
-                }
-                callScanFun = callback;
-            };
-            var conn = {};
-            conn.NativeScanBar = NativeScanBar;
-            conn.callScanFun = callScanFun;
-            return conn;
-        }();
-        //统一回调
-        window.iOSBarCodeString = function (data) {
-            var wayBillNum = data.split(",")[1];
-            window.NativeConn.callScanFun(wayBillNum);
-        };
-
-
-    }
 
     
  

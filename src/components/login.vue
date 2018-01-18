@@ -83,7 +83,15 @@ export default {
   
 
  },
- 
+ created  () {
+               coo.setCache("dataListToPieces","") //缓存到件页面数据
+               coo.setCache("dataPiecesValueList","")//缓存到件页面value
+               coo.setCache("dataSignList","")//缓存签收页面dataList
+               coo.setCache("dataDetentionList","");//缓存到件页面value
+           
+     
+ },
+  
  
   methods : {
 
@@ -103,7 +111,7 @@ export default {
             "sessionId"         : this.sessionId
           }
         this.info= JSON.stringify(this.info)
-          console.log(this.info)
+        //   console.log(this.info)
        //发送请求
         coo.sign(this.info,coo.testLoginUrl).then(res =>{
            if(res.data.success==true && res.status){
@@ -120,7 +128,7 @@ export default {
           }else {
               this.refreshImg();
               coo.setCache("message",res.data.message)
-               openToastWithIcon();
+               this.openToastWithIcon();
           }
        }).catch(err => {
          this.openToastWithIcon();

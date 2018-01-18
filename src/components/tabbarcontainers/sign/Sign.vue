@@ -71,18 +71,33 @@
                 totalpage            :1,                //计算出来应有的 刷新次数   
             }
         },
+        created () {
+            if (coo.getCache("dataSignList")) {
+                    this.proCopyright = JSON.parse(coo.getCache("dataSignList"))
+                    
+            } else {
+                    this.loadPageList();  //初次访问查询列表
+                   console.log("sign执行了");
+                   
+                
+            }
+        },
+        beforeDestroy () {
+            coo.setCache ("dataSignList",JSON.stringify(this.proCopyright))
+        },
 
-         filters : {
+         
+        mounted(){
+            
+        
+                    this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;//组件更新动态计算页面scroll 数据
+            },
+        filters : {
                  formatDate (time) {
                      let date = new Date(time);
                     return formatDate (date, 'yyyy-MM-dd hh:mm')
                        }  
-            },
-        mounted(){
-            
-                    this.loadPageList();  //初次访问查询列表
-                    this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;//组件更新动态计算页面scroll 数据
-            },
+        },
         methods : {
              openToast(msg) {
                  Toast({
@@ -202,39 +217,15 @@
 
             },
             //下拉刷新执行
-            loadTop : function  () {
-                // console.log("下拉刷新执行了");
-                this.flag = true;
-                this.loadPageList()
-                if(this.totalpage == 1){
-                         this.pageNo = 1;
-                         this.allLoaded = true;
-                        setTimeout (() => {
-                                         
-                           this.$refs.loadmore.onTopLoaded();
-                                         },300)  
-                       } else{      
-                           if (this.pageNo >=this.totalpage){
-                                setTimeout (() => {
-                                         
-                           this.$refs.loadmore.onTopLoaded();
-                                         },300)                                 
-                            }else {
-                                   //   console.log("more方法查询的")
-                                    this.pageNo = parseInt(this.pageNo) + 1;
-                                    this.start = this.start +20;
-                                    this.upLoadMore();
-                                  setTimeout (() => {
-                                         
-                                    this.$refs.loadmore.onTopLoaded();
-                                         },300)  
-                            }
-                                 
-                                    //此处若用 请给给下拉事件加节流阀
-                                     
-                      }
-                       
-
+              loadTop : function  () {
+           
+                this.pageNo =1;
+             
+                this.start = 0;
+                this.loadPageList();
+                setTimeout (() => {           
+                        this.$refs.loadmore.onTopLoaded();
+                    },300)  
             },
 
              loadPageList:function (){
@@ -446,5 +437,10 @@
   .open-tosat{
       font-size: 100%;   
   }
+  .mint-button--large {
+
+    text-indent: 0px;
+   
+}
 </style>
 
