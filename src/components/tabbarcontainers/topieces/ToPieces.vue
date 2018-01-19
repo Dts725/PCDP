@@ -36,7 +36,7 @@ import { Search } from 'mint-ui';
 export default { 
   data () {
     return {
-        flagTopieces                    :   false,      //默认为false 用来判断下个页面是否需要刷新
+        flagTopieces            :    "true",
         value                   :    "",
         dataList                :    [],
         dataPiecesValueList     :    [],
@@ -54,11 +54,19 @@ export default {
       if (coo.getCache("dataPiecesValueList")) {
           this.dataPiecesValueList =  JSON.parse( coo.getCache("dataPiecesValueList"));          
       }
+      //true 页面不刷新
+        coo.setCache("flagTopieces","true")
+      
+        
   },
     beforeDestroy () {
         //页面消亡前保存数据
         coo.setCache("dataListToPieces",JSON.stringify(this.dataList))
         coo.setCache("dataPiecesValueList",JSON.stringify (this.dataPiecesValueList))
+        coo.setCache("flagTopieces",this.flagTopieces)
+        
+        
+        
   },
 
   methods: {
@@ -127,7 +135,7 @@ export default {
       },
      
       toPieces (itemId,wayBillNo,$index) {
-          //判断页面确定执行then 后面的内容
+          
            MessageBox.confirm('确定执行到件操作?').then (action => {
               
                 
@@ -150,7 +158,8 @@ export default {
                     this.dataList.splice($index,1);
                        //删除对应的缓存数组元素
                     this.dataPiecesValueList.splice($index,1);
-                    flagTopieces = true;
+                   this.flagTopieces = "";  
+                  
                     Toast({
                         message: '操作成功',
                         iconClass: 'icon icon-success',
@@ -243,7 +252,8 @@ export default {
                     console.log(err);
             })
            
-      }  
+      }
+
     }
 };
 </script>

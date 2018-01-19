@@ -54,9 +54,8 @@
         data () {
 
             return {
-                flagMounted          : true,         //判断是否首次刷新页面
+                flagSign             : "true",
                 loading              : false,            //默认false 滑动加载
-                flag                 : false,               //flag  为true  上拉刷新加载数据 默认false
                 wrapperHeight        : 0,          //页面scroll 数据
                 start                : 0,                 //数据加载开始的位置
                 limit                : 20,                 // 每页允许的加载数据条数
@@ -72,18 +71,20 @@
             }
         },
         created () {
-            if (coo.getCache("dataSignList")) {
-                    this.proCopyright = JSON.parse(coo.getCache("dataSignList"))
-                    
+            if ((coo.getCache("dataSignList").length>2)  &&  coo.getCache("flagTopieces")) {
+                    //此处使用缓存
+                    this.proCopyright = JSON.parse(coo.getCache("dataSignList"))  
             } else {
-                    this.loadPageList();  //初次访问查询列表
-                   console.log("sign执行了");
-                   
-                
+                console.log("怎么进来的");
+                    this.loadPageList();  //初次访问查询列表  
             }
+            //页面刷新 true  不刷新
+            coo.setCache("flagSign","true")
         },
         beforeDestroy () {
             coo.setCache ("dataSignList",JSON.stringify(this.proCopyright))
+            coo.setCache("flagSign",this.flagSign)
+            
         },
 
          
@@ -149,7 +150,8 @@
                                                 this.proCopyright[$index].status= '7';
                                                 this.openToast("已滞留");  
                                                 this.proCopyright.splice($index,1);
-                                        }
+                                            }
+                                           this.flagSign = "";
                                     }
                          
                                  }).catch(err => {
@@ -248,10 +250,9 @@
                         coo.sign(data,( coo.LoginUrl    +   "pcpmobile/querySignWayBillInfo.action")).then(res => {
                               if(res.status == 200 && res.data.success == true) {
 
-                                  if(!this.flag  && this.flagMounted) {
-                                      this.flagMounted = false;
+                              
                                       this.proCopyright = res.data.wayBillInfoList;
-                                  } 
+                                 
                                       this.totalpage = Math.ceil(res.data.totalCount/this.limit);  //计算出需要刷新的次数              
                                 
                                 }

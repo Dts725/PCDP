@@ -96,10 +96,6 @@ window.iOSBarCodeString = function (data) {
         }
     })
 
-
-
-
-
 var vm = new Vue({
     el: "#app",
     router,

@@ -79,7 +79,7 @@
 
         
             created () {
-                if (coo.getCache("dataDetentionList")) {
+                if (coo.getCache("dataDetentionList").length>2 &&  coo.getCache("flagSign")) {
                     
                     this.proCopyright = JSON.parse(coo.getCache("dataDetentionList"));
                 } else { 
@@ -87,6 +87,7 @@
                 
 
                 }
+    
             },
             beforeDestroy () {
                 coo.setCache ("dataDetentionList",JSON.stringify(this.proCopyright))
@@ -206,7 +207,7 @@
             loadTop : function  () {
            
                 this.pageNo =1;
-                console.log("下拉刷新执行了");
+                // console.log("下拉刷新执行了");
                 this.start = 0;
                 this.loadPageList();
                 setTimeout (() => {           

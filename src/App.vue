@@ -49,7 +49,7 @@ data () {
   
 },
 created () {
-    
+
 },
 methods : {
   //再出拿到哈希值 决定tittle 的名字
