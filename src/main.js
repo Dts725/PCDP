@@ -3,6 +3,8 @@ import Vue from "vue";
 
 //引入根组件
 import App from "./App.vue"
+import Vuex from "vuex";
+import  store from "./store.js";
 // import login from "./components/login.vue"
 //引入路由配置
 import router from "./routers/router.js"
@@ -12,7 +14,6 @@ import './img/icon/iconfont.css'
 import MintUI from 'mint-ui'
 import "./commn.css";
 import 'mint-ui/lib/style.css'
-Vue.use(MintUI);
 import coo from './config.js'
 import axios from "axios";
 //引入mui的css
@@ -21,6 +22,8 @@ import "../libs/mui/css/icons-extra.css"
 //添加一个响应拦截器
 
 import { Toast } from 'mint-ui';
+Vue.use(Vuex);
+Vue.use(MintUI);
 window.NativeConn = function () {
     var callScanFun = function (data) {
         console.log(data);
@@ -99,6 +102,7 @@ window.iOSBarCodeString = function (data) {
 var vm = new Vue({
     el: "#app",
     router,
+    store,
     template: "<App/>",
     components: {App}
 })

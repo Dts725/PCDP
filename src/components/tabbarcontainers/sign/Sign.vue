@@ -2,7 +2,7 @@
 <div   ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
 
 
-   <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore"
+   <mt-loadmore :top-method="loadTop"  :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore"
   infinite-scroll-disabled="loading">
     <ul class="wrap">
       <li  class = "info-sign"  v-for="(item,index) in proCopyright" :key="item.id" >
@@ -17,9 +17,9 @@
                   <li><span class="iconfont" v-cloak>&#xe61c; : &nbsp;到件操作  &nbsp; {{item.arriveTime | formatDate}}   </span></li>
                   <li><span class="iconfont" v-cloak >&#xe606; : &nbsp;签收操作  &nbsp; {{item.signforTime | formatDate}}  </span></li>
                   <li><span  class="iconfont" v-cloak>&#xe620; : &nbsp;{{item.receiveAddress}}  </span></li>
-                  <li v-show="item.status == 3" class = "sign-detention">  
-                       <mt-button @click.native="openConfirm('是否进行签收操作?','700',item.id,item.wayBillNo,index)" size="large">
-                            
+                  <li v-if="item.status == 3"  class = "sign-detention">  
+                       <mt-button   @click.native="openConfirm('是否进行签收操作?','700',item.id,item.wayBillNo,index)" size="large">
+                        
                                 <span>签收</span>
                          
                        </mt-button>
@@ -40,20 +40,21 @@
 </template>
 
 <script>
-    
+   
     import { Loadmore } from 'mint-ui';
     import {wrapper} from 'mint-ui'
     import {formatDate}  from '../../../date.js'
     import axios from 'axios'
     import coo   from '../../../config.js'
     import { MessageBox } from 'mint-ui' //confirm
-
-    import { Toast } from 'mint-ui';
+    // import '../../../store.js'
+    import { Toast } from 'mint-ui'
  
     export default {
         data () {
 
             return {
+                countOperation       : 0 , //下标数字初始值,
                 flagSign             : "true",
                 loading              : false,            //默认false 滑动加载
                 wrapperHeight        : 0,          //页面scroll 数据
@@ -73,26 +74,27 @@
         created () {
             if ((coo.getCache("dataSignList").length>2)  &&  coo.getCache("flagTopieces")) {
                     //此处使用缓存
-                    this.proCopyright = JSON.parse(coo.getCache("dataSignList"))  
+                    this.proCopyright = JSON.parse(coo.getCache("dataSignList"));
+                    this.signStore();
             } else {
                 console.log("怎么进来的");
-                    this.loadPageList();  //初次访问查询列表  
+                    this.loadPageList();  //初次访问查询列表
+                    this.signStore();
+                      
             }
             //页面刷新 true  不刷新
             coo.setCache("flagSign","true")
+        },
+        mounted(){
+            
+        
+                    this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;//组件更新动态计算页面scroll 数据
         },
         beforeDestroy () {
             coo.setCache ("dataSignList",JSON.stringify(this.proCopyright))
             coo.setCache("flagSign",this.flagSign)
             
         },
-
-         
-        mounted(){
-            
-        
-                    this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;//组件更新动态计算页面scroll 数据
-            },
         filters : {
                  formatDate (time) {
                      let date = new Date(time);
@@ -152,6 +154,9 @@
                                                 this.proCopyright.splice($index,1);
                                             }
                                            this.flagSign = "";
+                                           //-------------------------------状态管理天至此处-------------------------------------
+                                           this.countOperation = this.countOperation - 1;
+                                           this.$store.commit('signNumberCommit',this.countOperation);
                                     }
                          
                                  }).catch(err => {
@@ -188,49 +193,53 @@
                             //   setTimeout (() => {
                             //       //此处定时器客给可不给用来控制刷新加载的速度
                             //   },50)
-                                  this.upLoadMore();
+                                this.upLoadMore();
+                                this.signStore();
+                                  
                       } 
                 
             },
-            loadBottom : function () {
-                // console.log("上来刷新执行了");
-                  if(this.totalpage == 1){
-                    this.pageNo = 1;
-                    this.allLoaded = true;
+            // loadBottom : function () {
+            //     console.log("上来刷新执行了");
+            //       if(this.totalpage == 1){
+            //         this.pageNo = 1;
+            //         this.allLoaded = true;
                        
-                       } else if (this.pageNo ==this.totalpage){
-                              this.allLoaded = true
-                              this.pageNo = parseInt(this.pageNo) + 1;                                         
-                            }else{
-                            //   console.log("more方法查询的")
-                              this.pageNo = parseInt(this.pageNo) + 1;
-                              this.start = this.start +20;
-                              this.allLoaded = false;
+            //            } else if (this.pageNo ==this.totalpage){
+            //                   this.allLoaded = true
+            //                   this.pageNo = parseInt(this.pageNo) + 1;                                         
+            //                 }else{
+            //                 //   console.log("more方法查询的")
+            //                   this.pageNo = parseInt(this.pageNo) + 1;
+            //                   this.start = this.start +20;
+            //                   this.allLoaded = false;
 
                               
-                                 //此处若用 请给给上拉事件加节流阀
+            //                      //此处若用 请给给上拉事件加节流阀
                                
-                                  this.upLoadMore();
-                      } 
-                         setTimeout (() => {
-                                    this.$refs.loadmore.onBottomLoaded();// 固定方法，查询完要调用一次，用于重新定位
+            //                       this.upLoadMore();
+            //                     this.signStore();
+            //           } 
+            //              setTimeout (() => {
+            //                         this.$refs.loadmore.onBottomLoaded();// 固定方法，查询完要调用一次，用于重新定位
 
-                                  }, 2500)
+            //                       }, 2500)
 
-            },
+            // },
             //下拉刷新执行
               loadTop : function  () {
            
                 this.pageNo =1;
-             
                 this.start = 0;
                 this.loadPageList();
-                setTimeout (() => {           
+                
+                this.signStore();         
+                setTimeout (() => {  
                         this.$refs.loadmore.onTopLoaded();
                     },300)  
             },
 
-             loadPageList:function (){
+             loadPageList : function (){
 
                 // console.log("初始化查询");
         
@@ -253,7 +262,23 @@
                               
                                       this.proCopyright = res.data.wayBillInfoList;
                                  
-                                      this.totalpage = Math.ceil(res.data.totalCount/this.limit);  //计算出需要刷新的次数              
+                                      this.totalpage = Math.ceil(res.data.totalCount/this.limit);  //计算出需要刷新的次数    
+                                      
+                                    //   this.proCopyright.forEach( (item,index,arr) =>{
+                                    //       if(item.status == 3) {
+                                    //         //   this.countOperation = this.countOperation + 1;
+                                    //           this.countOperation++;
+                                    //       }
+                                    //      this.$store.commit('signNumberCommit',this.countOperation);
+                                    //   })
+                                      
+
+
+
+
+
+                                            
+                                           
                                 
                                 }
                             }).catch( function (error) {
@@ -304,11 +329,17 @@
                         })
    
             },
-        
-    
-
-
-    
+        //状态管理
+        signStore () {
+                this.countOperation = 0;
+                this.proCopyright.forEach( (item,index,arr) =>{
+                    if(item.status == 3) {
+                        //   this.countOperation = this.countOperation + 1;
+                        this.countOperation++;
+                    }
+                this.$store.commit('signNumberCommit',this.countOperation);
+                })
+            }
         }
     }
 </script>

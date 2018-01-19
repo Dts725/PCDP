@@ -15,10 +15,13 @@
 				  <span class="mui-tab-label" >到件</span>
 		  	</router-link>
 			  <router-link class="mui-tab-item1" to="/sign?1">
+                   <span class="detetion" v-cloak>{{signIco}}</span>
+              
 			  	<span class="mui-icon iconfont">&#xe773;</span>
 			  	<span class="mui-tab-label">签收</span>
 		  	</router-link>
 		  	<router-link class="mui-tab-item1" to="/detention?2">
+                   <span class="detetion"  v-cloak>{{detentionIco}}</span>
 				  <span class="mui-icon iconfont">&#xe66c;</span>
 				  <span class="mui-tab-label">滞留</span>
 		  	</router-link>
@@ -50,6 +53,14 @@ data () {
 },
 created () {
 
+},
+computed : {
+    signIco  () {
+        return this.$store.state.signNumber;
+    },
+    detentionIco () {
+        return this.$store.state.detentionNumber;
+    }
 },
 methods : {
   //再出拿到哈希值 决定tittle 的名字
@@ -132,5 +143,43 @@ html body {
     z-index: 20;
     width: 100%;
 }
+.mui-tab-item1 {
+    position: relative;
+    top: 0;
+    left: 0;
+    
+}
 
+/* .detetion {
+    position: absolute;
+    top: 0;
+    right: 25px;
+
+    display: block;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    color: #fff;
+    font-size: 8px;
+    background-color: red;
+    border-radius: 50%;
+    z-index: 22;
+} */
+.detetion {
+    display: block;
+    width: 30px;
+    height: 19px;
+    border-radius: 9px;
+    font-size: 12px;
+    background-color: #f44336;
+    color: #fff;
+    position: absolute;
+    top: 1px;
+    right: 6px;
+}
+
+.mui-tab-item1:nth-of-type(2) >.detetion {
+
+      background-color: #4caf50;
+}
 </style>

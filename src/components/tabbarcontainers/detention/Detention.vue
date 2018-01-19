@@ -55,16 +55,17 @@
         data () {
 
             return {
-                $index               : 0,                    //获取当前项的index
+                countOperation       : 0,         //状态码初始值
+                $index               : 0,         //获取当前项的index
                 $id                  :  "" ,  
-                $wayBillNo           :  0,              //获取当前项的id
+                $wayBillNo           :  0,         //获取当前项的id
                 // signStatus : true,              //判断是否签收
               
-                loading              : false,            //默认false 滑动加载
+                loading              : false,       //默认false 滑动加载
                  
                 wrapperHeight        : 0,          //页面scroll 数据
-                start                : 0,                 //数据加载开始的位置
-                limit                : 20,                 // 每页允许的加载数据条数
+                start                : 0,           //数据加载开始的位置
+                limit                : 20,          // 每页允许的加载数据条数
                 accessToken          :    coo.getCache('accessToken'),
                 cooperateCode        :    coo.getCache('cooperateCode'),
                 mobileUserName       :    coo.getCache('mobileUserName'),
@@ -80,11 +81,12 @@
         
             created () {
                 if (coo.getCache("dataDetentionList").length>2 &&  coo.getCache("flagSign")) {
-                    
                     this.proCopyright = JSON.parse(coo.getCache("dataDetentionList"));
+                    this.detentionStore();
                 } else { 
                     this.loadPageList();
-                
+                    this.detentionStore();
+                    
 
                 }
     
@@ -119,7 +121,7 @@
             });
               
             },
-              openConfirm(msg,statusCode) {
+            openConfirm(msg,statusCode) {
                   //提示信息
                  MessageBox.confirm(msg).then(action=> {
                         
@@ -161,6 +163,8 @@
                                      this.openToast("已退件");  
                                 }
                             }
+                            this.countOperation--;
+                            this.$store.commit('detentionNumberCommit',this.countOperation)
                             
                          
                         }).catch(err => {
@@ -181,6 +185,7 @@
              },
     
             loadMoreMore : function () {
+                //滚动加载
                 // console.log("出发了scroll");
                 
                 // this.loading =true;
@@ -193,13 +198,12 @@
                         
                             }else{
                             //   console.log("more方法查询的")
-                              this.pageNo = parseInt(this.pageNo) + 1;
-                              this.start = this.start +20;
-                            //   this.allLoaded = false;
-                            //   setTimeout (() => {
-                            //       //此处定时器客给可不给用来控制刷新加载的速度
-                            //   },50)
-                                  this.upLoadMore();
+                                this.pageNo = parseInt(this.pageNo) + 1;
+                                this.start = this.start +20;
+                          
+                                this.upLoadMore();
+                                this.detentionStore();
+                                  
                       } 
                 
             },
@@ -210,6 +214,7 @@
                 // console.log("下拉刷新执行了");
                 this.start = 0;
                 this.loadPageList();
+                this.detentionStore();
                 setTimeout (() => {           
                         this.$refs.loadmore.onTopLoaded();
                     },300)  
@@ -234,13 +239,12 @@
                         coo.sign(data,(coo.LoginUrl    +   "pcpmobile/queryRetentionWayBillInfo.action")).then(res => {
                               if(res.status == 200 && res.data.success == true) {
 
-                                      this.proCopyright = res.data.wayBillInfoList;
+                                    this.proCopyright = res.data.wayBillInfoList;
                                   
-                                      this.totalpage = Math.ceil(res.data.totalCount/this.limit);  //计算出需要刷新的次数              
+                                    this.totalpage = Math.ceil(res.data.totalCount/this.limit);  //计算出需要刷新的次数              
                                 
                                 }
                             }).catch( function (error) {
-            
                                 if(error.response){
                                         console.log(error.response.data);
                                         console.log(error.response.status);
@@ -289,6 +293,18 @@
                         })
    
             },
+
+            // 状态管理
+            detentionStore () {
+                this.countOperation = 0;
+                this.proCopyright.forEach((item,index,arr) => {
+                    if (item.status == 9) {
+                        this.countOperation++;
+                    }
+    
+                    this.$store.commit('detentionNumberCommit',this.countOperation);
+                })
+            }
         
     
 
