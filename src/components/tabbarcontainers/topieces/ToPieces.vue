@@ -36,7 +36,7 @@ import { Search } from 'mint-ui';
 export default { 
   data () {
     return {
- 
+        flagTopieces                    :   false,      //默认为false 用来判断下个页面是否需要刷新
         value                   :    "",
         dataList                :    [],
         dataPiecesValueList     :    [],
@@ -70,7 +70,7 @@ export default {
         let scanWaybillNumberFn = function (datas) {
             //  console.log(datas);
             let valueTmp =that.dataPiecesValueList.indexOf(datas);
-             //禁止重复查询订单
+             //禁止重复查询订单-----------------------------------------------------------------------------------------------------
             if (valueTmp != -1) {
                 Toast ({
                         message     : "请勿重复输入该订单!",
@@ -80,16 +80,7 @@ export default {
                     })
                  that.value = null;
                  return
-             } else {
-                 //判断数组长度
-                 if(that.dataPiecesValueList.length <50) {
-                     that.dataPiecesValueList.push(datas);
-                 }else {
-                     that.dataPiecesValueList.shift(); 
-                     that.dataPiecesValueList.push(datas); 
-                     
-                 }
-             }
+             } 
             let data = {
                 "searchWayBillNo": parseInt(datas),
                 "accessToken": that.accessToken,
@@ -106,6 +97,8 @@ export default {
                         
 
                         that.dataList.unshift(res.data.wayBillInfo);
+                           //缓存去重的数组
+                        this.dataPiecesValueList.unshift(res.data.searchWayBillNo)
                         that.value = null;
 
                     } else {
@@ -155,6 +148,9 @@ export default {
                 if( res.status == 200 && res.data.success == true ) {
 
                     this.dataList.splice($index,1);
+                       //删除对应的缓存数组元素
+                    this.dataPiecesValueList.splice($index,1);
+                    flagTopieces = true;
                     Toast({
                         message: '操作成功',
                         iconClass: 'icon icon-success',
@@ -196,14 +192,6 @@ export default {
                     })
                  this.value = null;
                  return
-             } else {
-                 if(this.dataPiecesValueList.length <50) {
-                     this.dataPiecesValueList.push(this.value);
-                 }else {
-                     this.dataPiecesValueList.shift();
-                     this.dataPiecesValueList.push(this.value);
-                     
-                 }
              }
              
              
@@ -223,8 +211,10 @@ export default {
                 if(res.status == 200) {
                     if(res.data.success == true){ 
                         
-                        console.log(this.dataList);
+                        // console.log(res.data);
                             this.dataList.unshift(res.data.wayBillInfo);
+                            //缓存去重的数组
+                            this.dataPiecesValueList.unshift(res.data.searchWayBillNo)
                             this.value = null;
                         
                   

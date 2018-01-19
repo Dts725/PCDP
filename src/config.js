@@ -6,8 +6,7 @@ export default {
     //var LoginUrl ='https://pcp.deppon.com/pcp-web/';//线上地址；
     depponVersion : '0.0.1.0' ,//版本号；
     sysCode  : "APP",
-    refreshImgUrlID: 'http://10.230.34.166:8080/pcp-web/pcpmobile/getGenerateSessionId.action',//测试获取验证码ID地址
-    refreshImgUrl: 'http://10.230.34.166:8080/pcp-web/pcpmobile/securityCode.action?sessionId=',//测试刷新验证码地址
+ 
     //封装缓存
     testLoginUrl: 'http://10.230.34.166:8080/pcp-web/pcpmobile/userLogin.action',
     getCache :(key) =>{
