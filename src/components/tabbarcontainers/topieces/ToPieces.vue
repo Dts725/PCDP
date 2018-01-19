@@ -106,7 +106,7 @@ export default {
 
                         that.dataList.unshift(res.data.wayBillInfo);
                            //缓存去重的数组
-                        this.dataPiecesValueList.unshift(res.data.searchWayBillNo)
+                        htat.dataPiecesValueList.unshift(res.data.searchWayBillNo)
                         that.value = null;
 
                     } else {
