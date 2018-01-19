@@ -263,7 +263,7 @@
                                       this.proCopyright = res.data.wayBillInfoList;
                                  
                                       this.totalpage = Math.ceil(res.data.totalCount/this.limit);  //计算出需要刷新的次数    
-                                      
+                                      this.signStore();
                                     //   this.proCopyright.forEach( (item,index,arr) =>{
                                     //       if(item.status == 3) {
                                     //         //   this.countOperation = this.countOperation + 1;

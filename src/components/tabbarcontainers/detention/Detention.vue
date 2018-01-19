@@ -240,8 +240,9 @@
                               if(res.status == 200 && res.data.success == true) {
 
                                     this.proCopyright = res.data.wayBillInfoList;
-                                  
-                                    this.totalpage = Math.ceil(res.data.totalCount/this.limit);  //计算出需要刷新的次数              
+
+                                    this.totalpage = Math.ceil(res.data.totalCount/this.limit);  //计算出需要刷新的次数  
+                                    this.detentionStore();            
                                 
                                 }
                             }).catch( function (error) {

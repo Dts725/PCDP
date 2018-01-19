@@ -1,5 +1,5 @@
 var path = require("path");
-// const uglify = require('uglifyjs-webpack-plugin'); // 压缩js的插件
+const uglify = require('uglifyjs-webpack-plugin');
 //引入插件
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -20,15 +20,15 @@ module.exports = {
                 test: /\.css$/,
                 //当文件后缀匹配之后，会调用这个数组中的加载器对文件进行打包操作
                 //调用加载器的顺序是从后向前的！
-                use: [ 'style-loader', 'css-loader' ]
+                use: ['style-loader', 'css-loader']
             },
             {
                 test: /\.less$/,
-                use: [ 'style-loader', 'css-loader', 'less-loader']
+                use: ['style-loader', 'css-loader', 'less-loader']
             },
             {
                 test: /\.sass$/,
-                use: [ 'style-loader', 'css-loader', 'sass-loader']
+                use: ['style-loader', 'css-loader', 'sass-loader']
             },
             {
                 test: /\.(jpg|png|gif|jpeg|svg|ttf|woff|woff2|eot)$/,
@@ -50,9 +50,9 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: "./index.html"
         }),
-     
-            // new uglify(),
-     
+
+        new uglify(),
+
         new webpack.HotModuleReplacementPlugin()
     ],
     //下面这个属性是专门用来配置 webpack-dev-server的运行参数的

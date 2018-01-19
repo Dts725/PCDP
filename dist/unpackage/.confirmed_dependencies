@@ -1,1 +1,10 @@
-null
+{
+  "index.html": {
+    "href": "index.html",
+    "resources": [
+      "build.js"
+    ],
+    "refer": [],
+    "priority": 0
+  }
+}

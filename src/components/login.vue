@@ -37,6 +37,8 @@
 <script>
 import axios from "axios";
 import { Toast } from 'mint-ui';
+import { Field } from 'mint-ui';
+
 import coo from '../config.js'
 import { Indicator } from 'mint-ui';
 import router  from 'router'

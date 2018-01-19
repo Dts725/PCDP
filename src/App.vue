@@ -15,13 +15,13 @@
 				  <span class="mui-tab-label" >到件</span>
 		  	</router-link>
 			  <router-link class="mui-tab-item1" to="/sign?1">
-                   <span class="detetion" v-cloak>{{signIco}}</span>
+                   <span v-show="signIco" class="detetion" v-cloak>{{signIco}}</span>
               
 			  	<span class="mui-icon iconfont">&#xe773;</span>
 			  	<span class="mui-tab-label">签收</span>
 		  	</router-link>
 		  	<router-link class="mui-tab-item1" to="/detention?2">
-                   <span class="detetion"  v-cloak>{{detentionIco}}</span>
+                   <span class="detetion" v-show="detentionIco"  v-cloak>{{detentionIco}}</span>
 				  <span class="mui-icon iconfont">&#xe66c;</span>
 				  <span class="mui-tab-label">滞留</span>
 		  	</router-link>
@@ -36,8 +36,6 @@
 
 <script>
 import  coo from  './config'
-
-
 export default {
 data () {
   return {
