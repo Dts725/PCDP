@@ -121,7 +121,6 @@ export default {
       },
      
       toPieces (itemId,wayBillNo,$index) {
-          this.flagTopieces = 0;  
            MessageBox.confirm('确定执行到件操作?').then (action => {
               
                 
@@ -144,8 +143,7 @@ export default {
                     this.dataList.splice($index,1);
                        //删除对应的缓存数组元素
                     this.dataPiecesValueList.splice($index,1);
-                //    this.flagTopieces = 0;  
-                  
+                    this.flagTopieces = 0;  
                     Toast({
                         message: '操作成功',
                         iconClass: 'icon icon-success',
