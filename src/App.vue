@@ -42,7 +42,8 @@ export default {
       mesage: ["到件", "签收", "滞留", "我的"]
     };
   },
-  created() {},
+  mounted  () {
+  },
   computed: {
     signIco() {
       return this.$store.state.tips.signNumber;

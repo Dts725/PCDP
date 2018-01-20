@@ -84,7 +84,7 @@ export default {
       this.$refs.wrapper.getBoundingClientRect().top; //组件更新动态计算页面scroll 数据
   },
   beforeDestroy() {
-    this.beforeDestroyDetntion();
+    this.beforeDestroyDetntion(); 
   },
   filters: {
     formatDate(time) {

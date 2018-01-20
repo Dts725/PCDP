@@ -47,7 +47,7 @@ export default {
       roleAuth: coo.getCache("roleAuth")
     };
   },
-  created() {
+  mounted () {
     this.createdToPieces();
   },
   beforeDestroy() {
@@ -135,6 +135,7 @@ export default {
               //删除对应的缓存数组元素
               this.dataPiecesValueList.splice($index, 1);
               this.flagTopieces = 0;
+			  this.$store.commit("signNumberCommit", this.$store.state.tips.signNumber+1);
               Toast({
                 message: "操作成功",
                 iconClass: "icon icon-success",

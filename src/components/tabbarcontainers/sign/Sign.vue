@@ -79,8 +79,6 @@ export default {
       this.$refs.wrapper.getBoundingClientRect().top; //组件更新动态计算页面scroll 数据
   },
   beforeDestroy() {
-    // coo.setCache ("dataSignList",JSON.stringify(this.proCopyright))
-    // coo.setCache("flagSign",this.flagSign)
     this.beforeDestroySign();
   },
   filters: {
@@ -128,6 +126,8 @@ export default {
                 this.openToast("已签收");
               } else {
                 this.proCopyright[$index].status = "7";
+				this.$store.commit("detentionNumberCommit", this.$store.state.tips.detentionNumber+1);
+
                 this.openToast("已滞留");
                 this.proCopyright.splice($index, 1);
               }
