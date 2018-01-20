@@ -78,30 +78,17 @@
             }
         },
 
-        
-            created () {
-                if (coo.getCache("dataDetentionList").length>2 &&  coo.getCache("flagSign")) {
-                    this.proCopyright = JSON.parse(coo.getCache("dataDetentionList"));
-                    this.detentionStore();
-                } else { 
-                    this.loadPageList();
-                    this.detentionStore();
-                    
-
-                }
-    
-            },
-            beforeDestroy () {
-                coo.setCache ("dataDetentionList",JSON.stringify(this.proCopyright))
-            },
-         mounted(){
+        mounted(){
                 // this.loadPageList();
-             
+                this.mountedDetention();
                 this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;//组件更新动态计算页面scroll 数据
+            },
+        beforeDestroy () {
+                this.beforeDestroyDetntion();
             },
          filters : {
                  formatDate (time) {
-                     let date = new Date(time);
+                    let date = new Date(time);
                     return formatDate (date, 'yyyy-MM-dd hh:mm')
                        }  
             },
@@ -305,6 +292,31 @@
     
                     this.$store.commit('detentionNumberCommit',this.countOperation);
                 })
+            },
+            mountedDetention () {
+                console.log(this.$store.state.sign.flagSign);
+                
+                try {
+                    if (this.$store.state.detention.dataDetentionList.length > 2 && this.$store.state.sign.flagSign) {
+                        this.proCopyright = this.$store.state.detention.dataDetentionList;
+                        this.detentionStore();
+                    } else {
+                        this.loadPageList();
+                        this.detentionStore();
+                    }
+                } catch (error) {
+                    console.error(error);
+                    
+                }
+            },
+            beforeDestroyDetntion () {
+                  try {
+                    this.$store.dispatch('dataDetentionListActions',this.proCopyright);
+                    this.$store.dispatch('flagSignCommitActions',1);
+                } catch (error) {
+                    console.error(error);
+                    
+                }
             }
         
     

@@ -85,14 +85,7 @@ export default {
   
 
  },
- created  () {
-               coo.setCache("dataListToPieces","") //缓存到件页面数据
-               coo.setCache("dataPiecesValueList","")//缓存到件页面value
-               coo.setCache("dataSignList","")//缓存签收页面dataList
-               coo.setCache("dataDetentionList","");//缓存到件页面value
-           
-     
- },
+
   
  
   methods : {

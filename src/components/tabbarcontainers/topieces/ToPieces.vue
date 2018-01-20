@@ -31,12 +31,13 @@
 import { Toast } from 'mint-ui'
 import coo   from '../../../config.js'
 import { MessageBox } from 'mint-ui';
-import axios from 'axios'
+import axios from 'axios';
 import { Search } from 'mint-ui';   
+// import  '../../../store.js';
 export default { 
   data () {
     return {
-        flagTopieces            :    "true",
+        flagTopieces            :    1,
         value                   :    "",
         dataList                :    [],
         dataPiecesValueList     :    [],
@@ -47,26 +48,11 @@ export default {
     }
   },
   created () {
-      //页面选渲染时获取缓存 缓存写在 login 页面的created 中
-      if (coo.getCache("dataListToPieces")) {
-          this.dataList =  JSON.parse( coo.getCache("dataListToPieces"));
-      };
-      if (coo.getCache("dataPiecesValueList")) {
-          this.dataPiecesValueList =  JSON.parse( coo.getCache("dataPiecesValueList"));          
-      }
-      //true 页面不刷新
-        coo.setCache("flagTopieces","true")
-      
-        
+    this.createdToPieces();
   },
     beforeDestroy () {
-        //页面消亡前保存数据
-        coo.setCache("dataListToPieces",JSON.stringify(this.dataList))
-        coo.setCache("dataPiecesValueList",JSON.stringify (this.dataPiecesValueList))
-        coo.setCache("flagTopieces",this.flagTopieces)
-        
-        
-        
+    this.beforeDestroyTopieces();
+          
   },
 
   methods: {
@@ -135,7 +121,7 @@ export default {
       },
      
       toPieces (itemId,wayBillNo,$index) {
-          
+          this.flagTopieces = 0;  
            MessageBox.confirm('确定执行到件操作?').then (action => {
               
                 
@@ -158,7 +144,7 @@ export default {
                     this.dataList.splice($index,1);
                        //删除对应的缓存数组元素
                     this.dataPiecesValueList.splice($index,1);
-                   this.flagTopieces = "";  
+                //    this.flagTopieces = 0;  
                   
                     Toast({
                         message: '操作成功',
@@ -252,6 +238,27 @@ export default {
                     console.log(err);
             })
            
+      },
+      //creatd 中的函数
+    createdToPieces () {
+        if (this.$store.state.toPieces.dataListToPieces) {
+            this.dataList =  this.$store.state.toPieces.dataListToPieces;
+        };
+        if (this.$store.state.toPieces.dataPiecesValueList) {
+            this.dataPiecesValueList = this.$store.state.toPieces.dataPiecesValueList;
+        }
+      this.$store.dispatch('flagTopiecesActions',1);
+      },
+      beforeDestroyTopieces () {
+           try {
+            this.$store.dispatch('dataListToPiecesActions',this.dataList);   //页面展示数据
+            this.$store.dispatch('dataPiecesValueListActions',this.dataPiecesValueList); //运单信息
+            this.$store.dispatch('flagTopiecesActions',this.flagTopieces);   //页面刷新
+
+        } catch (error) {
+            console.log(error);
+            
+        }
       }
 
     }

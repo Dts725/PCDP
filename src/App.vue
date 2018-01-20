@@ -54,10 +54,10 @@ created () {
 },
 computed : {
     signIco  () {
-        return this.$store.state.signNumber;
+        return this.$store.state.tips.signNumber;
     },
     detentionIco () {
-        return this.$store.state.detentionNumber;
+        return this.$store.state.tips.detentionNumber;
     }
 },
 methods : {

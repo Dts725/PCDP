@@ -47,15 +47,17 @@
     import axios from 'axios'
     import coo   from '../../../config.js'
     import { MessageBox } from 'mint-ui' //confirm
-    // import '../../../store.js'
+
     import { Toast } from 'mint-ui'
+   
+    import { mapActions } from 'vuex'
  
     export default {
         data () {
 
             return {
                 countOperation       : 0 , //下标数字初始值,
-                flagSign             : "true",
+                flagSign             : 1,
                 loading              : false,            //默认false 滑动加载
                 wrapperHeight        : 0,          //页面scroll 数据
                 start                : 0,                 //数据加载开始的位置
@@ -71,28 +73,15 @@
                 totalpage            :1,                //计算出来应有的 刷新次数   
             }
         },
-        created () {
-            if ((coo.getCache("dataSignList").length>2)  &&  coo.getCache("flagTopieces")) {
-                    //此处使用缓存
-                    this.proCopyright = JSON.parse(coo.getCache("dataSignList"));
-                    this.signStore();
-            } else {
-                console.log("怎么进来的");
-                    this.loadPageList();  //初次访问查询列表
-                    this.signStore();
-                      
-            }
-            //页面刷新 true  不刷新
-            coo.setCache("flagSign","true")
-        },
+    
         mounted(){
-            
-        
-                    this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;//组件更新动态计算页面scroll 数据
+             this.mountedSign();
+            this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;//组件更新动态计算页面scroll 数据
         },
         beforeDestroy () {
-            coo.setCache ("dataSignList",JSON.stringify(this.proCopyright))
-            coo.setCache("flagSign",this.flagSign)
+            // coo.setCache ("dataSignList",JSON.stringify(this.proCopyright))
+            // coo.setCache("flagSign",this.flagSign)
+           this.beforeDestroySign();
             
         },
         filters : {
@@ -153,7 +142,7 @@
                                                 this.openToast("已滞留");  
                                                 this.proCopyright.splice($index,1);
                                             }
-                                           this.flagSign = "";
+                                           this.flagSign = 0;
                                            //-------------------------------状态管理天至此处-------------------------------------
                                            this.countOperation = this.countOperation - 1;
                                            this.$store.commit('signNumberCommit',this.countOperation);
@@ -264,13 +253,7 @@
                                  
                                       this.totalpage = Math.ceil(res.data.totalCount/this.limit);  //计算出需要刷新的次数    
                                       this.signStore();
-                                    //   this.proCopyright.forEach( (item,index,arr) =>{
-                                    //       if(item.status == 3) {
-                                    //         //   this.countOperation = this.countOperation + 1;
-                                    //           this.countOperation++;
-                                    //       }
-                                    //      this.$store.commit('signNumberCommit',this.countOperation);
-                                    //   })
+                                
                                       
 
 
@@ -329,6 +312,7 @@
                         })
    
             },
+          
         //状态管理
         signStore () {
                 this.countOperation = 0;
@@ -339,7 +323,36 @@
                     }
                 this.$store.commit('signNumberCommit',this.countOperation);
                 })
+            },
+        mountedSign () { 
+            try {
+                if ((this.$store.state.sign.dataListSign).length >2 && this.$store.state.toPieces.flagTopieces) {
+                    this.proCopyright = this.$store.state.sign.dataListSign;    //使用缓存
+                    this.signStore();   //提示数字
+                } else {
+                    this.loadPageList();    //初始换查询
+                    this.signStore();
+                }
+            } catch (error) {
+                console.error(error);
+            };
+            this.$store.dispatch('flagSignCommitActions',1);
+        },
+        beforeDestroySign () {
+            // console.log(this.proCopyright);
+            
+            try {
+                
+                this.$store.dispatch('dataListSignActions',this.proCopyright);       
+                this.$store.dispatch('flagSignCommitActions',this.flagSign);
+                this.$store.dispatch('flagTopiecesActions',1);
+            } catch (error) {
+                console.error(error);
+                
             }
+        }
+         
+            
         }
     }
 </script>
