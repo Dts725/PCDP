@@ -35,45 +35,32 @@
 </template>
 
 <script>
-import  coo from  './config'
+import coo from "./config";
 export default {
-data () {
-  return {
-    mesage : [
-      "到件",
-      "签收",
-      "滞留",
-      "我的"
-    ]
-
-  }
-  
-},
-created () {
-
-},
-computed : {
-    signIco  () {
-        return this.$store.state.tips.signNumber;
-    },
-    detentionIco () {
-        return this.$store.state.tips.detentionNumber;
-    }
-},
-methods : {
-  //再出拿到哈希值 决定tittle 的名字
-  forTittle(){
-    return  location.hash.substr(-1);
+  data() {
+    return {
+      mesage: ["到件", "签收", "滞留", "我的"]
+    };
   },
-  //判断模块显示隐藏
-  flag(){
-    return   coo.getDataUrl();
+  created() {},
+  computed: {
+    signIco() {
+      return this.$store.state.tips.signNumber;
+    },
+    detentionIco() {
+      return this.$store.state.tips.detentionNumber;
+    }
+  },
+  methods: {
+    //再出拿到哈希值 决定tittle 的名字
+    forTittle() {
+      return location.hash.substr(-1);
+    },
+    //判断模块显示隐藏
+    flag() {
+      return coo.getDataUrl();
+    }
   }
-  
-
-
-}
-
 };
 </script>
 
@@ -120,32 +107,30 @@ html body {
   text-overflow: ellipsis;
 }
 .mui-bar .mui-icon {
-    font-size: 24px;
-    position: relative;
-    z-index: 20;
-    padding-top: 10px;
-    left: 0%;
-    transform: translateY(0px);
-    padding-bottom: 10px;
+  font-size: 24px;
+  position: relative;
+  z-index: 20;
+  padding-top: 10px;
+  left: 0%;
+  transform: translateY(0px);
+  padding-bottom: 10px;
 }
-.router-view{
-    overflow: auto;
-    box-sizing: border-box;
-    padding-bottom: 50px;
-    padding-top: 40px; 
-    /* z-index: -2; */
-
+.router-view {
+  overflow: auto;
+  box-sizing: border-box;
+  padding-bottom: 50px;
+  padding-top: 40px;
+  /* z-index: -2; */
 }
 .mint-header {
-    position: fixed;
-    z-index: 20;
-    width: 100%;
+  position: fixed;
+  z-index: 20;
+  width: 100%;
 }
 .mui-tab-item1 {
-    position: relative;
-    top: 0;
-    left: 0;
-    
+  position: relative;
+  top: 0;
+  left: 0;
 }
 
 /* .detetion {
@@ -164,20 +149,19 @@ html body {
     z-index: 22;
 } */
 .detetion {
-    display: block;
-    width: 30px;
-    height: 19px;
-    border-radius: 9px;
-    font-size: 12px;
-    background-color: #f44336;
-    color: #fff;
-    position: absolute;
-    top: 1px;
-    right: 6px;
+  display: block;
+  width: 30px;
+  height: 19px;
+  border-radius: 9px;
+  font-size: 12px;
+  background-color: #f44336;
+  color: #fff;
+  position: absolute;
+  top: 1px;
+  right: 6px;
 }
 
-.mui-tab-item1:nth-of-type(2) >.detetion {
-
-      background-color: #4caf50;
+.mui-tab-item1:nth-of-type(2) > .detetion {
+  background-color: #4caf50;
 }
 </style>

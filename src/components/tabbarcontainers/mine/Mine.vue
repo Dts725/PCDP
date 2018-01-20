@@ -1,7 +1,6 @@
 <template>
   <div class="mine">
-
-
+      <div class="img-ifon"><span>找个头像丢进来</span></div>
       <ul>
 
                 <li>
@@ -10,7 +9,6 @@
                         <span  v-cloak style="">&nbsp;&nbsp;&nbsp;{{userName}}  {{userPhone}}</span>
                     </mt-button>
                  </li>
-        
                <li>
                    <router-link to="/count">
                     <mt-button v-cloak size="large" class="mine-button" type="default" style="line-height : 1.6em;margin-top : 0.5em">  
@@ -19,10 +17,16 @@
                     </mt-button>
                     </router-link>
                 </li>
-                
+                 <li>
+                   <router-link to="/count">
+                    <mt-button v-cloak size="large" class="mine-button" type="default" style="line-height : 1.6em;margin-top : 0.5em">  
+                        <span  class="iconfont" style="font-size : 1.4em;margin-right : 15px;"> &#xe602;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+                        <span > &nbsp;&nbsp;&nbsp;信息录入</span>
+                    </mt-button>
+                    </router-link>
+                </li>
                <li> 
                     <mt-button size="large" @click="quick" type="danger" style="margin-top :2.5em; text-align : center " >  
-               
                         退出
                     </mt-button>
                 </li>
@@ -86,6 +90,11 @@ export default {
     box-shadow: 0 0 1px #b8bbbf;
 }
 
- 
+.img-ifon {
+    height: 80px;
+    text-align: center;
+    line-height: 80px;
+    background-color: rgba(44, 232, 17, 0.57);
+}
 
 </style>
