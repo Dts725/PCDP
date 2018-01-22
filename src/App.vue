@@ -165,4 +165,8 @@ html body {
 .mui-tab-item1:nth-of-type(2) > .detetion {
   background-color: #4caf50;
 }
+.mint-header-title {
+	padding-top: 2px;
+
+}
 </style>

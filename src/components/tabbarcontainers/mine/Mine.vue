@@ -1,14 +1,20 @@
 <template>
   <div class="mine">
-      <div class="img-ifon"><span>找个头像丢进来</span></div>
+      	<div class="img-ifon iconfont">
+		  <span class="">&#xe607;</span>
+		  <span v-cloak>{{userName}}
+			  <br>
+
+		  </span>
+      	</div>
       <ul>
 
-                <li>
+                <!-- <li>
                     <mt-button v-cloak size="large" class="mine-button" type="default" style="line-height : 1.6em;margin-top : 0.5em">  
                         <span  class="iconfont" style="font-size : 1.4em;margin-right : 15px;"> &#xe61b;&nbsp;&nbsp;&nbsp;:</span>
                         <span  v-cloak style="">&nbsp;&nbsp;&nbsp;{{userName}}  {{userPhone}}</span>
                     </mt-button>
-                 </li>
+                 </li> -->
                <li>
                    <router-link to="/count">
                     <mt-button v-cloak size="large" class="mine-button" type="default" style="line-height : 1.6em;margin-top : 0.5em">  
@@ -91,10 +97,31 @@ export default {
 }
 
 .img-ifon {
+	margin-top: 5PX;
     height: 80px;
     text-align: center;
     line-height: 80px;
-    background-color: rgba(44, 232, 17, 0.57);
+	background-color: rgb(246,248,250); 
+	display: flex;
+	justify-content: space-around;
+	box-sizing: border-box;
 }
-
+.img-ifon span:nth-of-type(1) {
+	text-align: right;
+	font-size: 64px;
+	color: #26a2ff;
+	/* line-height: 100%; */
+	width: 45%;
+	padding-right: 15px;
+	
+	
+}
+.img-ifon span:nth-of-type(2) {
+	text-align: left;
+	width: 50%;
+	text-indent: 15px;
+	color:rgb(101, 107, 126);
+	font-size: 20px;
+	font-weight: 700;
+}
 </style>
