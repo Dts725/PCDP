@@ -2,7 +2,7 @@
 <div   ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
 
 
-   <mt-loadmore :top-method="loadTop"  :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore"
+   <mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore"
   infinite-scroll-disabled="loading">
     <ul class="wrap">
       <li  class = "info-sign"  v-for="(item,index) in proCopyright" :key="item.id" >
@@ -49,7 +49,7 @@ import { MessageBox } from "mint-ui"; //confirm
 
 import { Toast } from "mint-ui";
 
-import { mapActions } from "vuex";
+
 
 export default {
   data() {
@@ -66,7 +66,7 @@ export default {
       roleAuth: coo.getCache("roleAuth"),
       pageNo: 1, //加载的页数  判断刷新次数 pangeNo ++
       proCopyright: [], //用来存储后台接受的数据
-      allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
+
       scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
       totalpage: 1 //计算出来应有的 刷新次数
     };
@@ -153,9 +153,6 @@ export default {
       // this.loading =true;
       if (this.totalpage == 1) {
         this.pageNo = 1;
-        this.allLoaded = true;
-      } else if (this.pageNo == this.totalpage) {
-        this.allLoaded = true;
       } else {
         //   console.log("more方法查询的")
         this.pageNo = parseInt(this.pageNo) + 1;

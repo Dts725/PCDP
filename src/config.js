@@ -69,39 +69,7 @@ export default {
         // alert('是否是iOS：' + isiOS);
     },
     
-    //全局window
-    // scan: (currentData) => {
-    //     if (!currentData.typeOf == "function") {
-    //         return 
-    //     }
-    //     window.deviceType = function () {   //设备类型
-    //         if (window.navigator.appVersion.indexOf("Android") !== -1) {
-    //             return 'Android';
-    //         } else {
-    //             return 'IOS';
-    //         }
-    //     }();
-        
-    //     window.Deppon_Scan_Main = function (type) {
-    //         if (window.deviceType() == 'IOS') {
-    //             iOSScanBarCode(type);
-    //         } else {
-    //             window.Android.scanTheCode(type);
-    //         }
-    //     }();
-    //     console.log("执行了23");
-    //     window.iOSBarCodeString = function (data,currentData) {
-    //         // var type = data.split(",")[0];
-    //         var wayBillNum = data.split(",")[1];
-    //         currentData(wayBillNum);
-    //     }();
 
-    // // }
-    // scanToPieces: () => {
-       
-       
-
-    // }
 
     
  

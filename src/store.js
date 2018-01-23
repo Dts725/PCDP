@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 Vue.use(Vuex)
+//下标提示页
 const moduleTipsNumber = {
     // 定义状态
     state: {
@@ -62,6 +63,7 @@ const moduleToPieces = {
         
   
 };
+//签收页状态
 const moduleSign = {
     state : {
         dataListSign : "",
@@ -95,6 +97,7 @@ const moduleSign = {
     }
 
 };
+//滞留页状态
 const moduleDetention = {
     state : {
         dataDetentionList : ""
@@ -111,6 +114,33 @@ const moduleDetention = {
             commit('dataDetentionListCommit', msg);
         }
     }
+};
+//零担线索状态
+const modulesEntry = {
+	state : {
+		entryList : "",
+		entryDetails : "",
+		flagEntry 	 : 1
+	},
+	mutations : {
+		entryListMutations (state,msg) {
+			state.entryList = msg;
+		},
+		entryDetailsMutations (state,msg) {
+			state.entryDetails = msg;
+		},
+		flagEntryMutations (state,msg) {
+			state.flagEntry = msg;
+		}
+	},
+	actions : {
+		entryListActions ({commit},msg) {
+			commit('entryListMutations',msg)
+		},
+		entryDetailsActions ({commit},msg) {
+			commit('entryDetailsMutations',msg)
+		}
+	}
 }
 
 
@@ -122,7 +152,8 @@ const store = new Vuex.Store({
         tips        : moduleTipsNumber,
         toPieces    : moduleToPieces,
         sign        : moduleSign,
-        detention   : moduleDetention
+		detention   : moduleDetention,
+		entry		: modulesEntry
         
     }
 })

@@ -12,16 +12,16 @@ import router from "./routers/router.js"
 import './img/icon/iconfont.css'
 //引入mint-ui
 import MintUI from 'mint-ui'
-import "./commn.css";
+import "./commn.css"
 import 'mint-ui/lib/style.css'
 import coo from './config.js'
-import axios from "axios";
+import axios from "axios"
 //引入mui的css
 import "../libs/mui/css/mui.css"
 import "../libs/mui/css/icons-extra.css"
 //添加一个响应拦截器
-
-import { Toast } from 'mint-ui';
+import Distpicker from 'v-distpicker'
+import { Toast } from 'mint-ui'
 Vue.use(Vuex);
 Vue.use(MintUI);
 window.NativeConn = function () {

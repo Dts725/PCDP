@@ -8,13 +8,6 @@
 		  </span>
       	</div>
       <ul>
-
-                <!-- <li>
-                    <mt-button v-cloak size="large" class="mine-button" type="default" style="line-height : 1.6em;margin-top : 0.5em">  
-                        <span  class="iconfont" style="font-size : 1.4em;margin-right : 15px;"> &#xe61b;&nbsp;&nbsp;&nbsp;:</span>
-                        <span  v-cloak style="">&nbsp;&nbsp;&nbsp;{{userName}}  {{userPhone}}</span>
-                    </mt-button>
-                 </li> -->
                <li>
                    <router-link to="/count">
                     <mt-button v-cloak size="large" class="mine-button" type="default" style="line-height : 1.6em;margin-top : 0.5em">  
@@ -24,10 +17,10 @@
                     </router-link>
                 </li>
                  <li>
-                   <router-link to="/count">
+                   <router-link to="/ExpressEntry/detailsEntry">
                     <mt-button v-cloak size="large" class="mine-button" type="default" style="line-height : 1.6em;margin-top : 0.5em">  
                         <span  class="iconfont" style="font-size : 1.4em;margin-right : 15px;"> &#xe602;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
-                        <span > &nbsp;&nbsp;&nbsp;信息录入</span>
+                        <span > &nbsp;&nbsp;&nbsp;零担线索</span>
                     </mt-button>
                     </router-link>
                 </li>
@@ -97,6 +90,8 @@ export default {
 }
 
 .img-ifon {
+	width: 95%;
+	margin: 0 auto;
 	margin-top: 5PX;
     height: 80px;
     text-align: center;
@@ -107,19 +102,19 @@ export default {
 	box-sizing: border-box;
 }
 .img-ifon span:nth-of-type(1) {
-	text-align: right;
+	text-align: left;
 	font-size: 64px;
 	color: #26a2ff;
 	/* line-height: 100%; */
-	width: 45%;
-	padding-right: 15px;
+	width: 30%;
+	text-indent: 10px;
 	
 	
 }
 .img-ifon span:nth-of-type(2) {
 	text-align: left;
-	width: 50%;
-	text-indent: 15px;
+	width: 65%;
+
 	color:rgb(101, 107, 126);
 	font-size: 20px;
 	font-weight: 700;
