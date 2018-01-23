@@ -1,6 +1,6 @@
 <template>
  
-  <div class="top">
+  <div class="top-pieces">
 
     
     <div>
@@ -265,7 +265,7 @@ input[type="search"] {
   width: 80%;
 }
 .mint-searchbar-inner {
-  height: 46px;
+  height: 36px;
   /* background-color: red; */
 }
 
@@ -359,5 +359,8 @@ ul {
 
   transform: translate(13px, -50px);
   z-index: 2;
+}
+.top-pieces {
+	margin-top: 40px;
 }
 </style>

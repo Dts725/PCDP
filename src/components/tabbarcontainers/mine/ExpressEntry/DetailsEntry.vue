@@ -150,7 +150,7 @@ export default {
 #warp {
 box-sizing: border-box;
 height: 100%;
-margin: 45px 0  35px 0;
+margin-top: 40px;
 overflow: auto;
 
 }
@@ -159,4 +159,5 @@ overflow: auto;
 	top: 0;
 	left: 0;
 }
+
 </style>

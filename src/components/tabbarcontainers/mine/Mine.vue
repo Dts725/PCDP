@@ -62,6 +62,10 @@ export default {
 </script>
 
 <style slot-scope>
+.mine{
+	margin-top: 40px;
+	overflow: auto;
+}
     .mine ul{
         margin-top: 20px;
         width: 95%;

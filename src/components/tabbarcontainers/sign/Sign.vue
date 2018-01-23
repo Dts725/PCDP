@@ -269,8 +269,8 @@ export default {
 </script>
 <style scoped >
 .fall-scoll {
-	/* margin-top: 41px;
-	margin-bottom: 41px; */
+	 margin-top: 40px;
+	overflow: auto;
 
 }
 .info-sign {

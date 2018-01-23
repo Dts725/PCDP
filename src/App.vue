@@ -117,11 +117,8 @@ html body {
   padding-bottom: 10px;
 }
 .router-view {
-  overflow: auto;
-  box-sizing: border-box;
-  padding-bottom: 50px;
-  padding-top: 40px;
-  /* z-index: -2; */
+  overflow: hidden; 
+
 }
 .mint-header {
   position: fixed;

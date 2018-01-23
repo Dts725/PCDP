@@ -20,7 +20,7 @@
             </div>
             <div class="iconfont">
                 <input placeholder="请输入验证码" v-model="securityCode" type="number">
-                <img @click="refreshImg" :src="VerificationImg"  alt="">
+                <img @click="refreshImg" :src="VerificationImg"  alt="验证码丢失了">
             </div>
 
            <!-- <mt-field placeholder="输入验证码" type="password"></mt-field>
@@ -125,10 +125,9 @@ export default {
 };
 </script>
 <style scoped>
-.body {
 
+.body {
   margin: 0 auto;
-  margin-top: -40px;
   width: 80%;
   position: relative;
   top: 0px;
@@ -160,5 +159,6 @@ export default {
     position: absolute;
     top: 3px;
     right: 0;
-}
+
+} 
 </style>

@@ -1,5 +1,5 @@
 <template>
-          <div>
+          <div class="count">
           <mt-header id="title-count" title="统计">
                 <router-link to="/mine?3" class="iconfont" slot="left"> 
                 &#xe6ba; 返回
@@ -129,6 +129,10 @@ export default {
 </script>
 
 <style scoped>
+.count{
+	margin-top: 40px;
+	overflow: auto;
+}
 .clearfix::after {
   content: "";
   display: block;

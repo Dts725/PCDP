@@ -159,9 +159,11 @@ export default {
 
 <style lang="css" scoped>
 .body {
+
   width: 80%;
   margin: 0 auto;
   font-size: 80%;
+  margin-top: 50px;
 }
 .img-login {
   width: 100%;
