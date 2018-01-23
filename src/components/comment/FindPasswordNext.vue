@@ -117,9 +117,7 @@ export default {
   padding-top: 80px;
 
 }
-.top-reset-pwd{
-    margin-top: -40px;
-}
+
 .qrdcode {
     float: left;
 }

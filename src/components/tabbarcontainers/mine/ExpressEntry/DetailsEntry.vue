@@ -151,6 +151,7 @@ export default {
 box-sizing: border-box;
 height: 100%;
 margin-top: 40px;
+padding-bottom: 35px; 
 overflow: auto;
 
 }

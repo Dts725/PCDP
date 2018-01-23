@@ -107,13 +107,14 @@ import {provs_data, citys_data, dists_data} from 'vue-pickers/lib/areaData';
 	}
 </script>
 <style scoped>
+.details-entry {
+	margin-top: 80px;
+}
+ 
 .iconfont {
 	font-size: 100%;
 }
-.details-entry{
-	padding-top: 40px;
-	margin-top: -40px;
-}
+
 .details-bottom {
 	position: fixed;
 	left: 0;

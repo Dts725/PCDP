@@ -65,24 +65,34 @@ export default {
         this.refreshImg()
     },
     methods : {
-    refreshImg : function  () {
+       //图片刷新
+    refreshImg() {
+      //获取后台图片ID
 
-          //获取后台图片ID
-        axios({
-            method: "post",
-            url: coo.refreshImgUrlID
-        }).then(res => {
-            if ((res.data.success === true) && (res.status === 200)) {
-                this.sessionId=res.data.sessionId;
-                // 得到刷新图片的地址
-                this.VerificationImg =coo.refreshImgUrl+ this.sessionId +"&date:" + new Date().getTime()
+      axios({
+        method: "POST",
+        // headers     : { 'Content-Type': 'application/json; charset=UTF-8' },
+        url: coo.LoginUrl + "pcpmobile/getGenerateSessionId.action"
+      })
+        .then(res => {
+          if (res.data.success === true && res.status === 200) {
+            this.sessionId = res.data.sessionId;
+            // 得到刷新图片的地址
+            this.VerificationImg =
+              coo.LoginUrl +
+              "pcpmobile/securityCode.action?sessionId=" +
+              this.sessionId +
+              "&date:" +
+              new Date().getTime();
             // console.log(this.sessionId)
-            }
-        }).catch(err => {
-            console.log(err)
+          }
         })
-   
-      },
+        .catch(err => {
+          console.log("进来了");
+
+          console.log(err);
+        });
+    },
       nextButton : function ()  {
 
           if(!this.securityCode || !this.userCode) {
