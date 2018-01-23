@@ -20,7 +20,7 @@ import axios from "axios"
 import "../libs/mui/css/mui.css"
 import "../libs/mui/css/icons-extra.css"
 //添加一个响应拦截器
-import Distpicker from 'v-distpicker'
+
 import { Toast } from 'mint-ui'
 Vue.use(Vuex);
 Vue.use(MintUI);

@@ -1,5 +1,5 @@
 <template>
-<div   ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+<div class="fall-scoll"  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
 
 
    <mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore"
@@ -300,6 +300,11 @@ export default {
 };
 </script>
 <style scoped>
+.fall-scoll {
+	margin-top: -41px;
+	margin-bottom: -41px;
+
+}
 .info-sign {
   position: relative;
   letter-spacing: 0.1px;

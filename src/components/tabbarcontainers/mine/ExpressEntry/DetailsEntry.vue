@@ -1,28 +1,30 @@
 <template>
-<div class="details-entry">
+<div class="details-entry" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" >
         <mt-header id="title-count" title="零担线索">
             <router-link to="/mine?3" class="iconfont" slot="left"> 
                 &#xe6ba; 返回
           	</router-link>
         </mt-header>
-<mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore"
-  infinite-scroll-disabled="loading">
-    <ul class="wrap">
-      <li  class = "info-sign"  v-for="item in 20" :key="item.id" >
-          <!-- 这样添加水印图片 不然webpack 打包会报错找不到图片路径 -->
-          <!-- <img  v-if="item.status === '7'"    src='../../../img/imgQian@2x.png' alt="">
-          <img  v-else   src='../../../img/imgWatie@2x.png' alt=""> -->
-           <ul>
-                  <li><span>姓名  </span><span > :    </span></li>
-                  <li><span class="iconfont" v-cloak>联系方式 : <a :href="'tel:' +item.recipientsPhone">{{item.recipientsPhone}}</a> </span></li>
-                  <li><span class="iconfont" v-cloak>货物信息 :&nbsp; {{item.recipients}}   </span></li>
-                  <li><span class="iconfont" v-cloak>发货地址 :  &nbsp; {{item.arriveTime | formatDate}}   </span></li>
-                  <li><span class="iconfont" v-cloak >提交时间 &nbsp;&nbsp; {{item.signforTime | formatDate}}  </span></li>
-              </ul>
-          </li>
-    </ul>
-  </mt-loadmore>
-
+		<div id="warp">
+		<mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore"
+  			infinite-scroll-disabled="loading">
+    			<ul class="wrap">
+      				<li  class = "info-sign"  v-for="item in 20" :key="item.id" >
+          				<!-- 这样添加水印图片 不然webpack 打包会报错找不到图片路径 -->
+          				<!-- <img  v-if="item.status === '7'"    src='../../../img/imgQian@2x.png' alt="">
+          				<img  v-else   src='../../../img/imgWatie@2x.png' alt=""> -->
+           			<ul>
+                  		<li><span>姓名  </span><span > :    </span></li>
+                  		<li><span class="iconfont" v-cloak>联系方式 : <a :href="'tel:' +item.recipientsPhone">{{item.recipientsPhone}}</a> </span></li>
+                  		<li><span class="iconfont" v-cloak>货物信息 :&nbsp; {{item.recipients}}   </span></li>
+                  		<li><span class="iconfont" v-cloak>发货地址 :  &nbsp; {{item.arriveTime | formatDate}}   </span></li>
+                  		<li><span class="iconfont" v-cloak >提交时间 &nbsp;&nbsp; {{item.signforTime | formatDate}}  </span></li>
+              		</ul>
+          		</li>
+    		</ul>
+  		</mt-loadmore>
+		</div>
+	
 	<router-link to="/ExpressEntry/listEntry">
 		<div class="details-bottom">
 				<span>新建线索</span>
@@ -43,21 +45,21 @@ import { MessageBox } from "mint-ui"; //confirm
 import { Toast } from "mint-ui";
 export default {
 		data () {
-					return {
-						dataList : "",
-						loading: false, //默认false 滑动加载
-						allLoaded : false
-						
+				return {
+					dataList : "",
+					loading: false, //默认false 滑动加载
+					allLoaded : false,
+					wrapperHeight : 0	//页面滚动高度
 
-					}
+				}
 				},
 		mounted () {
-			// this.mountedDataList();	
-			// this.mountstedScroo();
+			this.mountedDataList();	
+			this.mountstedScroo();
 		},
 		beforeDestroy(){
 			//本地存储当前页面数据
-			// this.beforeDestroyDataList();
+			this.beforeDestroyDataList();
 		},
 		filters: {
 			//注册一个时间过滤器
@@ -70,16 +72,16 @@ export default {
 	  		loadTop: function() {
 				  //下拉刷新
 				  
-				// this.expressDetailsHTTP();
-      			// setTimeout(() => {
-        		// 	  this.$refs.loadmore.onTopLoaded(); 
-      			// }, 300);
+				this.expressDetailsHTTP();
+      			setTimeout(() => {
+        			  this.$refs.loadmore.onTopLoaded(); 
+      			}, 300);
 			},
 			loadMoreMore: function() {
 				
 					//滚动刷新
 			
-			// this.expressDetailsHTTP();					
+			this.expressDetailsHTTP();					
 			  },
 			expressDetailsHTTP() {
 				//页面数据请求
@@ -95,9 +97,9 @@ export default {
 					
 				// })
 			},
-			mountstedScroo () {
-			this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;//组件更新动态计算页面scroll 数据
-				
+			mountstedScroo ()  {
+			
+				this.wrapperHeight =document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top; //组件更新动态计算页面scroll 数据
 			},
 			mountedDataList () {
 				if ((this.$store.state.entry.entryList).length>2 && this.$store.state.entry.flagEntry) {
@@ -126,10 +128,6 @@ export default {
 .iconfont {
 	font-size: 100%;
 }
-.details-entry{
-	margin-top: -40px;
-	/* padding-bottom: 40px; */
-}
 .details-bottom {
 	position: fixed;
 	left: 0;
@@ -142,20 +140,23 @@ export default {
 	color: #fff;
 	font-size: 80%;
 }
-.wrap {
-	width: 100%;
-	margin: 0 auto;
-	font-size: 80%;
-	margin-top: 40px;
+.wrap li {
+	box-sizing: border-box;
+	background-color: rgb(236, 156, 6);
+	padding: 5px 10px;
+	font-size: 14px;
+	margin-bottom: 5px;
+}
+#warp {
+box-sizing: border-box;
+height: 100%;
+margin: 45px 0  35px 0;
+overflow: auto;
 
 }
-
-.wrap li{
-	background-color: #26a2ff;
-	margin: 10px 0;
-	padding: 5px 10px;		
-
+#title-count{
+	position: fixed;
+	top: 0;
+	left: 0;
 }
-
-
 </style>
