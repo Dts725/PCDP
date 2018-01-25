@@ -5,8 +5,9 @@ export default {
     LoginUrl : 'http://10.230.34.166:8080/pcp-web/',//测试环境IP地址
     //var LoginUrl ='https://pcp.deppon.com/pcp-web/';//线上地址；
     depponVersion : '0.0.1.0' ,//版本号；
-    sysCode  : "APP",
-	LindanUrl: 'http://10.224.66.14:8080/pcp-web/',
+	sysCode  : "APP",
+	//http:10.224.66.14:8081/pcp-web/pcpmobile/insetInputClue.action
+	LingDanUrl: 'http://10.224.66.14:8081/pcp-web/', //零担线索测试接口
     //封装缓存
     testLoginUrl: 'http://10.230.34.166:8080/pcp-web/pcpmobile/userLogin.action',
     getCache :(key) =>{

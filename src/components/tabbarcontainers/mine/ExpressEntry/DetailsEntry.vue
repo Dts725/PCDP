@@ -9,16 +9,15 @@
 		<mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore"
   			infinite-scroll-disabled="loading">
     			<ul class="wrap">
-      				<li  class = "info-sign"  v-for="item in 20" :key="item.id" >
-          				<!-- 这样添加水印图片 不然webpack 打包会报错找不到图片路径 -->
-          				<!-- <img  v-if="item.status === '7'"    src='../../../img/imgQian@2x.png' alt="">
-          				<img  v-else   src='../../../img/imgWatie@2x.png' alt=""> -->
+      				<li v-cloak  class = "info-sign"  v-for="item in dataList" :key="item.entryList" >
+          				<span class="" v-if="item.deliveryStatus === '2'" v-cloak>已提交</span>
+          				<span v-else v-cloak>已开单</span>
            			<ul>
-                  		<li><span>姓名  </span><span > :    </span></li>
-                  		<li><span class="iconfont" v-cloak>联系方式 : <a :href="'tel:' +item.recipientsPhone">{{item.recipientsPhone}}</a> </span></li>
-                  		<li><span class="iconfont" v-cloak>货物信息 :&nbsp; {{item.recipients}}   </span></li>
-                  		<li><span class="iconfont" v-cloak>发货地址 :  &nbsp; {{item.arriveTime | formatDate}}   </span></li>
-                  		<li><span class="iconfont" v-cloak >提交时间 &nbsp;&nbsp; {{item.signforTime | formatDate}}  </span></li>
+                  		<li><span>姓名  </span><span > :   {{item.partnerName}} </span></li>
+                  		<li><span class="iconfont" v-cloak>联系方式 : <a :href="'tel:' +item.phoneNumber">{{item.phoneNumber}}</a> </span></li>
+                  		<li><span class="iconfont" v-cloak>货物信息 :&nbsp; {{item.goodsInformation}}   </span></li>
+                  		<li><span class="iconfont" v-cloak>发货地址 :  &nbsp; {{item.deliveryAddress}}   </span></li>
+                  		<li><span class="iconfont" v-cloak >提交时间 &nbsp;&nbsp; {{item.createTime | formatDate}}  </span></li>
               		</ul>
           		</li>
     		</ul>
@@ -46,73 +45,106 @@ import { Toast } from "mint-ui";
 export default {
 		data () {
 				return {
-					dataList : "",
-					loading: false, //默认false 滑动加载
-					allLoaded : false,
-					wrapperHeight : 0	//页面滚动高度
-
+					dataList 		: [],
+					loading			: false, //默认false 滑动加载
+					allLoaded 		: false,
+					wrapperHeight 	: 0,	//页面滚动高度
+					limit 			: 20,
+					start			: 0,
+					accessToken		: coo.getCache("accessToken"),
+      				cooperateCode	: coo.getCache("cooperateCode"),
+					mobileUserName  : coo.getCache("mobileUserName"),
+					roleAuth		: coo.getCache("roleAuth"),
+					pageNo			: 0 //可分页数
 				}
 				},
+	
 		mounted () {
+			//页面加载数据
 			this.mountedDataList();	
-			this.mountstedScroo();
+			//滚动高度
+			this.mountstedScroll();
+		
 		},
 		beforeDestroy(){
 			//本地存储当前页面数据
+
 			this.beforeDestroyDataList();
 		},
 		filters: {
 			//注册一个时间过滤器
+
     		formatDate(time) {
       		let date = new Date(time);
       		return formatDate(date, "yyyy-MM-dd hh:mm");
     	}
-  },
+  		},
 		methods : {
-	  		loadTop: function() {
-				  //下拉刷新
-				  
+	  		loadTop: function() {    
+				//下拉刷新
+
 				this.expressDetailsHTTP();
       			setTimeout(() => {
         			  this.$refs.loadmore.onTopLoaded(); 
       			}, 300);
 			},
 			loadMoreMore: function() {
-				
-					//滚动刷新
-			
+			//滚动刷新
+
+			this.start = this.start + 20;
 			this.expressDetailsHTTP();					
 			  },
 			expressDetailsHTTP() {
-				//页面数据请求
-				// let data = {
+			//	页面数据请求
 
-				// };
-
-				// data = JSON.stringify(data);
-				// coo.sign(data,coo.LoginUrl).then(res => {
-
-				// }).atch ( err => {
-				// 	console.error(err);
+      			let data = {
+        			limit: this.limit,
+        			start: this.start,
+        			accessToken: this.accessToken,
+        			cooperateCode: this.cooperateCode,
+        			mobileUserName: this.mobileUserName,
+        			roleAuth: this.roleAuth
+				  };
+				  data = JSON.stringify(data);
+				coo.sign(data,coo.LingDanUrl+'pcpmobile/queryInputClueList.action').then(res => {
+				
+					if(res.status === 200 && res.data.success === true) {
+						this.pageNo = res.data.totalCount/this.limit;
+						this.dataList = this.dataList.concat(res.data.entityList)
+					} else {
+							Toast({
+        					message: '数据获取失败请重试',
+        					duration: 1200,       				
+						  });
+					}
 					
-				// })
+				}).catch ( err => {
+
+					console.error(err);
+					Toast({
+        					message: res.message,
+        					duration: 1200,
+						  });
+
+					
+				})
 			},
-			mountstedScroo ()  {
-			
+			mountstedScroll ()  {
+				//滚动加载页面
 				this.wrapperHeight =document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top; //组件更新动态计算页面scroll 数据
 			},
 			mountedDataList () {
+				//页面数据是否走缓存
 				if ((this.$store.state.entry.entryList).length>2 && this.$store.state.entry.flagEntry) {
 					this.dataList = this.$store.state.entry.entryList;
 				} else {
 					//重新获取数据页面信息
-					this.expressDetailsHTTP();
-					
+					this.expressDetailsHTTP();	
 				}
 			},
 			beforeDestroyDataList () {
 				//保存当前页面状态
-				this.$store.commit('entryList',this.dataList)	
+				this.$store.dispatch('entryListActions',this.dataList)	
 			}
 		}
 }

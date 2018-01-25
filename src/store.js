@@ -139,6 +139,9 @@ const modulesEntry = {
 		},
 		entryDetailsActions ({commit},msg) {
 			commit('entryDetailsMutations',msg)
+		},
+		flagEntryMutations ({commit},msg) {
+			commit('flagEntryMutations',msg)
 		}
 	}
 }

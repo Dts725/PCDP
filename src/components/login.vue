@@ -133,8 +133,7 @@ export default {
         method: "POST",
         // headers     : { 'Content-Type': 'application/json; charset=UTF-8' },
         url: coo.LoginUrl + "pcpmobile/getGenerateSessionId.action"
-      })
-        .then(res => {
+      }).then(res => {
           if (res.data.success === true && res.status === 200) {
             this.sessionId = res.data.sessionId;
             // 得到刷新图片的地址
@@ -146,8 +145,7 @@ export default {
               new Date().getTime();
             // console.log(this.sessionId)
           }
-        })
-        .catch(err => {
+        }).catch(err => {
           console.log("进来了");
 
           console.log(err);

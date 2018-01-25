@@ -7,11 +7,11 @@
         </mt-header>
 		<div class="warp-entry-list">
 			<ul>
-				<li v-cloak><span>姓名</span><input type="text" v-model="userName" placeholder="请输入姓名" autofocus></li>
-				<li v-cloak><span>联系电话</span><input type="number"  v-model="userPhone" placeholder="请输入联系电话" ></li>
-				<li v-cloak><span>货物信息</span> <input type="text" v-model="goodsInfo" placeholder="请输入货物信息" ></li>
+				<li v-cloak><span>姓名</span><input type="text" v-model="partnerName" placeholder="请输入姓名" autofocus></li>
+				<li v-cloak><span>联系电话</span><input type="number" pattern=[/^[0-9]{10}$/] v-model="phoneNumber" placeholder="请输入联系电话" ></li>
+				<li v-cloak><span>货物信息</span> <input type="text" v-model="goodsInformation" placeholder="请输入货物信息" ></li>
 				<li v-cloak><span>发货地址</span> <input  readonly = "value" type="text" @click="isShow" v-model="selectStr" placeholder="省/市/区" ></li>
-				<li v-cloak><textarea cols="20"	rows="6" v-model="detailsInfo" maxlength="150"> 
+				<li v-cloak><textarea cols="20"	rows="6" placeholder="请将输入字数限制在150字之内" v-model="detailsInfo" maxlength="150"> 
 			</textarea></li>
 			</ul>
 		</div>
@@ -44,22 +44,72 @@ import {provs_data, citys_data, dists_data} from 'vue-pickers/lib/areaData';
 		data () {
 			return {
 				pickData3: {
-  						columns: 3,
-  						link: true,
-  						pData1: provs_data,
-  						pData2: citys_data,
-  						pData3: dists_data,
+  						columns	: 3,
+  						link	: true,
+  						pData1	: provs_data,
+  						pData2	: citys_data,
+  						pData3	: dists_data,
 						},
-				selectStr   : "",
-				show3 		: false,
-				userName 	: "",
-				userPhone 	: "",
-				goodsInfo 	: "",
-				detailsInfo : ""
+				selectStr   		: "",
+				show3 				: false,
+				partnerName 		: "",
+				phoneNumber 		: "",
+				goodsInformation 	: "",
+				detailsInfo 		: "",
+				accessToken			: coo.getCache("accessToken"),
+      			cooperateCode		: coo.getCache("cooperateCode"),
+				mobileUserName		: coo.getCache("mobileUserName"),
+				roleAuth			: coo.getCache("roleAuth"),
+				phoneFlag  			: false //标识电话状态的
+			}
+		},
+		watch : {
+			phoneNumber (phoneNumber) {
+				//手机号校验
+				let  pattern = /^[1][0-9]{10}$/;
+				// let oldPhoneNumber = phoneNumber;
+				if(phoneNumber.length >= 11){
+					if (pattern.test(phoneNumber)) {
+						this.phoneFlag = true;
+					} else {
+						this.phoneFlag = false;
+					 	Toast({
+        					message: '请输入正确的手机号',
+        					duration: 1200,
+					  	});
+						this.phoneNumber = phoneNumber.substring(0,11);
+				}
+				}
+			},
+			partnerName (partnerName) {
+				if(partnerName.length>80) {
+					this.partnerName = partnerName.substring(0,80);
+					console.log(partnerName);
+			
+					Toast({
+						message:  '你输入的用户名过长请重新输入',
+        					duration: 1200,
+						  });
+						
+				} 
+			},
+			goodsInformation (goodsInformation) {
+					if(goodsInformation.length>80) {
+					this.goodsInformation = goodsInformation.substring(0,80);
+					console.log(goodsInformation);
+			
+					Toast({
+						message:  '你输入的信息过长请重新输入',
+        					duration: 1200,
+						  });
+						
+				}
 			}
 		},
 		methods : {
+
 		isShow () {
+			//picker显示
 			if(this.show3) {
 				this.show3 = false;
 			} else {
@@ -70,9 +120,11 @@ import {provs_data, citys_data, dists_data} from 'vue-pickers/lib/areaData';
 				this.show3 = true;
 		},
 		close() {
+			//picker关闭
 				this.show3 = false;
 		},
-	    confirmFn(data) {
+		confirmFn(data) {
+			//来自picker 插件
 			
 				this.selectStr = data.select1.text
 				if (data.select2) {
@@ -84,21 +136,55 @@ import {provs_data, citys_data, dists_data} from 'vue-pickers/lib/areaData';
         		this.close()
       		},
 		commit () {
-			
-			var data = {
-				"userName" : this.userName,
-					"userPhone" : this.userPhone,
-					"goodsInfo"  : this.goodsInfo,
-					"selectStr"	: this.selectStr,
-					"detailsInfo" : this.detailsInfo
-
-				};
+			//提交数据
+			if (!this.partnerName || !this.phoneNumber || !this.goodsInformation || !this.detailsInfo) {
+				Toast({
+        					message: '有选项为空请检查输入',
+        					duration: 1200,
+        					className: "open-tosat"
+						  });
+					return ;		  
+			} else {
+				if (!this.phoneFlag) {
+					Toast({
+        					message: '手机号输入错误请重新输入',
+        					duration: 1000,
+        					className: "open-tosat"
+						  });
+				}
+			}
+			let data = {
+				   	accessToken		: this.accessToken,
+         			mobileUserName	: this.mobileUserName,
+          			cooperateCode	: this.cooperateCode,
+					inputClueRequest  :{
+						partnerName 		: this.partnerName,
+						phoneNumber 		: this.phoneNumber,
+						goodsInformation 	: this.goodsInformation,
+						deliveryAddress		: this.selectStr + this.detailsInfo
+				}
+			};
 				data =JSON.stringify(data);
 				console.log(data);
 				
-				coo.sign(data,coo.LoginUrl).then(res => {
+				coo.sign(data,coo.LingDanUrl + 'pcpmobile/insetInputClue.action').then(res => {
 					//数据提交成功就更改缓存
+					if (res.status === 200 && res.data.success === true) {
+						this.$router.push('/ExpressEntry/detailsEntry')
+						this.$store.commit('flagEntryMutations',0)
+					} else {
+							Toast({
+        					message:  res.message,
+        					duration: 1200,
+        					className: "open-tosat"
+						  });
+					}
 				}).catch (err => {
+					Toast({
+        					message:  '提交失败 请重试',
+        					duration: 1000,
+        					className: "open-tosat"
+						  });
 					console.error(err);
 					
 				})
