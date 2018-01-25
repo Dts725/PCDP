@@ -6,7 +6,7 @@ export default {
     //var LoginUrl ='https://pcp.deppon.com/pcp-web/';//线上地址；
     depponVersion : '0.0.1.0' ,//版本号；
     sysCode  : "APP",
-	
+	LindanUrl: 'http://10.224.66.14:8080/pcp-web/',
     //封装缓存
     testLoginUrl: 'http://10.230.34.166:8080/pcp-web/pcpmobile/userLogin.action',
     getCache :(key) =>{
