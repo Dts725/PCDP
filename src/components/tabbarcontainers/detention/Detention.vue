@@ -2,7 +2,7 @@
 <div class="fall-scoll"  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
 
 
-   <mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore"
+   <mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"   finite-scroll-distance = "100" v-infinite-scroll="loadMoreMore"
   infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true">
     <ul class="wrap">
       <li  class = "info-sign"  v-for="(item,index) in proCopyright" :key="item.id" >
@@ -47,7 +47,7 @@ import { formatDate } from "../../../date.js";
 import axios from "axios";
 import coo from "../../../config.js";
 import { MessageBox } from "mint-ui"; //confirm
-
+import { Indicator } from 'mint-ui';
 import { Toast } from "mint-ui";
 
 export default {
@@ -57,7 +57,10 @@ export default {
       $index			: 0, //获取当前项的index
       $id				: "",
       $wayBillNo		: 0, //获取当前项的id
+      // signStatus : true,              //判断是否签收
+
       loading			: false, //默认false 滑动加载
+
       wrapperHeight		: 0, //页面scroll 数据
       start				: 0, //数据加载开始的位置
       limit				: 20, // 每页允许的加载数据条数
@@ -69,14 +72,14 @@ export default {
       proCopyright		: [], //用来存储后台接受的数据
       allLoaded			: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
       scrollMode		: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
-      totalpage			: 1 //计算出来应有的 刷新次数
+	  totalpage			: 1 ,//计算出来应有的 刷新次数
+	  refreshFlag		: 0 //页面刷新所用的时间
     };
   },
 
-mounted() {
-	// this.loadPageList();
-    this.mountedDetention(); 
-	
+  mounted() {
+    // this.loadPageList();
+    this.mountedDetention();
     this.wrapperHeight =
       document.documentElement.clientHeight -
       this.$refs.wrapper.getBoundingClientRect().top; //组件更新动态计算页面scroll 数据
@@ -160,21 +163,26 @@ mounted() {
 
     loadMoreMore: function() {
       //滚动加载
-    //   console.log("页面走缓存也刷新了");
+      // console.log("出发了scroll");
 
       // this.loading =true;
       if (this.totalpage == 1) {
         this.pageNo = 1;
         this.allLoaded = true;
-      } else if (this.pageNo == this.totalpage) {
-        this.allLoaded = true;
+      } else if (this.pageNo >= this.totalpage) {
+		this.allLoaded = true;
+			Toast({
+        		message: '数据加载完成',
+        		duration: 500,       				
+				});	
       } else {
-        //   console.log("more方法查询的")
+		//   console.log("more方法查询的")
+		
         this.pageNo = parseInt(this.pageNo) + 1;
         this.start = this.start + 20;
 
         this.upLoadMore();
-        this.detentionStore();
+		this.detentionStore();
       }
     },
     //下拉刷新执行
@@ -186,14 +194,19 @@ mounted() {
       this.detentionStore();
       setTimeout(() => {
         this.$refs.loadmore.onTopLoaded();
-      }, 300);
+	  }, 300);
+
+	  
     },
 
     loadPageList: function() {
       // 初始化查询 滞留页面数据
 
       // console.log("初始化查询");
-
+		Indicator.open({
+  			text: '加载中...',
+ 		 	spinnerType: 'fading-circle'
+		});
       let data = {
         limit: this.limit,
         start: this.start,
@@ -209,9 +222,9 @@ mounted() {
           if (res.status == 200 && res.data.success == true) {
             this.proCopyright = res.data.wayBillInfoList;
 
-			this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
-			// this.$store.commit('totalpageDetentionCommit',this.totalpage); // 初次刷新缓存totolpage		
-            this.detentionStore();
+            this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
+			this.detentionStore();
+			Indicator.close();
           }
         })
         .catch(function(error) {
@@ -227,6 +240,10 @@ mounted() {
     },
 
     upLoadMore: function() {
+		Indicator.open({
+  			text: '加载中...',
+ 		 	spinnerType: 'fading-circle'
+		});
       //封装刷新滞留数据加载函数
       let data = {
         limit: this.limit,
@@ -247,7 +264,8 @@ mounted() {
             this.proCopyright = this.proCopyright.concat(
               res.data.wayBillInfoList
             );
-
+				Indicator.close();
+				this.refreshFlag = 1;
             // console.log(this.totalpage);
             // console.log(this.pageNo);
             // console.log(this.proCopyright);
@@ -267,6 +285,7 @@ mounted() {
         if (item.status == 9) {
           this.countOperation++;
         }
+
         this.$store.commit("detentionNumberCommit", this.countOperation);
       });
     },
@@ -276,8 +295,7 @@ mounted() {
           this.$store.state.detention.dataDetentionList.length > 2 &&
           this.$store.state.sign.flagSign
         ) {
-		  this.proCopyright = this.$store.state.detention.dataDetentionList;
-		//   this.totalpage    = this.$store.state.detention.totalpageDetention;
+          this.proCopyright = this.$store.state.detention.dataDetentionList;
           this.detentionStore();
         } else {
           this.loadPageList();
@@ -289,7 +307,6 @@ mounted() {
     },
     beforeDestroyDetntion() {
       try {
-		//缓存页面状态获取状态为滚动加载做准备
         this.$store.dispatch("dataDetentionListActions", this.proCopyright);
         this.$store.dispatch("flagSignCommitActions", 1);
       } catch (error) {

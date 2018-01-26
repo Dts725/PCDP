@@ -6,11 +6,11 @@
           	</router-link>
         </mt-header>
 		
-		<mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore" :bottom-all-loaded="allLoaded" v-infinite-scroll="loadMoreMore"
+		<mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  finite-scroll-distance = "100" :bottom-all-loaded="allLoaded" v-infinite-scroll="loadMoreMore"
   			infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true" >
 			<div class="wrap">
     			<ul>
-      				<li v-cloak  class = "info-entry"  v-for="item in dataList" :key="item.entryList" >
+      				<li  class = "info-entry"  v-for="item in dataList" :key="item.entryList" >
           				<img class="icon-entry" v-if="item.deliveryStatus === '2'" v-cloak src="../../../../img/yitijiao@2x.png">
           				<img  class="icon-entry" v-else v-cloak src="../../../../img/yikaidan@2x.png">
            			<ul class="ifon-item-entry">
@@ -43,6 +43,7 @@ import axios from "axios";
 import { InfiniteScroll } from 'mint-ui';
 import coo from "../../../../config.js";
 import { MessageBox } from "mint-ui"; //confirm
+import { Indicator } from 'mint-ui';
 
 import { Toast } from "mint-ui";
 export default {
@@ -60,7 +61,7 @@ export default {
 					roleAuth		: coo.getCache("roleAuth"),
 					pageNo			: 1, //开始页数
 					totalpage		: 0, //最大可分页码
-					firstFlag 		: 0	 //是否为初始化刷新
+					firstFlag		: 0, //是否首次刷新 或者上拉刷新
 				}
 				},
 	
@@ -87,20 +88,19 @@ export default {
 		methods : {
 	  		loadTop: function() {    
 				//下拉刷新
-				this.firstFlag = true;
+				this.pageNo = 1;
+				this.start = 0;
+				this.firstFlag = 1;
 				this.expressDetailsHTTP();
 			
       			setTimeout(() => {
-					  	Toast({
-        				message: '数据加载完毕',
-        				duration: 500,       				
-						});
         			  this.$refs.loadmore.onTopLoaded(); 
       			}, 300);
 			},
 			loadMoreMore: function() {
 			//滚动加载
-							console.log("到底了");
+				this.firstFlag = 0;
+							// console.log("到底了");
 				if (this.pageNo < this.totalpage) {
 					this.pageNo = this.pageNo + 1;
 					this.start = this.start + 20;
@@ -114,14 +114,12 @@ export default {
 						});
 				}			
 			},
-			
 			expressDetailsHTTP() {
+				Indicator.open({
+  					text: '加载中...',
+ 		 			spinnerType: 'fading-circle'
+				});
 			//	页面数据请求
-				if (this.firstFlag) {
-					this.start = 0;
-					this.pageNo =1;
-					this.dataList = [];
-				}
       			let data = {
         			limit: this.limit,
         			start: this.start,
@@ -135,9 +133,14 @@ export default {
 				
 					if(res.status === 200 && res.data.success === true) {
 						//回复状态
-						this.firstFlag = 0;
-						this.totalpage = Math.ceil(res.data.totalCount/this.limit);
-						this.dataList = this.dataList.concat(res.data.entityList);
+						if (firstFlag) {
+							this.totalpage = Math.ceil(res.data.totalCount/this.limit);
+							this.dataList = res.data.entityList;
+						} else {
+							this.totalpage = Math.ceil(res.data.totalCount/this.limit);
+							this.dataList = this.dataList.concat(res.data.entityList);
+						}
+						Indicator.close();
 					} else {
 							Toast({
         					message: '数据获取失败请重试',

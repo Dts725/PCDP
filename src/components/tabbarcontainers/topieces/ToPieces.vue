@@ -357,10 +357,14 @@ ul {
   height: 36px;
   position: absolute;
 
-  transform: translate(13px, -50px);
+  transform: translate(13px, -44px);
   z-index: 2;
 }
 .top-pieces {
 	margin-top: 40px;
 }
+.mintui-search:before{
+	line-height: 31px;
+}
+
 </style>

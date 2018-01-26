@@ -20,7 +20,7 @@ import axios from "axios"
 import "../libs/mui/css/mui.css"
 import "../libs/mui/css/icons-extra.css"
 //添加一个响应拦截器
-
+import { Indicator } from 'mint-ui';
 import { Toast } from 'mint-ui'
 Vue.use(Vuex);
 Vue.use(MintUI);
@@ -58,7 +58,8 @@ window.iOSBarCodeString = function (data) {
          * 2 全局路事件里面注册全局axios 响应拦截器
          * 3 拦截器里面修改 判断token 是否失效 配置next 路由
          */
-        // console.log(to.meta.requireAuth)
+		// console.log(to.meta.requireAuth)
+		Indicator.close();//每个路由切换前关闭过度状态
         if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
             if (coo.getCache("accessToken")) { // 通过vuex state获取当前的token是否存在
 

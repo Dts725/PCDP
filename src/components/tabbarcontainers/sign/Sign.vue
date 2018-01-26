@@ -2,9 +2,9 @@
 <div  class="fall-scoll" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
 
 
-   <mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore" infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true" >
+   <mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  finite-scroll-distance = "100" v-infinite-scroll="loadMoreMore" infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true" >
     <ul class="wrap">
-      <li  class = "info-sign"  v-for="(item,index) in proCopyright" :key="item.id" >
+      <li   class = "info-sign"  v-for="(item,index) in proCopyright" :key="item.id" >
           <!-- 这样添加水印图片 不然webpack 打包会报错找不到图片路径 -->
           <img  v-if="item.status === '7'"    src='../../../img/imgQian@2x.png' alt="">
           <img  v-else   src='../../../img/imgWatie@2x.png' alt="">
@@ -45,7 +45,7 @@ import { formatDate } from "../../../date.js";
 import axios from "axios";
 import coo from "../../../config.js";
 import { MessageBox } from "mint-ui"; //confirm
-
+import { Indicator } from 'mint-ui';
 import { Toast } from "mint-ui";
 
 
@@ -150,8 +150,7 @@ export default {
     loadMoreMore: function() {
       // console.log("出发了scroll");
       // this.loading =true;
-   
-			
+  
         //   console.log("more方法查询的")
 		if (this.totalpage > this.pageNo) {
 			 this.pageNo = parseInt(this.pageNo) + 1;
@@ -161,7 +160,7 @@ export default {
 		} else {
 			
 				Toast({
-        		message: '数据加载完毕',
+        		message: '数据加载完成',
         		duration: 500,       				
 				});	
 		}
@@ -174,15 +173,15 @@ export default {
       this.loadPageList();
       this.signStore();
       setTimeout(() => {
-		Toast({
-        		message: '数据加载完毕',
-        		duration: 500,       				
-		});
         this.$refs.loadmore.onTopLoaded();
       }, 300);
     },
     loadPageList: function() {
-      // console.log("初始化查询");
+	  // console.log("初始化查询");
+	  	Indicator.open({
+  			text: '加载中...',
+ 		 	spinnerType: 'fading-circle'
+		});
       let data = {
         limit: this.limit,
         start: this.start,
@@ -198,9 +197,9 @@ export default {
         .then(res => {
           if (res.status == 200 && res.data.success == true) {
             this.proCopyright = res.data.wayBillInfoList;
-			this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
-			// this.$store.commit('totalpageSignCommit',this.totalpage);// 初始化刷新缓存 totalpage 数据			
-            this.signStore();
+            this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
+			this.signStore();
+			Indicator.close();
           }
         })
         .catch(function(error) {
@@ -215,7 +214,13 @@ export default {
         });
     },
     upLoadMore: function() {
-      //封装刷新加载函数
+
+	  //封装刷新加载函数
+	    Indicator.open({
+  			text: '加载中...',
+ 		 	spinnerType: 'fading-circle'
+		});
+			
       let data = {
         limit: this.limit,
         start: this.start,
@@ -231,7 +236,8 @@ export default {
           if (res.status == "200" && res.data.success == true) {
             this.proCopyright = this.proCopyright.concat(
               res.data.wayBillInfoList
-            );
+			);
+			Indicator.close();
           }
         })
         .catch(err => {
@@ -245,7 +251,7 @@ export default {
       this.proCopyright.forEach((item, index, arr) => {
         if (item.status == 3) {
           this.countOperation++;
-		}
+        }
         this.$store.commit("signNumberCommit", this.countOperation);
       });
     },

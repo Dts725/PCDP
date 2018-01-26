@@ -69,7 +69,7 @@ export default {
           position: "bottom"
         });
       }
-    };
+	};
   },
   //页面元素显示前执行内容
   mounted() {
