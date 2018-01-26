@@ -2,8 +2,7 @@
 <div  class="fall-scoll" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
 
 
-   <mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore"
-  infinite-scroll-disabled="loading">
+   <mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore" infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true" >
     <ul class="wrap">
       <li  class = "info-sign"  v-for="(item,index) in proCopyright" :key="item.id" >
           <!-- 这样添加水印图片 不然webpack 打包会报错找不到图片路径 -->
@@ -151,15 +150,23 @@ export default {
     loadMoreMore: function() {
       // console.log("出发了scroll");
       // this.loading =true;
-      if (this.totalpage == 1) {
-        this.pageNo = 1;
-      } else {
+   
+			
         //   console.log("more方法查询的")
-        this.pageNo = parseInt(this.pageNo) + 1;
-        this.start = this.start + 20;
-        this.upLoadMore();
-        this.signStore();
-      }
+		if (this.totalpage > this.pageNo) {
+			 this.pageNo = parseInt(this.pageNo) + 1;
+        	 this.start = this.start + 20;
+        	 this.upLoadMore();
+        	 this.signStore();
+		} else {
+			
+				Toast({
+        		message: '数据加载完毕',
+        		duration: 500,       				
+				});	
+		}
+       
+      
     },
     loadTop: function() {
       this.pageNo = 1;
@@ -167,6 +174,10 @@ export default {
       this.loadPageList();
       this.signStore();
       setTimeout(() => {
+		Toast({
+        		message: '数据加载完毕',
+        		duration: 500,       				
+		});
         this.$refs.loadmore.onTopLoaded();
       }, 300);
     },
@@ -187,7 +198,8 @@ export default {
         .then(res => {
           if (res.status == 200 && res.data.success == true) {
             this.proCopyright = res.data.wayBillInfoList;
-            this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
+			this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
+			// this.$store.commit('totalpageSignCommit',this.totalpage);// 初始化刷新缓存 totalpage 数据			
             this.signStore();
           }
         })
@@ -233,7 +245,7 @@ export default {
       this.proCopyright.forEach((item, index, arr) => {
         if (item.status == 3) {
           this.countOperation++;
-        }
+		}
         this.$store.commit("signNumberCommit", this.countOperation);
       });
     },
@@ -270,7 +282,7 @@ export default {
 <style scoped >
 .fall-scoll {
 	 margin-top: 40px;
-	overflow: auto;
+	 overflow: auto;
 
 }
 .info-sign {
@@ -289,9 +301,8 @@ export default {
   padding: 5px 15px;
 }
 .info-sign > img {
-  width: 4.5em;
   position: absolute;
-  right: 1em;
+  right: 20px;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -359,6 +370,7 @@ ul {
   color: #fff;
 }
 .wrap {
+	
   margin-bottom: 49px;
 }
 .mint-button::after {

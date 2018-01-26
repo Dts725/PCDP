@@ -66,8 +66,9 @@ const moduleToPieces = {
 //签收页状态
 const moduleSign = {
     state : {
-        dataListSign : "",
-        flagSign     : 1
+        dataListSign 	: "",
+		flagSign     	: 1,
+		totalpageSign 	: 0
     },
     getters : {
         //待用
@@ -79,7 +80,10 @@ const moduleSign = {
         },
         flagSignCommit (state,msg) {
             state.flagSign = msg;
-        }
+		},
+		totalpageSignCommit (state,msg) {
+			state.totalpageSign = msg;
+		}
     },
     actions : {
         //消亡时调用 意不提交状态改变
@@ -100,14 +104,19 @@ const moduleSign = {
 //滞留页状态
 const moduleDetention = {
     state : {
-        dataDetentionList : ""
+		dataDetentionList 	:  "",
+		totalpageDetention 	:  0
     },getters : {
 
     },
     mutations : {
         dataDetentionListCommit(state,msg) {
             state.dataDetentionList = msg;
-        }
+		},
+		totalpageDetentionCommit(state,msg) {
+			state.totalpageDetention = msg ;	
+		}
+		
     },
     actions: {
         dataDetentionListActions ({commit},msg) {

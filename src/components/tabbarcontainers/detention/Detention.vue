@@ -3,7 +3,7 @@
 
 
    <mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore"
-  infinite-scroll-disabled="loading">
+  infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true">
     <ul class="wrap">
       <li  class = "info-sign"  v-for="(item,index) in proCopyright" :key="item.id" >
           <img   v-if="item.status ===  '9'" src= '../../../img/imgZhiliu@2x.png' alt="">
@@ -53,32 +53,30 @@ import { Toast } from "mint-ui";
 export default {
   data() {
     return {
-      countOperation: 0, //状态码初始值
-      $index: 0, //获取当前项的index
-      $id: "",
-      $wayBillNo: 0, //获取当前项的id
-      // signStatus : true,              //判断是否签收
-
-      loading: false, //默认false 滑动加载
-
-      wrapperHeight: 0, //页面scroll 数据
-      start: 0, //数据加载开始的位置
-      limit: 20, // 每页允许的加载数据条数
-      accessToken: coo.getCache("accessToken"),
-      cooperateCode: coo.getCache("cooperateCode"),
-      mobileUserName: coo.getCache("mobileUserName"),
-      roleAuth: coo.getCache("roleAuth"),
-      pageNo: 1, //加载的页数  判断刷新次数 pangeNo ++
-      proCopyright: [], //用来存储后台接受的数据
-      allLoaded: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
-      scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
-      totalpage: 1 //计算出来应有的 刷新次数
+      countOperation	: 0, //状态码初始值
+      $index			: 0, //获取当前项的index
+      $id				: "",
+      $wayBillNo		: 0, //获取当前项的id
+      loading			: false, //默认false 滑动加载
+      wrapperHeight		: 0, //页面scroll 数据
+      start				: 0, //数据加载开始的位置
+      limit				: 20, // 每页允许的加载数据条数
+      accessToken		: coo.getCache("accessToken"),
+      cooperateCode		: coo.getCache("cooperateCode"),
+      mobileUserName	: coo.getCache("mobileUserName"),
+      roleAuth			: coo.getCache("roleAuth"),
+      pageNo			: 1, //加载的页数  判断刷新次数 pangeNo ++
+      proCopyright		: [], //用来存储后台接受的数据
+      allLoaded			: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
+      scrollMode		: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
+      totalpage			: 1 //计算出来应有的 刷新次数
     };
   },
 
-  mounted() {
-    // this.loadPageList();
-    this.mountedDetention();
+mounted() {
+	// this.loadPageList();
+    this.mountedDetention(); 
+	
     this.wrapperHeight =
       document.documentElement.clientHeight -
       this.$refs.wrapper.getBoundingClientRect().top; //组件更新动态计算页面scroll 数据
@@ -162,7 +160,7 @@ export default {
 
     loadMoreMore: function() {
       //滚动加载
-      // console.log("出发了scroll");
+    //   console.log("页面走缓存也刷新了");
 
       // this.loading =true;
       if (this.totalpage == 1) {
@@ -211,7 +209,8 @@ export default {
           if (res.status == 200 && res.data.success == true) {
             this.proCopyright = res.data.wayBillInfoList;
 
-            this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
+			this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
+			// this.$store.commit('totalpageDetentionCommit',this.totalpage); // 初次刷新缓存totolpage		
             this.detentionStore();
           }
         })
@@ -268,7 +267,6 @@ export default {
         if (item.status == 9) {
           this.countOperation++;
         }
-
         this.$store.commit("detentionNumberCommit", this.countOperation);
       });
     },
@@ -278,7 +276,8 @@ export default {
           this.$store.state.detention.dataDetentionList.length > 2 &&
           this.$store.state.sign.flagSign
         ) {
-          this.proCopyright = this.$store.state.detention.dataDetentionList;
+		  this.proCopyright = this.$store.state.detention.dataDetentionList;
+		//   this.totalpage    = this.$store.state.detention.totalpageDetention;
           this.detentionStore();
         } else {
           this.loadPageList();
@@ -290,6 +289,7 @@ export default {
     },
     beforeDestroyDetntion() {
       try {
+		//缓存页面状态获取状态为滚动加载做准备
         this.$store.dispatch("dataDetentionListActions", this.proCopyright);
         this.$store.dispatch("flagSignCommitActions", 1);
       } catch (error) {
@@ -320,9 +320,9 @@ export default {
   padding: 5px 15px;
 }
 .info-sign > img {
-  width: 4.5em;
+
   position: absolute;
-  right: 1em;
+  right: 20px;
   top: 50%;
   transform: translateY(-50%);
 }

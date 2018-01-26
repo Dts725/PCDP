@@ -5,14 +5,15 @@
                 &#xe6ba; 返回
           	</router-link>
         </mt-header>
-		<div id="warp">
-		<mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"  v-infinite-scroll="loadMoreMore"
-  			infinite-scroll-disabled="loading">
-    			<ul class="wrap">
-      				<li v-cloak  class = "info-sign"  v-for="item in dataList" :key="item.entryList" >
-          				<span class="" v-if="item.deliveryStatus === '2'" v-cloak>已提交</span>
-          				<span v-else v-cloak>已开单</span>
-           			<ul>
+		
+		<mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore" :bottom-all-loaded="allLoaded" v-infinite-scroll="loadMoreMore"
+  			infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true" >
+			<div class="wrap">
+    			<ul>
+      				<li v-cloak  class = "info-entry"  v-for="item in dataList" :key="item.entryList" >
+          				<img class="icon-entry" v-if="item.deliveryStatus === '2'" v-cloak src="../../../../img/yitijiao@2x.png">
+          				<img  class="icon-entry" v-else v-cloak src="../../../../img/yikaidan@2x.png">
+           			<ul class="ifon-item-entry">
                   		<li><span>姓名  </span><span > :   {{item.partnerName}} </span></li>
                   		<li><span class="iconfont" v-cloak>联系方式 : <a :href="'tel:' +item.phoneNumber">{{item.phoneNumber}}</a> </span></li>
                   		<li><span class="iconfont" v-cloak>货物信息 :&nbsp; {{item.goodsInformation}}   </span></li>
@@ -21,8 +22,9 @@
               		</ul>
           		</li>
     		</ul>
-  		</mt-loadmore>
 		</div>
+  		</mt-loadmore>
+		
 	
 	<router-link to="/ExpressEntry/listEntry">
 		<div class="details-bottom">
@@ -38,6 +40,7 @@ import { Loadmore } from "mint-ui";
 import { wrapper } from "mint-ui";
 import { formatDate } from "../../../../date.js";
 import axios from "axios";
+import { InfiniteScroll } from 'mint-ui';
 import coo from "../../../../config.js";
 import { MessageBox } from "mint-ui"; //confirm
 
@@ -45,9 +48,9 @@ import { Toast } from "mint-ui";
 export default {
 		data () {
 				return {
-					dataList 		: [],
+					allLoaded		: true ,// 禁止上啦
+					dataList 		: "",
 					loading			: false, //默认false 滑动加载
-					allLoaded 		: false,
 					wrapperHeight 	: 0,	//页面滚动高度
 					limit 			: 20,
 					start			: 0,
@@ -55,7 +58,9 @@ export default {
       				cooperateCode	: coo.getCache("cooperateCode"),
 					mobileUserName  : coo.getCache("mobileUserName"),
 					roleAuth		: coo.getCache("roleAuth"),
-					pageNo			: 0 //可分页数
+					pageNo			: 1, //开始页数
+					totalpage		: 0, //最大可分页码
+					firstFlag 		: 0	 //是否为初始化刷新
 				}
 				},
 	
@@ -82,21 +87,41 @@ export default {
 		methods : {
 	  		loadTop: function() {    
 				//下拉刷新
-
+				this.firstFlag = true;
 				this.expressDetailsHTTP();
+			
       			setTimeout(() => {
+					  	Toast({
+        				message: '数据加载完毕',
+        				duration: 500,       				
+						});
         			  this.$refs.loadmore.onTopLoaded(); 
       			}, 300);
 			},
 			loadMoreMore: function() {
-			//滚动刷新
-
-			this.start = this.start + 20;
-			this.expressDetailsHTTP();					
-			  },
+			//滚动加载
+							console.log("到底了");
+				if (this.pageNo < this.totalpage) {
+					this.pageNo = this.pageNo + 1;
+					this.start = this.start + 20;
+					this.expressDetailsHTTP();	
+				}else {
+		
+					
+					Toast({
+        				message: '数据加载完毕',
+        				duration: 500,       				
+						});
+				}			
+			},
+			
 			expressDetailsHTTP() {
 			//	页面数据请求
-
+				if (this.firstFlag) {
+					this.start = 0;
+					this.pageNo =1;
+					this.dataList = [];
+				}
       			let data = {
         			limit: this.limit,
         			start: this.start,
@@ -109,8 +134,10 @@ export default {
 				coo.sign(data,coo.LingDanUrl+'pcpmobile/queryInputClueList.action').then(res => {
 				
 					if(res.status === 200 && res.data.success === true) {
-						this.pageNo = res.data.totalCount/this.limit;
-						this.dataList = this.dataList.concat(res.data.entityList)
+						//回复状态
+						this.firstFlag = 0;
+						this.totalpage = Math.ceil(res.data.totalCount/this.limit);
+						this.dataList = this.dataList.concat(res.data.entityList);
 					} else {
 							Toast({
         					message: '数据获取失败请重试',
@@ -139,12 +166,15 @@ export default {
 					this.dataList = this.$store.state.entry.entryList;
 				} else {
 					//重新获取数据页面信息
+					this.firstFlag = 1;
 					this.expressDetailsHTTP();	
+					this.$store.dispatch('flagEntryMutations',1)
 				}
 			},
 			beforeDestroyDataList () {
 				//保存当前页面状态
-				this.$store.dispatch('entryListActions',this.dataList)	
+				this.$store.dispatch('entryListActions',this.dataList)
+			
 			}
 		}
 }
@@ -174,23 +204,35 @@ export default {
 }
 .wrap li {
 	box-sizing: border-box;
-	background-color: rgb(236, 156, 6);
 	padding: 5px 10px;
-	font-size: 14px;
+	font-size: 80%;
 	margin-bottom: 5px;
-}
-#warp {
-box-sizing: border-box;
-height: 100%;
-margin-top: 40px;
-padding-bottom: 35px; 
-overflow: auto;
 
+}
+.wrap{
+	margin: 40px 0; 
+}
+.details-entry {
+	overflow: auto;
 }
 #title-count{
 	position: fixed;
 	top: 0;
 	left: 0;
 }
-
+.info-entry{
+	position: relative;
+	top: 0;
+	left: 0;
+}
+.icon-entry {
+	position: absolute;
+	top: 50%;
+	right: 0;
+	transform: translate(-20px,-50%);
+}
+.info-entry {
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+}
 </style>

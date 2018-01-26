@@ -66,13 +66,13 @@ import {provs_data, citys_data, dists_data} from 'vue-pickers/lib/areaData';
 		watch : {
 			phoneNumber (phoneNumber) {
 				//手机号校验
+				this.phoneFlag = false;
 				let  pattern = /^[1][0-9]{10}$/;
 				// let oldPhoneNumber = phoneNumber;
 				if(phoneNumber.length >= 11){
 					if (pattern.test(phoneNumber)) {
 						this.phoneFlag = true;
 					} else {
-						this.phoneFlag = false;
 					 	Toast({
         					message: '请输入正确的手机号',
         					duration: 1200,
@@ -151,6 +151,7 @@ import {provs_data, citys_data, dists_data} from 'vue-pickers/lib/areaData';
         					duration: 1000,
         					className: "open-tosat"
 						  });
+						  return;
 				}
 			}
 			let data = {
