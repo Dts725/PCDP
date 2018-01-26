@@ -53,6 +53,7 @@ import { Toast } from "mint-ui";
 export default {
   data() {
     return {
+	  refreshFlag    : 0, //师傅首次刷新 默认为0  不是刷新
       countOperation: 0, //下标数字初始值,
       flagSign: 1,
       loading: false, //默认false 滑动加载
@@ -168,9 +169,10 @@ export default {
       
     },
     loadTop: function() {
+	  this.refreshFlag = 1;
       this.pageNo = 1;
       this.start = 0;
-      this.loadPageList();
+      this.upLoadMore();
       this.signStore();
       setTimeout(() => {
         this.$refs.loadmore.onTopLoaded();
@@ -234,9 +236,16 @@ export default {
         .sign(data, coo.LoginUrl + "pcpmobile/querySignWayBillInfo.action")
         .then(res => {
           if (res.status == "200" && res.data.success == true) {
-            this.proCopyright = this.proCopyright.concat(
-              res.data.wayBillInfoList
-			);
+			  if (this.refreshFlag) {
+				  	this.proCopyright =res.data.wayBillInfoList;
+            		this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
+					this.signStore();
+					
+				  
+			  } else {
+
+            	 	this.proCopyright = this.proCopyright.concat(res.data.wayBillInfoList);
+			  }
 			Indicator.close();
           }
         })
@@ -264,7 +273,8 @@ export default {
           this.proCopyright = this.$store.state.sign.dataListSign; //使用缓存
           this.signStore(); //提示数字
         } else {
-          this.loadPageList(); //初始换查询
+		 this.refreshFlag = 1;
+          this.upLoadMore(); //初始换查询
           this.signStore();
         }
       } catch (error) {

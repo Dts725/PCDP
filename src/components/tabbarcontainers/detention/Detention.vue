@@ -73,7 +73,7 @@ export default {
       allLoaded			: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
       scrollMode		: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
 	  totalpage			: 1 ,//计算出来应有的 刷新次数
-	  refreshFlag		: 0 //页面刷新所用的时间
+	  refreshFlag		: 0 //默认事发后首次刷新 默认为0 不是首次刷新
     };
   },
 
@@ -187,10 +187,11 @@ export default {
     },
     //下拉刷新执行
     loadTop: function() {
+	  this.refreshFlag =  1;
       this.pageNo = 1;
       // console.log("下拉刷新执行了");
       this.start = 0;
-      this.loadPageList();
+      this.upLoadMore();
       this.detentionStore();
       setTimeout(() => {
         this.$refs.loadmore.onTopLoaded();
@@ -261,11 +262,16 @@ export default {
         .sign(data, coo.LoginUrl + "pcpmobile/queryRetentionWayBillInfo.action")
         .then(res => {
           if (res.status == "200" && res.data.success == true) {
-            this.proCopyright = this.proCopyright.concat(
-              res.data.wayBillInfoList
-            );
+			  if (this.refreshFlag) {
+				  	this.proCopyright = res.data.wayBillInfoList;
+           		  	this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
+				  	this.detentionStore();  
+			  } else {
+
+            		this.proCopyright = this.proCopyright.concat(res.data.wayBillInfoList);
+
+			  }
 				Indicator.close();
-				this.refreshFlag = 1;
             // console.log(this.totalpage);
             // console.log(this.pageNo);
             // console.log(this.proCopyright);
@@ -298,7 +304,8 @@ export default {
           this.proCopyright = this.$store.state.detention.dataDetentionList;
           this.detentionStore();
         } else {
-          this.loadPageList();
+			this.refreshFlag = 1;
+          this.upLoadMore();
           this.detentionStore();
         }
       } catch (error) {
