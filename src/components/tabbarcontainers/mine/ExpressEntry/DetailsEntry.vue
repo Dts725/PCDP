@@ -21,8 +21,9 @@
                   		<li><span class="iconfont" v-cloak >提交时间 &nbsp;&nbsp; {{item.createTime | formatDate}}  </span></li>
               		</ul>
           		</li>
-    		</ul>
-		</div>
+			<li v-show="totalpage === pageNo" @click="topRefresh"  v-cloak class="refresh-bottom">到底啦 点击更新数据!</li>
+    	</ul>
+	</div>
   		</mt-loadmore>
 		
 	
@@ -86,6 +87,14 @@ export default {
     	}
   		},
 		methods : {
+				topRefresh : function () {
+	  				this.dataList = "";
+					//底部刷新返回到底部刷新事件
+      				this.pageNo =1;
+	  				this.totalpage =0;
+      				this.start = 0;
+	  				this.expressDetailsHTTP();		
+			},
 	  		loadTop: function() {    
 				//下拉刷新
 				this.pageNo = 1;
@@ -105,14 +114,7 @@ export default {
 					this.pageNo = this.pageNo + 1;
 					this.start = this.start + 20;
 					this.expressDetailsHTTP();	
-				}else {
-		
-					
-					Toast({
-        				message: '数据加载完毕',
-        				duration: 500,       				
-						});
-				}			
+				}
 			},
 			expressDetailsHTTP() {
 				Indicator.open({
@@ -167,6 +169,7 @@ export default {
 				//页面数据是否走缓存
 				if ((this.$store.state.entry.entryList).length>2 && this.$store.state.entry.flagEntry) {
 					this.dataList = this.$store.state.entry.entryList;
+					thi.pageNo = this.totalpage;
 				} else {
 					//重新获取数据页面信息
 					this.firstFlag = 1;
@@ -237,5 +240,13 @@ export default {
 .info-entry {
 	border-top: 1px solid #ddd;
 	border-bottom: 1px solid #ddd;
+}
+.refresh-bottom{
+	height: 50px;
+	font-size: 20px;
+	text-align: center;
+	color: #26a2ff;
+	line-height: 50px;
+	font-weight: 700;
 }
 </style>

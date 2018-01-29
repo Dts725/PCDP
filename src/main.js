@@ -50,8 +50,6 @@ window.iOSBarCodeString = function (data) {
     var wayBillNum = data.split(",")[1];
     window.NativeConn.__proto__.constructor.callScanFun(wayBillNum);
 };
-
-
     router.beforeResolve ((to, from, next) => {
         /**
          * 1 注册全局路由事件

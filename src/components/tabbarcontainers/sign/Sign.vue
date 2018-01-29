@@ -33,6 +33,9 @@
 
               </ul>
           </li>
+			<li v-show="totalpage === pageNo" @click="topRefresh"  v-cloak class="refresh-bottom">到底啦 点击更新数据!</li>
+
+
     </ul>
   </mt-loadmore>
   </div>
@@ -68,7 +71,7 @@ export default {
       proCopyright: [], //用来存储后台接受的数据
 
       scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
-      totalpage: 1 //计算出来应有的 刷新次数
+      totalpage: 0 //计算出来应有的 刷新次数
     };
   },
 
@@ -88,6 +91,16 @@ export default {
     }
   },
   methods: {
+	topRefresh : function () {
+
+	  this.proCopyright =[];
+	//底部刷新返回到底部刷新事件
+      this.pageNo =1;
+	  this.totalpage =0;
+      this.start = 0;
+	  this.upLoadMore();
+	  this.signStore();		
+	},
     openToast(msg) {
       Toast({
         message: msg,
@@ -151,22 +164,14 @@ export default {
     loadMoreMore: function() {
       // console.log("出发了scroll");
       // this.loading =true;
-  
+		this.refreshFlag = 0;
         //   console.log("more方法查询的")
 		if (this.totalpage > this.pageNo) {
-			 this.pageNo = parseInt(this.pageNo) + 1;
+			 this.pageNo = this.pageNo + 1;
         	 this.start = this.start + 20;
         	 this.upLoadMore();
         	 this.signStore();
-		} else {
-			
-				Toast({
-        		message: '数据加载完成',
-        		duration: 500,       				
-				});	
 		}
-       
-      
     },
     loadTop: function() {
 	  this.refreshFlag = 1;
@@ -177,43 +182,6 @@ export default {
       setTimeout(() => {
         this.$refs.loadmore.onTopLoaded();
       }, 300);
-    },
-    loadPageList: function() {
-	  // console.log("初始化查询");
-	  	Indicator.open({
-  			text: '加载中...',
- 		 	spinnerType: 'fading-circle'
-		});
-      let data = {
-        limit: this.limit,
-        start: this.start,
-        accessToken: this.accessToken,
-        cooperateCode: this.cooperateCode,
-        mobileUserName: this.mobileUserName,
-        roleAuth: this.roleAuth
-      };
-      data = JSON.stringify(data);
-      // 查询数据
-      coo
-        .sign(data, coo.LoginUrl + "pcpmobile/querySignWayBillInfo.action")
-        .then(res => {
-          if (res.status == 200 && res.data.success == true) {
-            this.proCopyright = res.data.wayBillInfoList;
-            this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
-			this.signStore();
-			Indicator.close();
-          }
-        })
-        .catch(function(error) {
-          if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.header);
-          } else {
-            console.log("Error", error.message);
-          }
-          console.log("Error", error.message);
-        });
     },
     upLoadMore: function() {
 
@@ -243,7 +211,7 @@ export default {
 					
 				  
 			  } else {
-
+            		this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数				  	
             	 	this.proCopyright = this.proCopyright.concat(res.data.wayBillInfoList);
 			  }
 			Indicator.close();
@@ -270,7 +238,8 @@ export default {
           this.$store.state.sign.dataListSign.length > 2 &&
           this.$store.state.toPieces.flagTopieces
         ) {
-          this.proCopyright = this.$store.state.sign.dataListSign; //使用缓存
+		  this.proCopyright = this.$store.state.sign.dataListSign; //使用缓存
+		  this.pageNo = this.totalpage;
           this.signStore(); //提示数字
         } else {
 		 this.refreshFlag = 1;
@@ -419,6 +388,14 @@ ul {
 }
 .mint-button--large {
   text-indent: 0px;
+}
+.refresh-bottom{
+	height: 50px;
+	font-size: 20px;
+	text-align: center;
+	color: #26a2ff;
+	line-height: 50px;
+	font-weight: 700;
 }
 </style>
 

@@ -10,7 +10,7 @@
           <img   v-else-if="item.status ===  '11'" src = '../../../img/imgTui@2x.png' alt="">
           <img   v-else   src = '../../../img/imgQian@2x.png' alt="">
           <!-- <img :src="isImg(item.status)" alt=""> -->
-           <ul>
+           <ul v-cloak>
                   <li><span>运单号  </span><span >  :{{item.wayBillNo}}    </span></li>
                   <li><span class="iconfont" v-cloak>&#xe610; :&nbsp; {{item.recipients}}   </span></li>
                   <li><span class="iconfont" v-cloak>&#xe632; : <a :href="'tel:' +item.recipientsPhone">{{item.recipientsPhone}}</a> </span></li>
@@ -30,11 +30,10 @@
 
  
                             
-                  </li>
-                  
-
+                  </li> 
               </ul>
           </li>
+		  <li v-show="totalpage === pageNo" @click="topRefresh"  v-cloak class="refresh-bottom">到底啦 点击更新数据!</li>
     </ul>
   </mt-loadmore>
   </div>
@@ -72,9 +71,10 @@ export default {
       proCopyright		: [], //用来存储后台接受的数据
       allLoaded			: false, //是否可以上拉属性，false可以上拉，true为禁止上拉，就是不让往上划加载数据了
       scrollMode		: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
-	  totalpage			: 1 ,//计算出来应有的 刷新次数
-	  refreshFlag		: 0 //默认事发后首次刷新 默认为0 不是首次刷新
-    };
+	  totalpage			: 0 ,//计算出来应有的 刷新次数
+	  refreshFlag		: 0 ,//默认事发后首次刷新 默认为0 不是首次刷新
+	//   isBottom 			: 0 //标记是否点击底部刷新 默认0 不是底部点击刷新
+     };
   },
 
   mounted() {
@@ -94,6 +94,17 @@ export default {
     }
   },
   methods: {
+	topRefresh : function () {
+	  this.proCopyright =[];
+	//   this.isBottom=1;
+	//   this.refreshFlag =1; //此处防止用户错误操作
+	//底部刷新返回到底部刷新事件
+      this.pageNo =1;
+	  this.totalpage =0;
+      this.start = 0;
+	  this.upLoadMore();
+	  this.detentionStore();		
+	},
     //获取当前索引值
     getSignInfo: function($index, $id, $wayBillNo) {
       this.$index = $index;
@@ -120,13 +131,6 @@ export default {
             operationWayBillNo: this.$wayBillNo
           }
         };
-        // console.log(statusCode);
-
-        // console.log(this.$index);
-        // console.log(this.$id);
-        // console.log(this.$wayBillNo);
-        // console.log(data);
-
         data = JSON.stringify(data);
         let signUrl = "";
         if (statusCode === "910") {
@@ -163,27 +167,22 @@ export default {
 
     loadMoreMore: function() {
       //滚动加载
-      // console.log("出发了scroll");
-
+    //   console.log("出发了scroll");
+		this.refreshFlag = 0;
       // this.loading =true;
       if (this.totalpage == 1) {
         this.pageNo = 1;
         this.allLoaded = true;
-      } else if (this.pageNo >= this.totalpage) {
+      } else if (this.pageNo >=	 this.totalpage) {
 		this.allLoaded = true;
-			Toast({
-        		message: '数据加载完成',
-        		duration: 500,       				
-				});	
-      } else {
-		//   console.log("more方法查询的")
-		
-        this.pageNo = parseInt(this.pageNo) + 1;
-        this.start = this.start + 20;
-
+      } else { 
+        this.pageNo = this.pageNo + 1;
+        this.start = this.start + 20;	
         this.upLoadMore();
 		this.detentionStore();
-      }
+	  }
+		
+	  
     },
     //下拉刷新执行
     loadTop: function() {
@@ -199,48 +198,8 @@ export default {
 
 	  
     },
-
-    loadPageList: function() {
-      // 初始化查询 滞留页面数据
-
-      // console.log("初始化查询");
-		Indicator.open({
-  			text: '加载中...',
- 		 	spinnerType: 'fading-circle'
-		});
-      let data = {
-        limit: this.limit,
-        start: this.start,
-        accessToken: this.accessToken,
-        cooperateCode: this.cooperateCode,
-        mobileUserName: this.mobileUserName,
-        roleAuth: this.roleAuth
-      };
-
-      coo
-        .sign(data, coo.LoginUrl + "pcpmobile/queryRetentionWayBillInfo.action")
-        .then(res => {
-          if (res.status == 200 && res.data.success == true) {
-            this.proCopyright = res.data.wayBillInfoList;
-
-            this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
-			this.detentionStore();
-			Indicator.close();
-          }
-        })
-        .catch(function(error) {
-          if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.header);
-          } else {
-            console.log("Error", error.message);
-          }
-          console.log("Error", error.message);
-        });
-    },
-
     upLoadMore: function() {
+		
 		Indicator.open({
   			text: '加载中...',
  		 	spinnerType: 'fading-circle'
@@ -261,13 +220,14 @@ export default {
       coo
         .sign(data, coo.LoginUrl + "pcpmobile/queryRetentionWayBillInfo.action")
         .then(res => {
-          if (res.status == "200" && res.data.success == true) {
+			
+          if (res.status == "200" && res.data.success == true) {	  
 			  if (this.refreshFlag) {
+				  this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数				  
 				  	this.proCopyright = res.data.wayBillInfoList;
-           		  	this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
-				  	this.detentionStore();  
+				  	// this.detentionStore();  
 			  } else {
-
+					this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
             		this.proCopyright = this.proCopyright.concat(res.data.wayBillInfoList);
 
 			  }
@@ -296,15 +256,18 @@ export default {
       });
     },
     mountedDetention() {
+		//页面数据是否走缓存
       try {
         if (
           this.$store.state.detention.dataDetentionList.length > 2 &&
           this.$store.state.sign.flagSign
         ) {
-          this.proCopyright = this.$store.state.detention.dataDetentionList;
+		  this.proCopyright = this.$store.state.detention.dataDetentionList;
+		this.pageNo = this.totalpage;
           this.detentionStore();
         } else {
-			this.refreshFlag = 1;
+	 
+		  this.refreshFlag = 1; //此处标记为首次刷新
           this.upLoadMore();
           this.detentionStore();
         }
@@ -446,6 +409,14 @@ ul {
 }
 .mint-button--large {
   text-indent: 0px;
+}
+.refresh-bottom{
+	height: 50px;
+	font-size: 20px;
+	text-align: center;
+	color: #26a2ff;
+	line-height: 50px;
+	font-weight: 700;
 }
 </style>
 
