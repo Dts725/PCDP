@@ -33,7 +33,7 @@
 
               </ul>
           </li>
-			<li v-show="totalpage === pageNo" @click="topRefresh"  v-cloak class="refresh-bottom">到底啦 点击更新数据!</li>
+			<li v-show="totalpage === pageNo" @click="topRefresh"  v-cloak class="refresh-bottom">到底啦 点击更新数据 !</li>
 
 
     </ul>

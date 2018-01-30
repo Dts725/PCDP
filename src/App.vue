@@ -163,9 +163,11 @@ html body {
   background-color: #4caf50;
 }
 .mint-header-title {
-	/* padding-top: 4px;
+	margin: 0;
+	font-size: 14px;
 	height: 20px;
-	margin: 0; */
+	line-height: 20px;
+	
 
 }
 </style>
