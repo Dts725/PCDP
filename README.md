@@ -20,4 +20,6 @@ npm install
 npm start
 //或者
 npm run dev
+//上线版本
+npm run pro
 ```
