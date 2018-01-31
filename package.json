@@ -44,7 +44,7 @@
     "v-distpicker": "^1.0.16",
     "vue-area-linkage": "^1.2.6",
     "vue-pickers": "^1.0.4",
-    "vuex": "^3.0.1",
-    "vux": "^2.7.8"
+    "vuex": "^3.0.1"
+  
   }
 }
