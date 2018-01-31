@@ -5,11 +5,13 @@
       </mt-header>
 
           <div class="router-view">
-             <router-view/>
+		
+				   <router-view></router-view>
+		
         </div>   
        
 
-     <nav v-show="flag()" class="mui-bar mui-bar-tab" >
+     <nav mt-tabbar v-show="flag()" class="mui-bar mui-bar-tab" >
 			  <router-link class="mui-tab-item1" to="/pieces?0" >
 				  <span class="iconfont mui-icon"> &#xe605;</span>
 				  <span class="mui-tab-label" >到件</span>
@@ -42,7 +44,9 @@ export default {
       mesage: ["到件", "签收", "滞留", "我的"]
     };
   },
-  mounted  () {
+  updated () {
+	
+	  
   },
   computed: {
     signIco() {
@@ -117,7 +121,7 @@ html body {
   padding-bottom: 10px;
 }
 .router-view {
-  overflow: hidden; 
+  overflow: hidden;
 
 }
 .mint-header {
@@ -130,22 +134,6 @@ html body {
   top: 0;
   left: 0;
 }
-
-/* .detetion {
-    position: absolute;
-    top: 0;
-    right: 25px;
-
-    display: block;
-    width: 18px;
-    height: 18px;
-    text-align: center;
-    color: #fff;
-    font-size: 8px;
-    background-color: red;
-    border-radius: 50%;
-    z-index: 22;
-} */
 .detetion {
   display: block;
   width: 30px;

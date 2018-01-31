@@ -168,7 +168,7 @@ import {provs_data, citys_data, dists_data} from 'vue-pickers/lib/areaData';
 				data =JSON.stringify(data);
 				console.log(data);
 				
-				coo.sign(data,coo.LingDanUrl + 'pcpmobile/insetInputClue.action').then(res => {
+				coo.sign(data,coo.LoginUrl + 'pcpmobile/insetInputClue.action').then(res => {
 					//数据提交成功就更改缓存
 					if (res.status === 200 && res.data.success === true) {
 						this.$router.push('/ExpressEntry/detailsEntry')

@@ -2,7 +2,7 @@
 <div  class="fall-scoll" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
 
 
-   <mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  finite-scroll-distance = "100" v-infinite-scroll="loadMoreMore" infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true" >
+   <mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  finite-scroll-distance = "0" v-infinite-scroll="loadMoreMore" infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true" >
     <ul class="wrap">
       <li   class = "info-sign"  v-for="(item,index) in proCopyright" :key="item.id" >
           <!-- 这样添加水印图片 不然webpack 打包会报错找不到图片路径 -->
@@ -78,8 +78,8 @@ export default {
   mounted() {
     this.mountedSign();
     this.wrapperHeight =
-      document.documentElement.clientHeight -
-      this.$refs.wrapper.getBoundingClientRect().top; //组件更新动态计算页面scroll 数据
+    document.documentElement.clientHeight -
+	this.$refs.wrapper.getBoundingClientRect().top; //组件更新动态计算页面scroll 数据  	
   },
   beforeDestroy() {
     this.beforeDestroySign();
@@ -98,8 +98,7 @@ export default {
       this.pageNo =1;
 	  this.totalpage =0;
       this.start = 0;
-	  this.upLoadMore();
-	  this.signStore();		
+	  this.upLoadMore();	
 	},
     openToast(msg) {
       Toast({
@@ -170,7 +169,6 @@ export default {
 			 this.pageNo = this.pageNo + 1;
         	 this.start = this.start + 20;
         	 this.upLoadMore();
-        	 this.signStore();
 		}
     },
     loadTop: function() {
@@ -178,7 +176,6 @@ export default {
       this.pageNo = 1;
       this.start = 0;
       this.upLoadMore();
-      this.signStore();
       setTimeout(() => {
         this.$refs.loadmore.onTopLoaded();
       }, 300);
@@ -206,14 +203,12 @@ export default {
           if (res.status == "200" && res.data.success == true) {
 			  if (this.refreshFlag) {
 				  	this.proCopyright =res.data.wayBillInfoList;
-            		this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
-					this.signStore();
-					
-				  
+            		this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数	  
 			  } else {
             		this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数				  	
             	 	this.proCopyright = this.proCopyright.concat(res.data.wayBillInfoList);
 			  }
+			this.signStore();
 			Indicator.close();
           }
         })
@@ -235,22 +230,22 @@ export default {
     mountedSign() {
       try {
         if (
-          this.$store.state.sign.dataListSign.length > 2 &&
+          this.$store.state.sign.dataListSign.length > 0 &&
           this.$store.state.toPieces.flagTopieces
-        ) {
+        ) {	
 		  this.proCopyright = this.$store.state.sign.dataListSign; //使用缓存
 		  this.pageNo = this.totalpage;
           this.signStore(); //提示数字
         } else {
 		 this.refreshFlag = 1;
           this.upLoadMore(); //初始换查询
-          this.signStore();
         }
       } catch (error) {
         console.error(error);
-      }
+	  }	
       this.$store.dispatch("flagSignCommitActions", 1);
-    },
+	},
+
     beforeDestroySign() {
       // console.log(this.proCopyright);
       try {
@@ -391,11 +386,12 @@ ul {
 }
 .refresh-bottom{
 	height: 50px;
-	font-size: 20px;
+	font-size: 14px;
 	text-align: center;
-	color: #26a2ff;
+	color:  rgb(182, 171, 171);
 	line-height: 50px;
-	font-weight: 700;
+	border-top: 10px;
+	
 }
 </style>
 

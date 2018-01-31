@@ -6,7 +6,7 @@
           	</router-link>
         </mt-header>
 		
-		<mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  finite-scroll-distance = "100" :bottom-all-loaded="allLoaded" v-infinite-scroll="loadMoreMore"
+		<mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  finite-scroll-distance = "0" :bottom-all-loaded="allLoaded" v-infinite-scroll="loadMoreMore"
   			infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true" >
 			<div class="wrap">
     			<ul>
@@ -67,6 +67,7 @@ export default {
 				},
 	
 		mounted () {
+			// coo.routerViewHeight('.details-entry');
 			//页面加载数据
 			this.mountedDataList();	
 			//滚动高度
@@ -88,7 +89,7 @@ export default {
   		},
 		methods : {
 				topRefresh : function () {
-	  				this.dataList = "";
+	  				this.dataList = [];
 					//底部刷新返回到底部刷新事件
       				this.pageNo =1;
 	  				this.totalpage =0;
@@ -104,7 +105,8 @@ export default {
 			
       			setTimeout(() => {
         			  this.$refs.loadmore.onTopLoaded(); 
-      			}, 300);
+				  }, 300);
+				  this.firstFlag = 0;
 			},
 			loadMoreMore: function() {
 			//滚动加载
@@ -131,11 +133,13 @@ export default {
         			roleAuth: this.roleAuth
 				  };
 				  data = JSON.stringify(data);
-				coo.sign(data,coo.LingDanUrl+'pcpmobile/queryInputClueList.action').then(res => {
+				coo.sign(data,coo.LoginUrl+'pcpmobile/queryInputClueList.action').then(res => {
 				
 					if(res.status === 200 && res.data.success === true) {
 						//回复状态
-						if (firstFlag) {
+						if (this.firstFlag) {
+							console.log("没进来");
+							
 							this.totalpage = Math.ceil(res.data.totalCount/this.limit);
 							this.dataList = res.data.entityList;
 						} else {
@@ -169,7 +173,7 @@ export default {
 				//页面数据是否走缓存
 				if ((this.$store.state.entry.entryList).length>2 && this.$store.state.entry.flagEntry) {
 					this.dataList = this.$store.state.entry.entryList;
-					thi.pageNo = this.totalpage;
+					this.pageNo = this.totalpage;
 				} else {
 					//重新获取数据页面信息
 					this.firstFlag = 1;
@@ -197,7 +201,7 @@ export default {
 	font-size: 100%;
 }
 .details-bottom {
-	position: fixed;
+	position: absolute;
 	left: 0;
 	bottom: 0;
 	width: 100%;
@@ -243,10 +247,11 @@ export default {
 }
 .refresh-bottom{
 	height: 50px;
-	font-size: 20px;
+	font-size: 14px;
 	text-align: center;
-	color: #26a2ff;
+	color:  rgb(182, 171, 171);
 	line-height: 50px;
-	font-weight: 700;
+	border-top: 10px;
+	
 }
 </style>

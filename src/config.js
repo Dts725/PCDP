@@ -7,9 +7,9 @@ export default {
     depponVersion : '0.0.1.0' ,//版本号；
 	sysCode  : "APP",
 	//http:10.224.66.14:8081/pcp-web/pcpmobile/insetInputClue.action
-	LingDanUrl: 'http://10.224.66.14:8081/pcp-web/', //零担线索测试接口
+	// LingDanUrl: 'http://10.224.66.14:8081/pcp-web/', //零担线索测试接口
     //封装缓存
-    testLoginUrl: 'http://10.230.34.166:8080/pcp-web/pcpmobile/userLogin.action',
+    // testLoginUrl: 'http://10.230.34.166:8080/pcp-web/pcpmobile/userLogin.action',
     getCache :(key) =>{
       return  window.localStorage.getItem(key)
     },
@@ -66,9 +66,19 @@ export default {
            }
 
 
-        // alert('是否是Android：' + isAndroid);
-        // alert('是否是iOS：' + isiOS);
-    },
+        alert('是否是Android：' + isAndroid);
+        alert('是否是iOS：' + isiOS);
+	},
+
+	routerViewHeight: (VIEW) => {
+		//设置页面高度 防止见破案顶起
+		let screenY = window.screen.height;
+		let routerView = document.querySelector(VIEW);
+		routerView.style.height = screenY + 'px';
+		console.log(routerView);
+		console.log(screenY);
+			
+	},
     
 
 

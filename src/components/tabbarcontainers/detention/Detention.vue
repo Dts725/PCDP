@@ -2,7 +2,7 @@
 <div class="fall-scoll"  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
 
 
-   <mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"   finite-scroll-distance = "100" v-infinite-scroll="loadMoreMore"
+   <mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"   finite-scroll-distance = "0" v-infinite-scroll="loadMoreMore"
   infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true">
     <ul class="wrap">
       <li  class = "info-sign"  v-for="(item,index) in proCopyright" :key="item.id" >
@@ -78,7 +78,7 @@ export default {
   },
 
   mounted() {
-    // this.loadPageList();
+	// coo.routerViewHeight('.fall-scoll');
     this.mountedDetention();
     this.wrapperHeight =
       document.documentElement.clientHeight -
@@ -102,8 +102,7 @@ export default {
       this.pageNo =1;
 	  this.totalpage =0;
       this.start = 0;
-	  this.upLoadMore();
-	  this.detentionStore();		
+	  this.upLoadMore();	
 	},
     //获取当前索引值
     getSignInfo: function($index, $id, $wayBillNo) {
@@ -179,7 +178,6 @@ export default {
         this.pageNo = this.pageNo + 1;
         this.start = this.start + 20;	
         this.upLoadMore();
-		this.detentionStore();
 	  }
 		
 	  
@@ -191,7 +189,6 @@ export default {
       // console.log("下拉刷新执行了");
       this.start = 0;
       this.upLoadMore();
-      this.detentionStore();
       setTimeout(() => {
         this.$refs.loadmore.onTopLoaded();
 	  }, 300);
@@ -225,12 +222,13 @@ export default {
 			  if (this.refreshFlag) {
 				  this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数				  
 				  	this.proCopyright = res.data.wayBillInfoList;
-				  	// this.detentionStore();  
 			  } else {
 					this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数
             		this.proCopyright = this.proCopyright.concat(res.data.wayBillInfoList);
 
 			  }
+				this.detentionStore();  	
+			  
 				Indicator.close();
             // console.log(this.totalpage);
             // console.log(this.pageNo);
@@ -257,19 +255,17 @@ export default {
     },
     mountedDetention() {
 		//页面数据是否走缓存
-      try {
+      try {  
         if (
-          this.$store.state.detention.dataDetentionList.length > 2 &&
+          this.$store.state.detention.dataDetentionList.length > 0 &&
           this.$store.state.sign.flagSign
-        ) {
+        ) {	
 		  this.proCopyright = this.$store.state.detention.dataDetentionList;
-		this.pageNo = this.totalpage;
+		  this.pageNo = this.totalpage;
           this.detentionStore();
         } else {
-	 
 		  this.refreshFlag = 1; //此处标记为首次刷新
           this.upLoadMore();
-          this.detentionStore();
         }
       } catch (error) {
         console.error(error);
@@ -412,11 +408,12 @@ ul {
 }
 .refresh-bottom{
 	height: 50px;
-	font-size: 20px;
+	font-size: 14px;
 	text-align: center;
-	color: #26a2ff;
+	color:  rgb(182, 171, 171);
 	line-height: 50px;
-	font-weight: 700;
+	border-top: 10px;
+	
 }
 </style>
 
