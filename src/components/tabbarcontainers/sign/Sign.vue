@@ -2,7 +2,7 @@
 <div  class="fall-scoll" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
 
 
-   <mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  finite-scroll-distance = "0" v-infinite-scroll="loadMoreMore" infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true" >
+   <mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  infinite-scroll-distance = "100" v-infinite-scroll="loadMoreMore" infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true" >
     <ul class="wrap">
       <li   class = "info-sign"  v-for="(item,index) in proCopyright" :key="item.id" >
           <!-- 这样添加水印图片 不然webpack 打包会报错找不到图片路径 -->
@@ -161,7 +161,7 @@ export default {
       });
     },
     loadMoreMore: function() {
-      // console.log("出发了scroll");
+      console.log("出发了scroll");
       // this.loading =true;
 		this.refreshFlag = 0;
         //   console.log("more方法查询的")

@@ -2,7 +2,7 @@
 <div class="fall-scoll"  ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
 
 
-   <mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"   finite-scroll-distance = "0" v-infinite-scroll="loadMoreMore"
+   <mt-loadmore :top-method="loadTop" :bottom-all-loaded="allLoaded" :auto-fill = "false" ref="loadmore"   infinite-scroll-distance = "100" v-infinite-scroll="loadMoreMore"
   infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true">
     <ul class="wrap">
       <li  class = "info-sign"  v-for="(item,index) in proCopyright" :key="item.id" >

@@ -6,7 +6,7 @@
           	</router-link>
         </mt-header>
 		
-		<mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  finite-scroll-distance = "0" :bottom-all-loaded="allLoaded" v-infinite-scroll="loadMoreMore"
+		<mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  infinite-scroll-distance = "100" :bottom-all-loaded="allLoaded" v-infinite-scroll="loadMoreMore"
   			infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true" >
 			<div class="wrap">
     			<ul>
