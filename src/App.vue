@@ -1,7 +1,6 @@
 <template>
   <div class="top-app">
      <mt-header  v-show="flag()"  v-bind:title="mesage[forTittle()]">
-    
       </mt-header>
 
           <div class="router-view">

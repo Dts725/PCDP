@@ -14,6 +14,7 @@ import Count from "../components/tabbarcontainers/mine/Count.vue"
 import ResetNext from "../components/comment/FindPasswordNext.vue"
 import DetailsEntry from "../components/tabbarcontainers/mine/ExpressEntry/DetailsEntry.vue";
 import ListEntry from "../components/tabbarcontainers/mine/ExpressEntry/ListEntry.vue";
+import QuryExpress from '../components/comment/QueryExpress.vue'
 
 
 
@@ -74,6 +75,13 @@ export default new VueRouter({
             component: Count
 		},
 		{
+			path: "/quryExpress",
+			meta: {
+				requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
+			},
+			component: QuryExpress
+		},
+		{
 			path: "/ExpressEntry",
 			meta: {
 				requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
@@ -97,8 +105,7 @@ export default new VueRouter({
 					component: ListEntry
 				}
 			]
-		}
-		
+		}		
     ]
 });
 

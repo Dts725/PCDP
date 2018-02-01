@@ -61,7 +61,7 @@ export default {
         { value: "QT_000", text: "全部" },
         { value: "QT_002", text: "已签收" },
         { value: "QT_004", text: "已取回" },
-        { value: "QT_005", text: "代签收" }
+        { value: "QT_005", text: "待签收" }
       ],
       detailNumber: []
     };
@@ -113,7 +113,7 @@ export default {
               },
               {
                 value: "QT_005",
-                text: "代签收" + res.data.wayBillTotalResponse.waitSignTotal
+                text: "待签收" + res.data.wayBillTotalResponse.waitSignTotal
               }
             ];
             // console.log(this.dataList);

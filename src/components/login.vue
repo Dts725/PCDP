@@ -112,8 +112,13 @@ export default {
             coo.setCache("mobileUserName", res.data.mobileUserName);
             coo.setCache("roleAuth", res.data.roleAuth);
             coo.setCache("userPassword", this.userPassword);
-            coo.setCache("cooperateName", res.data.cooperateName);
-            this.$router.push("pieces?0");
+			coo.setCache("cooperateName", res.data.cooperateName);
+			if (res.data.roleAuth === '2') {
+				this.$router.push("/quryExpress")
+			} else {
+
+				this.$router.push("/pieces?0");
+			}
           } else {
             this.refreshImg();
             coo.setCache("message", res.data.message);

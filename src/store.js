@@ -24,6 +24,21 @@ const moduleTipsNumber = {
     },
    
 };
+//快递员登陆查询页
+const moduleQueryExpress = {
+	state : {
+		dataListQuery 		: "",
+		dataValueListQuery 	: ""
+	},
+	mutations : {
+		dataListQueryCommit (state,msg) {
+			state.dataListQuery =msg;
+		},
+		dataValueListQueryCommit(state, msg) {
+			state.dataValueListQuery = msg;
+		}
+	}
+}
 //到件页面数据状态
 const moduleToPieces = {
     state : {
@@ -165,7 +180,8 @@ const store = new Vuex.Store({
         toPieces    : moduleToPieces,
         sign        : moduleSign,
 		detention   : moduleDetention,
-		entry		: modulesEntry
+		entry		: modulesEntry,
+		querExpress : moduleQueryExpress
         
     }
 })
