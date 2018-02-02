@@ -57,7 +57,6 @@ export default {
   data() {
     return {
 	  refreshFlag    : 0, //师傅首次刷新 默认为0  不是刷新
-      countOperation: 0, //下标数字初始值,
       flagSign: 1,
       loading: false, //默认false 滑动加载
       wrapperHeight: 0, //页面scroll 数据
@@ -138,15 +137,13 @@ export default {
                 this.openToast("已签收");
               } else {
                 this.proCopyright[$index].status = "7";
-				this.$store.commit("detentionNumberCommit", this.$store.state.tips.detentionNumber+1);
-
                 this.openToast("已滞留");
                 this.proCopyright.splice($index, 1);
               }
               this.flagSign = 0;
               //-------------------------------状态管理天至此处-------------------------------------
-              this.countOperation = this.countOperation - 1;
-              this.$store.commit("signNumberCommit", this.countOperation);
+			this.signStore();
+			
             }
           })
           .catch(err => {
@@ -161,7 +158,7 @@ export default {
       });
     },
     loadMoreMore: function() {
-      console.log("出发了scroll");
+    //   console.log("出发了scroll");
       // this.loading =true;
 		this.refreshFlag = 0;
         //   console.log("more方法查询的")
@@ -219,13 +216,17 @@ export default {
 
     //状态管理
     signStore() {
-      this.countOperation = 0;
-      this.proCopyright.forEach((item, index, arr) => {
-        if (item.status == 3) {
-          this.countOperation++;
-        }
-        this.$store.commit("signNumberCommit", this.countOperation);
-      });
+		let that = this;
+		//待处理件数
+		let data = {
+			accessToken 	: this.accessToken,
+			mobileUserName 	: this.mobileUserName,
+			cooperateCode  	: this.cooperateCode
+		}
+		JSON.stringify(data);
+		coo.tipNumber(data,coo.signUrl+'pcpmobile/queryTotalCount.action',that)
+		
+    
     },
     mountedSign() {
       try {

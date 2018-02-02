@@ -69,10 +69,13 @@ export default {
 		mounted () {
 			// coo.routerViewHeight('.details-entry');
 			//页面加载数据
-			this.mountedDataList();	
+			
 			//滚动高度
 			this.mountstedScroll();
 		
+		},
+		activated () {
+			this.mountedDataList();	
 		},
 		beforeDestroy(){
 			//本地存储当前页面数据
@@ -98,15 +101,18 @@ export default {
 			},
 	  		loadTop: function() {    
 				//下拉刷新
+				// console.log('下拉刷新');
+				
 				this.pageNo = 1;
 				this.start = 0;
 				this.firstFlag = 1;
 				this.expressDetailsHTTP();
 			
       			setTimeout(() => {
-        			  this.$refs.loadmore.onTopLoaded(); 
+					  this.$refs.loadmore.onTopLoaded(); 
+					  this.firstFlag = 0;
 				  }, 300);
-				  this.firstFlag = 0;
+		
 			},
 			loadMoreMore: function() {
 			//滚动加载
@@ -138,7 +144,7 @@ export default {
 					if(res.status === 200 && res.data.success === true) {
 						//回复状态
 						if (this.firstFlag) {
-							console.log("没进来");
+							// console.log("没进来");
 							
 							this.totalpage = Math.ceil(res.data.totalCount/this.limit);
 							this.dataList = res.data.entityList;

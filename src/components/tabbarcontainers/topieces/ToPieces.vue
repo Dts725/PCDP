@@ -218,6 +218,18 @@ export default {
     },
     //creatd 中的函数
     createdToPieces() {
+		let that = this;
+		//待处理件数
+		let data = {
+			accessToken 	: this.accessToken,
+			mobileUserName 	: this.mobileUserName,
+			cooperateCode  	: this.cooperateCode
+		}
+		JSON.stringify(data);
+		coo.tipNumber(data,coo.COO.LoginUrl+'pcpmobile/queryTotalCount.action',that)
+	
+		
+		//页面是否走缓存
       if (this.$store.state.toPieces.dataListToPieces) {
         this.dataList = this.$store.state.toPieces.dataListToPieces;
       }

@@ -12,10 +12,7 @@
     </mt-header>
 	  </div>
     <div  class="input-search">
-        <!-- <mt-search class="input-search" v-model.trim="value" cancel-text="取消" placeholder="请输入运单号">
-        </mt-search>
-          <div id="scan-topieces" @click="scanTopeieces"></div> -->
-		  <span class="iconfont">&#xe600;</span>
+		  <span class="iconfont" @click="scanQuery">&#xe600;</span>
 		  <span><input placeholder="请输入运单号" v-model.trim="value" autofocus type="number"></span>
     </div >
     <div class="query-express">
@@ -81,7 +78,8 @@ filters: {
 		this.$router.push("./")
     });
 	},
-    scanTopeieces: function() {
+	//扫描查询
+    scanQuery: function() {
       let that = this;
       window.NativeConn.NativeScanBar(function(datas) {
         scanWaybillNumberFn(datas);

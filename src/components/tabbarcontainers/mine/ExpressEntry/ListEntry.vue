@@ -37,7 +37,7 @@ import { Toast } from "mint-ui";
 import VuePickers from 'vue-pickers';
 import {provs_data, citys_data, dists_data} from 'vue-pickers/lib/areaData';
 
-	export default {
+export default {
 		components: {
   				VuePickers
 		},
@@ -49,7 +49,7 @@ import {provs_data, citys_data, dists_data} from 'vue-pickers/lib/areaData';
   						pData1	: provs_data,
   						pData2	: citys_data,
   						pData3	: dists_data,
-						},
+						},				//引用插件的数据格式
 				selectStr   		: "",
 				show3 				: false,
 				partnerName 		: "",

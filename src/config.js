@@ -1,4 +1,5 @@
  import axios from 'axios'
+ import  "./store.js";
 export default {
     //判断是否显示app 首页的组件
     //var LoginUrl = 'http://10.224.66.135:8081/pcp-web/'; //涛爷本地环境IP地址
@@ -9,7 +10,7 @@ export default {
 	//http:10.224.66.14:8081/pcp-web/pcpmobile/insetInputClue.action
 	// LingDanUrl: 'http://10.224.66.14:8081/pcp-web/', //零担线索测试接口
     //封装缓存
-    // testLoginUrl: 'http://10.230.34.166:8080/pcp-web/pcpmobile/userLogin.action',
+	testLoginUrl: 'http://10.224.66.22:8081/pcp-web/pcpmobile/queryTotalCount.action',
     getCache :(key) =>{
       return  window.localStorage.getItem(key)
     },
@@ -30,7 +31,7 @@ export default {
     },
     //封装全局签收事件
     sign : (data,signUrl) =>  {
-        
+		data = data || "";
       return   axios({
             method      : 'POST',
             headers     : { 'Content-Type': 'application/json; charset=UTF-8' },
@@ -48,7 +49,8 @@ export default {
             position: 'middle',
             duration: parseInt(times)
         });
-    },
+	},
+	
     // 封装判断用户终端是ios 还是Android
 
     whtasPhone: () => {
@@ -70,19 +72,27 @@ export default {
         alert('是否是iOS：' + isiOS);
 	},
 
-	routerViewHeight: (VIEW) => {
-		//设置页面高度 防止见破案顶起
-		let screenY = window.screen.height;
-		let routerView = document.querySelector(VIEW);
-		routerView.style.height = screenY + 'px';
-		console.log(routerView);
-		console.log(screenY);
+	//待处理事件封装
+	tipNumber : (data,signUrl,that) => {
+
+		
+	 return	axios({
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json; charset=UTF-8' },
+			url: signUrl,
+			data: data
+		}).then(res => {
+			if (res.status === 200 && res.data.success === true) {
+				that.$store.commit("signNumberCommit", res.data.signTotalCount);
+				that.$store.commit("detentionNumberCommit", res.data.retentionTotalCount);
+			} else {
+				coo.Toast("待处理事件获取失败 请重试 !")
+			}
+		}).catch(err => {
+			console.error(err);
 			
-	},
-    
+		})
+	}
 
-
-    
- 
 }
  

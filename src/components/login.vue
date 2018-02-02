@@ -13,12 +13,13 @@
            <div class="iconfont">
                <span>&#xe621;</span>
                
-                <input placeholder="输入密码"  v-model.trim="userPassword" type="password">
+                <span><input v-show="isShow" placeholder="输入密码"   v-model.trim="userPassword" type="password"><i v-show="isShow" @click="isShowTouch">&#xe616;</i></span>
+                <span><input v-show="isHidden" placeholder="输入密码"  v-model.trim="userPassword" type="text"><i v-show="isHidden" @click="isHiddenTouch">&#xe648;</i></span>
             </div>
         <div class="iconfont">
                <span>&#xe67b;</span>
             
-            <input placeholder="输入验证码"  v-model.trim="Verification" type="text">
+            <input placeholder="输入验证码"  v-model.trim="Verification" type="text"> 
 
             <img  @click="refreshImg" v-bind:src="VerificationImg"     class="loginSecurityCode">
         </div>
@@ -45,6 +46,8 @@ import router from "router";
 export default {
   data() {
     return {
+	  isShow 	: 1, // 密码
+	  isHidden	: 0, // 明文密码
       VerificationImg: "",
       info: "",
       sessionId: "",
@@ -79,6 +82,15 @@ export default {
   },
 
   methods: {
+	//密码 显示 隐藏
+	isShowTouch() {
+		this.isShow = 0;
+		this.isHidden =1;
+	},
+	isHiddenTouch() {
+		this.isShow = 1;
+		this.isHidden =0;
+	},
     //登陆
     loading() {
       //检查输入是否为空
@@ -203,11 +215,18 @@ input[type="text"] {
   top: 0px;
   left: 0px;
 }
-.iconfont > span {
+.iconfont > span:nth-of-type(1) {
   position: absolute;
   top: 10px;
   left: 12px;
   z-index: 2;
+}
+.iconfont span i{
+	position: absolute;
+	top: 10px;
+	right: 20px;
+	height: 50%;
+	width: 30px;
 }
 .loginSecurityCode {
   position: absolute;

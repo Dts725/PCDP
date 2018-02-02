@@ -52,7 +52,6 @@ import { Toast } from "mint-ui";
 export default {
   data() {
     return {
-      countOperation	: 0, //状态码初始值
       $index			: 0, //获取当前项的index
       $id				: "",
       $wayBillNo		: 0, //获取当前项的id
@@ -150,8 +149,8 @@ export default {
                 this.openToast("已退件");
               }
             }
-            this.countOperation--;
-            this.$store.commit("detentionNumberCommit", this.countOperation);
+          
+            this.detentionStore();
           })
           .catch(err => {
             if (statusCode === "910") {
@@ -244,14 +243,15 @@ export default {
 
     // 状态管理
     detentionStore() {
-      this.countOperation = 0;
-      this.proCopyright.forEach((item, index, arr) => {
-        if (item.status == 9) {
-          this.countOperation++;
-        }
-
-        this.$store.commit("detentionNumberCommit", this.countOperation);
-      });
+		let that = this;
+		//待处理件数
+		let data = {
+			accessToken 	: this.accessToken,
+			mobileUserName 	: this.mobileUserName,
+			cooperateCode  	: this.cooperateCode
+		}
+		JSON.stringify(data);
+		coo.tipNumber(data,coo.LoginUrl+'pcpmobile/queryTotalCount.action',that)
     },
     mountedDetention() {
 		//页面数据是否走缓存
