@@ -224,7 +224,7 @@ export default {
 			cooperateCode  	: this.cooperateCode
 		}
 		JSON.stringify(data);
-		coo.tipNumber(data,coo.signUrl+'pcpmobile/queryTotalCount.action',that)
+		coo.tipNumber(data,coo.LoginUrl+'pcpmobile/queryTotalCount.action',that)
 		
     
     },
