@@ -226,7 +226,7 @@ export default {
 			cooperateCode  	: this.cooperateCode
 		}
 		JSON.stringify(data);
-		coo.tipNumber(data,coo.COO.LoginUrl+'pcpmobile/queryTotalCount.action',that)
+		coo.tipNumber(data,coo.LoginUrl+'pcpmobile/queryTotalCount.action',that)
 	
 		
 		//页面是否走缓存
