@@ -36,6 +36,7 @@
 <script>
 import coo from '../../../config.js'
 import { Button } from 'mint-ui'
+import { MessageBox } from 'mint-ui'
 
 export default {
     data () {
@@ -50,9 +51,10 @@ export default {
     },
     methods : {
         quick : function () {
-            window.localStorage.removeItem("accessToken")
-            window.localStorage.removeItem("dataListToPieces")
-            this.$router.push('/login')
+			MessageBox.confirm('确定执行此操作?').then(action => {
+				window.localStorage.removeItem("accessToken")
+            	this.$router.push('/login')
+			});
         },
         what : function () {       
             coo.whtasPhone();

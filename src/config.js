@@ -10,7 +10,7 @@ export default {
 	//http:10.224.66.14:8081/pcp-web/pcpmobile/insetInputClue.action
 	// LingDanUrl: 'http://10.224.66.14:8081/pcp-web/', //零担线索测试接口
     //封装缓存
-	testLoginUrl: 'http://10.224.66.22:8081/pcp-web/pcpmobile/queryTotalCount.action',
+	// testLoginUrl: 'http://10.224.66.22:8081/pcp-web/pcpmobile/queryTotalCount.action',
     getCache :(key) =>{
       return  window.localStorage.getItem(key)
     },
