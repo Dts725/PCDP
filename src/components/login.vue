@@ -116,6 +116,7 @@ export default {
       coo
         .sign(this.info, coo.LoginUrl + "pcpmobile/userLogin.action")
         .then(res => {
+			
           if (res.data.success == true && res.status) {
             //    console.log("就来执行了");
             coo.setCache("accessToken", res.data.accessToken);

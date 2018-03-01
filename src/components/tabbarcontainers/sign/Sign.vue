@@ -156,7 +156,8 @@ export default {
             console.log(err);
           });
       });
-    },
+	},
+	//滚动加载
     loadMoreMore: function() {
     //   console.log("出发了scroll");
       // this.loading =true;
@@ -227,7 +228,8 @@ export default {
 		coo.tipNumber(data,coo.LoginUrl+'pcpmobile/queryTotalCount.action',that)
 		
     
-    },
+	},
+	//状态管理
     mountedSign() {
       try {
         if (
@@ -246,7 +248,7 @@ export default {
 	  }	
       this.$store.dispatch("flagSignCommitActions", 1);
 	},
-
+	//状态管理
     beforeDestroySign() {
       // console.log(this.proCopyright);
       try {

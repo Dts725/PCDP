@@ -14,18 +14,14 @@
           <span>重置密码</span>
         </div>
         <div class="page-part reset">
-          <mt-field  placeholder="请输入旧密码" v-model.trim="oldPassword" type="passWord"></mt-field>
-          <mt-field  placeholder="请输入新密码" v-model.trim="newPassword" type="passWord"></mt-field>
-          <mt-field  placeholder="请输入新密码" v-model.trim="newPasswordNext" type="passWord"></mt-field>
+          <input  placeholder="请输入旧密码" v-model.trim="oldPassword" type="passWord">
+          <input  placeholder="请输入新密码" v-model.trim="newPassword" type="passWord">
+          <input  placeholder="请输入新密码" v-model.trim="newPasswordNext" type="passWord">
         
            <!-- <mt-field placeholder="输入验证码" type="password"></mt-field>
             <img   @click="refreshImg" src="http://10.230.34.166:8080/pcp-web/pcpmobile/securityCode.action?sessionId=RrXrLzVnCpxEYDk3RUQYXCdS1514509483146&amp;date=1514510732325" class="loginSecurityCode"> -->
          </div>
-         <div class="forget-password-next" @click="sureButton"> 
-      
-        <button>确定</button>
-    
-        </div>
+         <div class="forget-password-next" @click="sureButton"> 确定</div>
     </div>
         
         
@@ -44,7 +40,7 @@ export default {
             newPasswordNext : "",
             findSerialUID   : coo.getCache("findSerialUID"),
             findMobileLoginName : coo.getCache("findMobileLoginName"),
-           
+            passWordFlag : 1, //默认显示密码
             openToast (msg,times) {
             times  = times || 900;
             Toast({
@@ -59,6 +55,17 @@ export default {
     
     },
     methods : {
+		//密码显示隐藏
+	  passWordFn : function () {
+		  if (this.passWordFlag) {
+			  this.passWordFlag = 0;
+			  return 'type="passWord"'
+		  } else {
+			  this.passWordFlag = 1;
+			    return 'type="text"'
+		  }
+	  },
+		//确定按钮
       sureButton : function ()  {
       
            let data = {
@@ -70,14 +77,6 @@ export default {
             data = JSON.stringify(data);  
             
                 if(!this.oldPassword|| !this.newPassword || !this.newPasswordNext) {
-                    // console.log("进来第一层了");
-                    
-                    // if(!this.newPassword === this.newPasswordNext){
-                    //     console.log("进来第二层了");
-                        
-                    //     this.openToast("两次密码输入不一样请重新输入");
-                    //     return 
-                    // }
                     this.openToast("请检查输入");
                     return
         
@@ -90,9 +89,7 @@ export default {
                     window.localStorage.removeItem("userPassword")
                     this.$router.push("/login")
                     } else {
-             
-                    
-                        this.openToast("修改失败请重试",1500);
+                        this.openToast(res.data.message,1500);
           
               }
 
@@ -123,14 +120,15 @@ export default {
 }
 
   .forget-password-next {
-      margin-top: 15%;
-      width: 100%;
-     transform: translateX(5%);     width: 100%;
+    margin-top: 15%;
+    width: 100%;
+	height: 40px;
+	background-color: #68778382;
+	text-align: center;
+	line-height: 40px;
+	border-radius: 5px;
   }
- .forget-password-next button {
-    background-color: #68778382;
-    /* float: left; */
- }
+
   .forget-password {
      text-align: center;
      margin-bottom: 50px;
@@ -144,4 +142,13 @@ export default {
     width: 50%;
     color: #fff;
 } 
+.reset  input{
+	border: none;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    text-indent: 15px;
+    font-size: 80%;
+	font-size: 80%;
+}
+
 </style>

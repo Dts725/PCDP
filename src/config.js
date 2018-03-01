@@ -3,7 +3,8 @@
 export default {
     //判断是否显示app 首页的组件
     //var LoginUrl = 'http://10.224.66.135:8081/pcp-web/'; //涛爷本地环境IP地址
-    LoginUrl : 'http://10.230.34.166:8080/pcp-web/',//测试环境IP地址
+	LoginUrl : 'http://10.230.34.166:8080/pcp-web/',//测试环境IP地址
+	// LoginUrl: 'http://10.224.66.25:8081/pcp-web/',//本地测试环境IP地址
     //var LoginUrl ='https://pcp.deppon.com/pcp-web/';//线上地址；
     depponVersion : '0.0.1.0' ,//版本号；
 	sysCode  : "APP",
@@ -71,6 +72,15 @@ export default {
         alert('是否是Android：' + isAndroid);
         alert('是否是iOS：' + isiOS);
 	},
+	// 转换response 返回的json 字符串
+	transformResponse: function (data) {
+        // 这里提前处理返回的数据
+        if(typeof data=='string')
+        {
+          return JSON.parse(data);
+        }
+        return data;
+      },
 
 	//待处理事件封装
 	tipNumber : (data,signUrl,that) => {

@@ -26,12 +26,8 @@
            <!-- <mt-field placeholder="输入验证码" type="password"></mt-field>
             <img   @click="refreshImg" src="http://10.230.34.166:8080/pcp-web/pcpmobile/securityCode.action?sessionId=RrXrLzVnCpxEYDk3RUQYXCdS1514509483146&amp;date=1514510732325" class="loginSecurityCode"> -->
          </div>
-         <div class="forget-password-next" @click="nextButton"> 
-      
-        <button>下一步</button>
-    
-        </div>
-    </div>
+         <div class="forget-password-next" @click="nextButton"> 下一步</div>
+</div>
         
         
  </div>
@@ -145,7 +141,15 @@ export default {
   padding-top: 80px;
 
 }
-
+.forget-password-next{
+    margin-top: 15%;
+    width: 100%;
+	height: 40px;
+	background-color: #68778382;
+	text-align: center;
+	line-height: 40px;
+	border-radius: 5px;
+}
 .router-link-active {
     color: #fff !important;
 }
