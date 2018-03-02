@@ -67,20 +67,7 @@ export default {
                window.localStorage.setItem("ios","2")
                
            }
-
-
-        alert('是否是Android：' + isAndroid);
-        alert('是否是iOS：' + isiOS);
 	},
-	// 转换response 返回的json 字符串
-	transformResponse: function (data) {
-        // 这里提前处理返回的数据
-        if(typeof data=='string')
-        {
-          return JSON.parse(data);
-        }
-        return data;
-      },
 
 	//待处理事件封装
 	tipNumber : (data,signUrl,that) => {
