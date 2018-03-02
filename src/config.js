@@ -12,7 +12,7 @@ export default {
 	// LingDanUrl: 'http://10.224.66.14:8081/pcp-web/', //零担线索测试接口
     //封装缓存
 	// testLoginUrl: 'http://10.224.66.22:8081/pcp-web/pcpmobile/queryTotalCount.action',
-    getCache :(key) =>{
+    getCache : (key) =>{
       return  window.localStorage.getItem(key)
     },
     setCache : (key,values) => {

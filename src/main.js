@@ -1,8 +1,5 @@
 import 'babel-polyfill'
 import Vue from 'vue'
-import Es6Promise from 'es6-promise'
-require('es6-promise').polyfill()
-Es6Promise.polyfill()
 //引入根组件
 import App from "./App.vue"
 import Vuex from "vuex"

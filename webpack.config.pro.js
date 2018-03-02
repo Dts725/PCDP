@@ -8,11 +8,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require("webpack")
 
 module.exports = {
-	entry:  {
-		app: ['babel-polyfill', path.join(__dirname,'src/main.js')]
-	
-}, 
-
+	entry : path.join(__dirname,'src/main.js'),
     output: {
         path: path.join(__dirname, "dist"),
         filename: "build.js"
@@ -42,8 +38,18 @@ module.exports = {
                 test: /\.js$/,
                 //下面的exclude就是做排除处理，只要是node_modules中的js文件就用babel-loader进行转换
                 exclude: /node_modules/,
-                use: ['babel-loader']
-            },
+				use: ['babel-loader'],
+				
+			},
+			// {
+			// 	test: /\.js$/,
+			// 	loader: 'babel-loader',
+			// 	options: {
+			// 		presets: ["es2015","env"]
+			// 	},
+			// 	exclude: [/node_modules/]
+
+			// },
             {
                 test: /\.vue$/,
                 use: ['vue-loader']
@@ -70,5 +76,5 @@ module.exports = {
         alias: {
             "vue": "vue/dist/vue.js"
         }
-    }
+    },
 }
