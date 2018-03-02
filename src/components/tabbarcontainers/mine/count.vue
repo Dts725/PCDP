@@ -1,6 +1,7 @@
 <template>
           <div class="count">
-          <mt-header id="title-count" title="统计">
+          <div class="header-warp">
+			  <mt-header id="title-count" title="统计">
                 <router-link to="/mine?3" class="iconfont" slot="left"> 
                 &#xe6ba; 返回
           </router-link>
@@ -17,7 +18,11 @@
                 </select>
                 </div>
                 </div>
-        <ul id="data-father-count" v-cloak>
+		  </div>
+        <div class="slid-warp">
+
+
+			<ul id="data-father-count" v-cloak>
             <li>
                 <ul class="query-datda-list" style="padding-top: 42px;">
                     <li v-for="item in dataList.wayBillArray" :key="item.list">
@@ -36,6 +41,7 @@
                 </ul>
             </li>
         </ul>
+		</div>
 
       </div>
 
@@ -129,9 +135,10 @@ export default {
 </script>
 
 <style scoped>
-.count{
-	margin-top: 40px;
-	overflow: auto;
+.header-warp {
+position: fixed;
+top: 0px;
+z-index: 9999;
 }
 .clearfix::after {
   content: "";
@@ -140,28 +147,24 @@ export default {
   height: 0;
   clear: both;
 }
-.mint-header {
-  position: fixed;
-  top: 0;
-  z-index: 20;
-  width: 100%;
-}
 
+.slid-warp{
+	margin-top: 82px;
+	overflow: auto;
+}
 .mint-header-button.is-left {
   text-indent: 0.5em;
 }
 .iconfont {
   width: 55%;
   position: relative;
-  /* left: 5%; */
   top: 0;
-  /* transform: translateY(30px); */
   z-index: 2;
 }
 #top-selected-count {
-  position: fixed;
-  /* top: 40px;
-   left: 0;; */
+  position: fixed; 
+  top: 40px;
+   left: 0;; 
   display: flex;
   box-sizing: border-box;
   z-index: 555;
@@ -226,9 +229,9 @@ export default {
 #title-count {
   z-index: 555;
 }
-/* #data-father-count{
-    margin-top: 80px;
-} */
+#data-father-count{
+    margin-top: -42px;
+}
 #query-datda-list {
   padding-top: 40px 0;
 }
