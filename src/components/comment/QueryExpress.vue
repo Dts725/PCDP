@@ -245,9 +245,10 @@ filters: {
 
 	position: fixed;
 	top: 120px;
-	left: 50%;
+	left: 5%;
 	width: 90%;
-	transform: translateX(-50%);
+	
+
 	z-index: 999;
 	
 }

@@ -123,7 +123,7 @@ export default {
     margin-top: 15%;
     width: 100%;
 	height: 40px;
-	background-color: #68778382;
+	background-color: #687783;
 	text-align: center;
 	line-height: 40px;
 	border-radius: 5px;
@@ -138,7 +138,7 @@ export default {
  .count-header.back-count.iconfont {
 
     background-color: #26a2ff;
-    transform: translateY(-1px);
+    margin-top: -1px;
     width: 50%;
     color: #fff;
 } 
