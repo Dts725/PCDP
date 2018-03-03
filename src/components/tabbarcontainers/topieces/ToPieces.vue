@@ -369,7 +369,8 @@ ul {
   width: 36px;
   height: 36px;
   position: absolute;
-  transform: translate(13px,-44px);
+  margin: -44px 0px 0px 13px;
+  /* transform: translate(13px,-44px); */
   z-index: 2;
 }
 .top-pieces {

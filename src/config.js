@@ -58,13 +58,16 @@ export default {
         let u = navigator.userAgent;
         let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
         let isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-
+	
+		
            if (isAndroid){
-               // 安卓存储为 "1"
-               window.localStorage.setItem("Android","1")
+			   // 安卓存储为 "1"
+			   return   1
+            //    window.localStorage.setItem("Android","1")
            }else {
-               //ios 存储为 "2"
-               window.localStorage.setItem("ios","2")
+			   //ios 存储为 "2"
+			   return 0
+            //    window.localStorage.setItem("ios","0")
                
            }
 	},

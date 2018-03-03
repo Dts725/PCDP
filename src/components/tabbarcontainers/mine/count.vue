@@ -214,14 +214,11 @@ z-index: 9999;
 }
 #query-data-item > li:nth-of-type(3) {
   position: absolute;
-  bottom: 0px;
-  right: 50%;
-  /* z-index: 556; */
+  right: 5%;
+  bottom: 0;
   height: 50%;
-  /* float: right; */
-  /* text-align: right; */
   width: 35%;
-  transform: translate(150%, 25px);
+  margin-top: 25px;
 }
 #query-data-item > li:nth-of-type(3) a {
   font-size: 80%;

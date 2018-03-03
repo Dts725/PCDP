@@ -3,7 +3,7 @@
      <mt-header  v-show="flag()"  v-bind:title="mesage[forTittle()]">
       </mt-header>
 
-          <div class="router-view">
+			  <div :class="isAndroid ? 'router-view-android': 'router-view-ios'">
 		
 				   <router-view></router-view>
 		
@@ -40,11 +40,12 @@ import coo from "./config";
 export default {
   data() {
     return {
-      mesage: ["到件", "签收", "滞留", "我的"]
+	  mesage: ["到件", "签收", "滞留", "我的"],
+	  isAndroid : 1 //默认是安卓设备
     };
   },
-  updated () {
-	
+  created () {
+	 this.isAndroid = coo.whtasPhone();
 	  
   },
   computed: {
@@ -56,6 +57,8 @@ export default {
     }
   },
   methods: {
+		
+	
     //再出拿到哈希值 决定tittle 的名字
     forTittle() {
       return location.hash.substr(-1);
@@ -119,9 +122,14 @@ html body {
   transform: translateY(0px);
   padding-bottom: 10px;
 }
-.router-view {
+.router-view-android {
   overflow: hidden;
+  font-size: 18px;
 
+}
+.router-view-ios {
+  overflow: hidden;
+  font-size: 22px;
 }
 .mint-header {
   position: fixed;

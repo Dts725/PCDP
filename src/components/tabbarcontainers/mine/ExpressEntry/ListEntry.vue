@@ -235,7 +235,7 @@ left: 0;
 }
 .warp-entry-list ul li span{
 	padding: 10px 15px;
-	width: 33%;
+	width: 40%;
 	text-align: right;	
 
 }
