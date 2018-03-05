@@ -98,10 +98,10 @@ filters: {
           return;
         }
         let data = {
-		accessToken: this.accessToken,
-        mobileUserName: this.mobileUserName,
-        roleAuth: this.roleAuth,
-        searchWayBillNo: this.value
+		accessToken: that.accessToken,
+        mobileUserName: that.mobileUserName,
+        roleAuth: that.roleAuth,
+        searchWayBillNo: parseInt(datas)
         };
         data = JSON.stringify(data);
         coo
@@ -255,14 +255,10 @@ filters: {
 ul {
   list-style: none;
 }
-.details-list-query {
-  margin-top: 1em;
-  overflow: hidden;
-}
 .details-list-query li > ul {
 padding: 5px 15px;
 margin: 0 auto;
-font-size: 12px;
+font-size: 14px;
 letter-spacing: 1px;
 border-top: 1px solid #ddd; 
 border-bottom: 1px solid #ddd; 

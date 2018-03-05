@@ -1,6 +1,8 @@
 import 'babel-polyfill'
 import Vue from 'vue'
 //引入根组件
+//解决ios的300ms延迟
+import fastclick from 'fastclick'  
 import App from "./App.vue"
 import Vuex from "vuex"
 import  store from "./store.js"
@@ -23,6 +25,8 @@ import { Indicator } from 'mint-ui'
 import { Toast } from 'mint-ui'
 // require('es6-promise').polyfill()
 // Es6Promise.polyfill()
+//解决ios 300ms延迟问题
+fastclick.attach(document.body);
 Vue.use(Vuex);
 Vue.use(MintUI);
 window.NativeConn = function () {

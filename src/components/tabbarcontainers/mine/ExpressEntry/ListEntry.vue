@@ -7,7 +7,7 @@
         </mt-header>
 		<div class="warp-entry-list">
 			<ul>
-				<li v-cloak><span>姓名</span><input type="text" v-model="partnerName" placeholder="请输入姓名" autofocus></li>
+				<li v-cloak><span>姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名</span><input type="text" v-model="partnerName" placeholder="请输入姓名" autofocus></li>
 				<li v-cloak><span>联系电话</span><input type="number" pattern=[/^[0-9]{10}$/] v-model="phoneNumber" placeholder="请输入联系电话" ></li>
 				<li v-cloak><span>货物信息</span> <input type="text" v-model="goodsInformation" placeholder="请输入货物信息" ></li>
 				<li v-cloak><span>发货地址</span> <input  readonly = "value" type="text" @click="isShow" v-model="selectStr" placeholder="省/市/区" ></li>
@@ -234,9 +234,10 @@ left: 0;
 	box-sizing: border-box;
 }
 .warp-entry-list ul li span{
-	padding: 10px 15px;
-	width: 40%;
-	text-align: right;	
+	padding: 10px 0px;
+	width: 50%;
+	text-align: left;	
+	text-indent: 5px;
 
 }
 .warp-entry-list ul li span::after {
@@ -248,10 +249,9 @@ left: 0;
 .warp-entry-list ul li input{
 	font-size: 80%;
 	outline: none;
-	/* padding: 0 8px; */
 	margin: 0;
-	/* padding: 0; */
-	width: 72%;
+	margin-left: 5px;
+	
 }
 .warp-entry-list ul {
 	list-style: none;
@@ -263,18 +263,7 @@ left: 0;
 .warp-entry-list li:nth-of-type(5) textarea 	{
 	font-size: 80%;
 }
-/* .area_ctrl .area_btn_box  .area_btn larea_cancel{
-	font-size: 50% !important;
-} */
 
-.gear area_province{
-	color: red !important;
-	background-color: red !important; 
-	
-	
-}
-.area_ctrl>.area_roll_mask>.area_roll{
-	font-size: 8px !important;
-	color: red !important;
-}
+
+
 </style>

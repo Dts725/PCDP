@@ -6,9 +6,9 @@
           	</router-link>
         </mt-header>
 		
+	<div class="wrap">
 		<mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  infinite-scroll-distance = "100" :bottom-all-loaded="allLoaded" v-infinite-scroll="loadMoreMore"
   			infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true" >
-			<div class="wrap">
     			<ul>
       				<li  class = "info-entry"  v-for="item in dataList" :key="item.entryList" >
           				<img class="icon-entry" v-if="item.deliveryStatus === '2'" v-cloak src="../../../../img/yitijiao@2x.png">
@@ -18,20 +18,20 @@
                   		<li><span class="iconfont" v-cloak>联系方式 : <a :href="'tel:' +item.phoneNumber">{{item.phoneNumber}}</a> </span></li>
                   		<li><span class="iconfont" v-cloak>货物信息 :&nbsp; {{item.goodsInformation}}   </span></li>
                   		<li><span class="iconfont" v-cloak>发货地址 :  &nbsp; {{item.deliveryAddress}}   </span></li>
-                  		<li><span class="iconfont" v-cloak >提交时间 &nbsp;&nbsp; {{item.createTime | formatDate}}  </span></li>
+                  		<li><span class="iconfont" v-cloak >提交时间 :&nbsp;&nbsp; {{item.createTime | formatDate}}  </span></li>
               		</ul>
           		</li>
 			<li v-show="totalpage === pageNo" @click="topRefresh"  v-cloak class="refresh-bottom">到底啦 点击更新数据 !</li>
     	</ul>
-	</div>
   		</mt-loadmore>
+	</div>
 		
 	
-	<router-link to="/ExpressEntry/listEntry">
-		<div class="details-bottom">
+	<div class="details-bottom">
+		<router-link to="/ExpressEntry/listEntry">
 				<span>新建线索</span>
-		</div>
-	</router-link>
+		</router-link>
+	</div>
 
 	
 </div>
@@ -207,16 +207,23 @@ export default {
 	font-size: 100%;
 }
 .details-bottom {
-	position: fixed;
-	left: 0;
-	bottom: 0;
+
 	width: 100%;
 	height: 40px;
 	line-height: 40px;
 	background-color: #26a2ff;
 	text-align: center;
-	color: #fff;
 	font-size: 80%;
+	position: fixed;
+	left: 0;
+	bottom: 0; 
+} 
+.details-bottom a {
+	font-size: 80%;
+	color: #fff;
+	display: block;
+	width: 100%;
+	height: 40px;
 }
 .wrap li {
 	box-sizing: border-box;
@@ -226,11 +233,15 @@ export default {
 
 }
 .wrap{
-	margin: 40px 0; 
+width: 100%;
+height: auto;
+position: absolute;
+top: 40px;
+bottom: 40px;
+box-sizing: border-box;
+overflow: auto;
 }
-.details-entry {
-	overflow: auto;
-}
+
 #title-count{
 	position: fixed;
 	top: 0;

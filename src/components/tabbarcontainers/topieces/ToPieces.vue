@@ -55,7 +55,7 @@ export default {
   },
 
   methods: {
-	  //调用原生扫描
+	  //调用原生扫描valueTmp
     scanTopeieces: function() {
       let that = this;
       window.NativeConn.NativeScanBar(function(datas) {

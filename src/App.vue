@@ -108,7 +108,7 @@ html body {
 }
 
 .mui-bar-tab .mui-tab-item1 .mui-icon ~ .mui-tab-label {
-  font-size: 11px;
+  font-size: 12px;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
