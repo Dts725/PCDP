@@ -27,11 +27,14 @@
                     <li v-cloak v-if="item.status === '3'">运单状态	 : 到件</li>
                     <li v-cloak v-else-if="item.status === '7'">运单状态	 : 签收</li>
                     <li v-cloak v-else-if="item.status === '9'">运单状态	 : 滞留</li>
+                    <li v-cloak v-else-if="item.status === '0'">运单状态	 : 待到件</li>
+                    <li v-cloak v-else-if="item.status === '11'">运单状态	 : 退件</li>
                     <li v-cloak v-else>运单状态	 : 滞留签收</li>
                     <li v-cloak>到件时间 	 : <span :class="{color : item.status === '3' }">{{item.arriveTime  | formatDate}} </span></li>
-                    <li v-cloak>签收时间 	 : <span :class="{color : item.status === '7'}">{{item.signforTime | formatDate}} </span></li>
-                    <li v-cloak>滞留时间 	 : <span :class="{color : item.status === '9'}">{{item.retentionTime  | formatDate}} </span></li>
-                    <li v-cloak>滞留签收 	 : <span :class="{color : item.status === '10'}">{{item.retentionSignTime  | formatDate}} </span></li>
+                    <li v-if ="item.status === '7'" v-cloak>签收时间 	 : <span :class="{color : item.status === '7'}">{{item.signforTime | formatDate}} </span></li>
+                    <li v-if="item.status === '10'" v-cloak>滞留时间 	 : <span :class="{color : item.status === '9'}">{{item.retentionTime  | formatDate}} </span></li>
+                    <li v-if="item.status === '10'" v-cloak>滞留签收 	 : <span :class="{color : item.status === '10'}">{{item.retentionSignTime  | formatDate}} </span></li>
+                    <li v-if="item.status === '11'" v-cloak>滞留退件 	 : <span :class="{color : item.status === '11'}">{{item.fetchBackTime  | formatDate}} </span></li>
                     <li v-cloak>收件人&nbsp;&nbsp;&nbsp; 	  : {{item.recipients}}</li>
                     <li v-cloak>联系方式 	 : <a  :href="'tel:' + item.recipientsPhone"> {{item.recipientsPhone}} </a></li>
                     <li v-cloak>合作点&nbsp;&nbsp;&nbsp; 	  : {{item.cooperateAddress}}</li>

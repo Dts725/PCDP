@@ -14,17 +14,18 @@
                   <li><span>运单号  </span><span >  :{{item.wayBillNo}}    </span></li>
                   <li><span class="iconfont" v-cloak>&#xe610; :&nbsp; {{item.recipients}}   </span></li>
                   <li><span class="iconfont" v-cloak>&#xe632; : <a :href="'tel:' +item.recipientsPhone">{{item.recipientsPhone}}</a> </span></li>
-                   <!-- <li><span class="iconfont"> &#xe632;</span><span v-cloak> : &nbsp;{{item.recipientsPhone}}</span></li> -->
-                  <li><span class="iconfont" v-cloak>&#xe61c; : &nbsp;滞留操作  &nbsp; {{item.arriveTime | formatDate}}   </span></li>
-                  <li><span class="iconfont" v-cloak >&#xe606; : &nbsp;取回操作  &nbsp; {{item.signforTime | formatDate}}  </span></li>
+                  <li><span class="iconfont" v-if = "item.status === '10'" v-cloak >&#xe606; : &nbsp;滞留操作  &nbsp; {{item.retentionTime | formatDate}}  </span></li>
+                  <li><span class="iconfont" v-if = "item.status === '10'" v-cloak >&#xe606; : &nbsp;滞留签收  &nbsp; {{item.retentionSignTime | formatDate}}  </span></li>
+                  <li><span class="iconfont" v-if = "item.status === '11'" v-cloak >&#xe606; : &nbsp;滞留操作 &nbsp; {{item.retentionTime | formatDate}}  </span></li>
+                  <li><span class="iconfont" v-if = "item.status === '11'" v-cloak >&#xe606; : &nbsp;退件操作 &nbsp; {{item.fetchBackTime | formatDate}}  </span></li>
                   <li><span  class="iconfont" v-cloak>&#xe620; : &nbsp;{{item.receiveAddress}}  </span></li>
                   <li v-show="item.status == 9" class = "sign-detention"  @click="getSignInfo(index,item.id,item.wayBillNo)">  
-                       <mt-button @click.native="openConfirm('是否进行签收操作?','1001')" size="large">
+                       <mt-button @click.native="openConfirm('是否进行退件操作?','1001')" size="large">
                             
                                 <span>退件</span>
                          
                        </mt-button>
-                        <mt-button @click.native="openConfirm('是否进行滞留操作?','910')" size="large">
+                        <mt-button @click.native="openConfirm('是否进行签收操作?','910')" size="large">
                                 <span>签收</span>
                           </mt-button>
 

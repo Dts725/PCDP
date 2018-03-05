@@ -8,10 +8,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var webpack = require("webpack")
 
 module.exports = {
-  	entry:  {
-		app: ['babel-polyfill', path.join(__dirname,'src/main.js')]
-	
-}, 
+	entry:   path.join(__dirname,'src/main.js'), 
     output: {
         path: path.join(__dirname, "dist"),
         filename: "build.js"

@@ -89,7 +89,7 @@ export default {
                     window.localStorage.removeItem("userPassword")
                     this.$router.push("/login")
                     } else {
-                        this.openToast(res.data.message,1500);
+                        this.openToast(res.data.message,300);
           
               }
 
