@@ -199,9 +199,17 @@ export default {
 }
  
 .iconfont {
-	font-size: 100%;
-}
+	height: 40px;
 
+}
+.mint-header-button >a{
+	font-size: 14px;
+    color: inherit;
+    display: block;
+    height: 100%;
+    height: 40px;
+    line-height: 40px;
+}
 .details-bottom {
 	position: fixed;
 	left: 0;

@@ -13,7 +13,7 @@
 	  </div>
     <div  class="input-search">
 		  <span class="iconfont" @click="scanQuery">&#xe600;</span>
-		  <span><input placeholder="请输入运单号" v-model.trim="value" autofocus type="number"></span>
+		  <span><input placeholder="请输入运单号" v-model.trim="value"  type="text"></span>
     </div >
     <div class="query-express">
         <mt-button  class="query-button"  @click="openToast()" size="large">查询运单</mt-button>
@@ -30,9 +30,9 @@
                     <li v-cloak v-else-if="item.status === '0'">运单状态	 : 待到件</li>
                     <li v-cloak v-else-if="item.status === '11'">运单状态	 : 退件</li>
                     <li v-cloak v-else>运单状态	 : 滞留签收</li>
-                    <li v-cloak>到件时间 	 : <span :class="{color : item.status === '3' }">{{item.arriveTime  | formatDate}} </span></li>
+                    <li v-cloak v-if ="item.status !== '0'">到件时间 	 : <span :class="{color : item.status === '3' }">{{item.arriveTime  | formatDate}} </span></li>
                     <li v-if ="item.status === '7'" v-cloak>签收时间 	 : <span :class="{color : item.status === '7'}">{{item.signforTime | formatDate}} </span></li>
-                    <li v-if="item.status === '10'" v-cloak>滞留时间 	 : <span :class="{color : item.status === '9'}">{{item.retentionTime  | formatDate}} </span></li>
+                    <li v-if="item.status === '10' || item.status === '11'" v-cloak>滞留时间 	 : <span :class="{color : item.status === '9'}">{{item.retentionTime  | formatDate}} </span></li>
                     <li v-if="item.status === '10'" v-cloak>滞留签收 	 : <span :class="{color : item.status === '10'}">{{item.retentionSignTime  | formatDate}} </span></li>
                     <li v-if="item.status === '11'" v-cloak>滞留退件 	 : <span :class="{color : item.status === '11'}">{{item.fetchBackTime  | formatDate}} </span></li>
                     <li v-cloak>收件人&nbsp;&nbsp;&nbsp; 	  : {{item.recipients}}</li>
@@ -245,7 +245,6 @@ filters: {
 }
 
 .query-express{
-
 	position: fixed;
 	top: 120px;
 	left: 5%;

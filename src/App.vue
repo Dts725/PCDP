@@ -129,7 +129,7 @@ html body {
 }
 .router-view-ios {
   overflow: hidden;
-  font-size: 22px;
+  font-size: 20px;
 }
 .mint-header {
   position: fixed;

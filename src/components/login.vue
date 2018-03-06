@@ -7,7 +7,7 @@
        
            <div class="iconfont">
                <span>&#xe611;</span>
-                <input    v-model.trim="userName"  placeholder="输入账号"   type="number"> 
+                <input    v-model.trim="userName"  placeholder="输入账号"   type="text"> 
             </div>
   
            <div class="iconfont">

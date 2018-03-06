@@ -189,7 +189,7 @@ z-index: 9999;
   position: relative;
   top: 0;
   left: 0;
-  font-size: 80%;
+  font-size: 70%;
   padding: 5px 15px;
   /* border: 1px solid #ddd; */
   margin-bottom: 2px;
@@ -221,7 +221,7 @@ z-index: 9999;
   margin-top: 25px;
 }
 #query-data-item > li:nth-of-type(3) a {
-  font-size: 80%;
+  font-size: 70%;
 }
 #title-count {
   z-index: 555;
@@ -238,6 +238,9 @@ z-index: 9999;
 .mint-header-button > a {
   color: inherit;
   font-size: 100%;
+  display: block;
+  width: 100%;
+  line-height: 40px;
 }
 #top-selected-count .select-down-row {
   position: relative;
@@ -248,6 +251,11 @@ select {
   background: url("../../../img/downRow.png") no-repeat 90% center;
   background-size: 15px;
   background-color: #fff;
+}
+
+.mint-header-button.is-left {
+    text-align: left;
+  
 }
 </style>
 

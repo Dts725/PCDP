@@ -16,10 +16,10 @@
         <div class="page-part reset">
        
             <div class="iconfont">
-                <input  placeholder="请输入账号" v-model="userCode" type="number">
+                <input  placeholder="请输入账号" v-model="userCode" type="text">
             </div>
             <div class="iconfont">
-                <input placeholder="请输入验证码" v-model="securityCode" type="number">
+                <input placeholder="请输入验证码" v-model="securityCode" type="text">
                 <img @click="refreshImg" :src="VerificationImg"  alt="验证码丢失了">
             </div>
 
@@ -84,18 +84,13 @@ export default {
           }
         })
         .catch(err => {
-          console.log("进来了");
-
           console.log(err);
         });
     },
       nextButton : function ()  {
 
-          if(!this.securityCode || !this.userCode) {
-            //   console.log("你进来");
-              
+          if(!this.securityCode || !this.userCode) {   
               this.openToast("请检查输入",1500);
-       
               return  
           }
           let data = {
@@ -105,8 +100,6 @@ export default {
           };
           data = JSON.stringify(data);  
           coo.sign(data,(coo.LoginUrl+"pcpmobile/findUserInfo.action")).then(res => {
-              console.log(res);
-              
               if(res.status === 200 && res.data.success === true) {
                   
                     coo.setCache('findSerialUID', res.data.findSerialUID);

@@ -14,10 +14,12 @@
                   <li><span>运单号  </span><span >  :{{item.wayBillNo}}    </span></li>
                   <li><span class="iconfont" v-cloak>&#xe610; :&nbsp; {{item.recipients}}   </span></li>
                   <li><span class="iconfont" v-cloak>&#xe632; : <a :href="'tel:' +item.recipientsPhone">{{item.recipientsPhone}}</a> </span></li>
-                  <li><span class="iconfont" v-if = "item.status === '10'" v-cloak >&#xe606; : &nbsp;滞留操作  &nbsp; {{item.retentionTime | formatDate}}  </span></li>
-                  <li><span class="iconfont" v-if = "item.status === '10'" v-cloak >&#xe606; : &nbsp;滞留签收  &nbsp; {{item.retentionSignTime | formatDate}}  </span></li>
-                  <li><span class="iconfont" v-if = "item.status === '11'" v-cloak >&#xe606; : &nbsp;滞留操作 &nbsp; {{item.retentionTime | formatDate}}  </span></li>
-                  <li><span class="iconfont" v-if = "item.status === '11'" v-cloak >&#xe606; : &nbsp;退件操作 &nbsp; {{item.fetchBackTime | formatDate}}  </span></li>
+                  <li><span class="iconfont" v-cloak >&#xe606; : &nbsp;到件操作  &nbsp; {{item.arriveTime | formatDate}}  </span></li>
+                  <!-- <li><span class="iconfont" v-if = "item.status === '10' || item.status === '9' || item.status === '11' || item.stautus === '7'" v-cloak >&#xe606; : &nbsp;滞留操作  &nbsp; {{item.retentionTime | formatDate}}  </span></li> -->
+                  <li><span class="iconfont" v-if = "item.status !== '3'" v-cloak >&#xe606; : &nbsp;滞留操作  &nbsp; {{item.retentionTime | formatDate}}  </span></li>
+                  <li><span class="iconfont" v-if = "item.status === '10' || item.stautus === '7'" v-cloak >&#xe606; : &nbsp;滞留签收  &nbsp; {{getDate(item.retentionSignTime) | formatDate}}  </span></li>
+                  <!-- <li><span class="iconfont" v-if = "item.status === '11'" v-cloak >&#xe606; : &nbsp;滞留操作 &nbsp; {{item.retentionTime | formatDate}}  </span></li> -->
+                  <li><span class="iconfont" v-if = "item.status === '11'" v-cloak >&#xe606; : &nbsp;退件操作 &nbsp; {{getDate(item.fetchBackTime) | formatDate}}  </span></li>
                   <li><span  class="iconfont" v-cloak>&#xe620; : &nbsp;{{item.receiveAddress}}  </span></li>
                   <li v-show="item.status == 9" class = "sign-detention"  @click="getSignInfo(index,item.id,item.wayBillNo)">  
                        <mt-button @click.native="openConfirm('是否进行退件操作?','1001')" size="large">
@@ -94,6 +96,12 @@ export default {
     }
   },
   methods: {
+	// 获取当前时间 用来填签收时间
+
+	getDate: (times) => {
+		times === null ? times = new Date().valueOf() : times;
+		return times
+	},
 	topRefresh : function () {
 	  this.proCopyright =[];
 	//   this.isBottom=1;
