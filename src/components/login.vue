@@ -21,7 +21,7 @@
             
             <input placeholder="输入验证码"  v-model.trim="Verification" type="text"> 
 
-            <img  @click="refreshImg" v-bind:src="VerificationImg"     class="loginSecurityCode">
+            <img  @click="refreshImg" v-bind:src="VerificationImg"     class="loginSecurityCode"  alt="验证码获取失败">
         </div>
    
       <mt-button type="primary"  @click="loading" size="large" style="text-align : center">登录</mt-button>
@@ -75,7 +75,7 @@ export default {
 	};
   },
   //页面元素显示前执行内容
-  mounted() {
+  activated () {
     this.refreshImg();
     this.userName = coo.getCache("mobileUserName");
     this.userPassword = coo.getCache("userPassword");

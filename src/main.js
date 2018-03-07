@@ -31,7 +31,6 @@ Vue.use(Vuex);
 Vue.use(MintUI);
 window.NativeConn = function () {
     var callScanFun = function (data) {
-        console.log(data);
     };
     var NativeScanBar = function (callback) {
         if (typeof callback != "function") {

@@ -42,7 +42,7 @@ export default {
             findMobileLoginName : coo.getCache("findMobileLoginName"),
             passWordFlag : 1, //默认显示密码
             openToast (msg,times) {
-            times  = times || 900;
+            times  = times || 2500;
             Toast({
             message: msg,
             position: 'middle',
@@ -70,7 +70,8 @@ export default {
       
            let data = {
                    "oldPassword": this.oldPassword,
-                    "newPassword": this.newPassword,
+					"newPassword": this.newPassword,
+					"newPassword2" :this.newPasswordNext,
                     "findSerialUID": this.findSerialUID,
                     "findMobileLoginName": this.findMobileLoginName
           };
@@ -81,15 +82,15 @@ export default {
                     return
         
                  } 
-                  console.log(data);
+          
                   
             coo.sign(data,(coo.LoginUrl+"pcpmobile/resetUserPassword.action")).then(res => {
                 if(res.status === 200 && res.data.success == true) {
-                    this.openToast("密码重置成功 请重新登陆",1500)
+                    this.openToast("密码重置成功 请重新登陆",2500)
                     window.localStorage.removeItem("userPassword")
                     this.$router.push("/login")
                     } else {
-                        this.openToast(res.data.message,300);
+                        this.openToast(res.data.message,2500);
           
               }
 

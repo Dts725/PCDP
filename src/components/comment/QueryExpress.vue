@@ -249,27 +249,31 @@ filters: {
 	top: 120px;
 	left: 5%;
 	width: 90%;
-	
-
 	z-index: 999;
 	
 }
+.query-express .query-button {
+	text-align: center;
+}
 ul {
   list-style: none;
+  padding: 5px 0px;
 }
 .details-list-query li > ul {
+width: 95%;
 padding: 5px 15px;
 margin: 0 auto;
 font-size: 14px;
 letter-spacing: 1px;
-border-top: 1px solid #ddd; 
-border-bottom: 1px solid #ddd; 
-margin-bottom: 5px;
-
+margin-top: 5px;
+border: 1px solid #ccc;
+/* box-shadow: 0px 0px 5px -3px #5e5e5e; */
+border-radius: 6px;
 }
 .details-list-query{
 	overflow: hidden;
 	margin-top: 170px;
+
 }
 .color{
 	color: #26a2ff;
@@ -279,10 +283,9 @@ margin-bottom: 5px;
 	top: 0;
 	left: 0;
 	background-color: #fff;
-	z-index: 666;
 	height: 170px;
 	width: 100%;
-	box-shadow: 0px 1px 5px 0.1px #ddd;
+
 }
 .exit{
 	display: block;

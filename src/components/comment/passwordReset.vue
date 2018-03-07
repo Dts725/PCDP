@@ -20,7 +20,7 @@
             </div>
             <div class="iconfont">
                 <input placeholder="请输入验证码" v-model="securityCode" type="text">
-                <img @click="refreshImg" :src="VerificationImg"  alt="验证码丢失了">
+                <img @click="refreshImg" :src="VerificationImg"  alt="验证码获取失败">
             </div>
 
            <!-- <mt-field placeholder="输入验证码" type="password"></mt-field>
@@ -46,7 +46,7 @@ export default {
             securityCode : "",
             sessionId   : "",
             openToast (msg,times) {
-             times  = times || 900;
+             times  = times || 2500;
             Toast({
             message: msg,
             position: 'middle',
@@ -90,7 +90,7 @@ export default {
       nextButton : function ()  {
 
           if(!this.securityCode || !this.userCode) {   
-              this.openToast("请检查输入",1500);
+              this.openToast("请检查输入",2500);
               return  
           }
           let data = {
@@ -108,7 +108,7 @@ export default {
               } else {
              
                      this.refreshImg();
-                    this.openToast(res.data.message,1500);
+                    this.openToast(res.data.message,2500);
           
               return  
           

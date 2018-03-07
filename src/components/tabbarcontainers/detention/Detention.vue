@@ -17,9 +17,9 @@
                   <li><span class="iconfont" v-cloak >&#xe606; : &nbsp;到件操作  &nbsp; {{item.arriveTime | formatDate}}  </span></li>
                   <!-- <li><span class="iconfont" v-if = "item.status === '10' || item.status === '9' || item.status === '11' || item.stautus === '7'" v-cloak >&#xe606; : &nbsp;滞留操作  &nbsp; {{item.retentionTime | formatDate}}  </span></li> -->
                   <li><span class="iconfont" v-if = "item.status !== '3'" v-cloak >&#xe606; : &nbsp;滞留操作  &nbsp; {{item.retentionTime | formatDate}}  </span></li>
-                  <li><span class="iconfont" v-if = "item.status === '10' || item.stautus === '7'" v-cloak >&#xe606; : &nbsp;滞留签收  &nbsp; {{getDate(item.retentionSignTime) | formatDate}}  </span></li>
+                  <li><span class="iconfont" v-if = "item.status === '10' || item.stautus === '7' || isShow" v-cloak >&#xe606; : &nbsp;滞留签收  &nbsp; {{getDate(item.retentionSignTime) | formatDate}}  </span></li>
                   <!-- <li><span class="iconfont" v-if = "item.status === '11'" v-cloak >&#xe606; : &nbsp;滞留操作 &nbsp; {{item.retentionTime | formatDate}}  </span></li> -->
-                  <li><span class="iconfont" v-if = "item.status === '11'" v-cloak >&#xe606; : &nbsp;退件操作 &nbsp; {{getDate(item.fetchBackTime) | formatDate}}  </span></li>
+                  <li><span class="iconfont" v-if = "item.status === '11' || isHidden" v-cloak >&#xe606; : &nbsp;退件操作 &nbsp; {{getDate(item.fetchBackTime) | formatDate}}  </span></li>
                   <li><span  class="iconfont" v-cloak>&#xe620; : &nbsp;{{item.receiveAddress}}  </span></li>
                   <li v-show="item.status == 9" class = "sign-detention"  @click="getSignInfo(index,item.id,item.wayBillNo)">  
                        <mt-button @click.native="openConfirm('是否进行退件操作?','1001')" size="large">
@@ -55,6 +55,8 @@ import { Toast } from "mint-ui";
 export default {
   data() {
     return {
+	  isHidden : 0,//点击滞留页面 签收退件的时候 默认不显示	
+	  isShow : 0, //点击滞留页面 签收退件的时候 默认不显示		
       $index			: 0, //获取当前项的index
       $id				: "",
       $wayBillNo		: 0, //获取当前项的id
@@ -79,14 +81,14 @@ export default {
      };
   },
 
-  mounted() {
+  activated () {
 	// coo.routerViewHeight('.fall-scoll');
     this.mountedDetention();
     this.wrapperHeight =
       document.documentElement.clientHeight -
       this.$refs.wrapper.getBoundingClientRect().top; //组件更新动态计算页面scroll 数据
   },
-  beforeDestroy() {
+  deactivated () {
     this.beforeDestroyDetntion(); 
   },
   filters: {
@@ -152,11 +154,16 @@ export default {
             if (res.status == 200 && res.data.success == true) {
               if (statusCode === "910") {
                 this.proCopyright[this.$index].status = "7";
-                this.openToast("已签收");
+				this.isHidden =0;
+				this.isShow =1;
+				this.openToast("已签收");
+				
               } else {
                 this.proCopyright[this.$index].status = "11";
-                this.openToast("已退件");
-              }
+				this.isShow = 0;
+				this.isHidden = 1;
+				this.openToast("已退件");
+			  }
             }
           
             this.detentionStore();
@@ -297,22 +304,22 @@ export default {
 	overflow: auto;
 }
 .info-sign {
+
+ width: 98%;
+ margin: 0 auto;
+  box-sizing: border-box;
+background-color: #fff;
+  color: #444;
   position: relative;
   letter-spacing: 0.1px;
-  /* display: flex; */
   font-size: 80%;
-  /* width: 90%; */
-  padding: 30px 0;
-  background-color: #fff;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 5px;
-  color: #444;
-  box-sizing: border-box;
   padding: 5px 15px;
+  border: 1px solid #ccc;
+border-radius: 5px;
+margin-top: 5px;
+
 }
 .info-sign > img {
-
   position: absolute;
   right: 20px;
   top: 50%;
@@ -419,7 +426,7 @@ ul {
 	height: 50px;
 	font-size: 14px;
 	text-align: center;
-	color:  rgb(182, 171, 171);
+	color:  #ddd;
 	line-height: 50px;
 	border-top: 10px;
 	

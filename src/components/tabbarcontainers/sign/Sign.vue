@@ -74,13 +74,13 @@ export default {
     };
   },
 
-  mounted() {
+  activated () {
     this.mountedSign();
     this.wrapperHeight =
     document.documentElement.clientHeight -
 	this.$refs.wrapper.getBoundingClientRect().top; //组件更新动态计算页面scroll 数据  	
   },
-  beforeDestroy() {
+  deactivated () {
     this.beforeDestroySign();
   },
   filters: {
@@ -281,12 +281,17 @@ export default {
   /* width: 90%; */
   padding: 30px 0;
   background-color: #fff;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 5px;
   color: #444;
   box-sizing: border-box;
   padding: 5px 15px;
+}
+.info-sign{
+width: 98%;
+margin: 0 auto;
+/* box-shadow: 0px 0px 5px -3px #5e5e5e; */
+border: 1px solid #ccc;
+border-radius: 5px;
+margin-top: 5px;
 }
 .info-sign > img {
   position: absolute;
@@ -396,7 +401,7 @@ ul {
 	height: 50px;
 	font-size: 14px;
 	text-align: center;
-	color:  rgb(182, 171, 171);
+	color:  #ddd;
 	line-height: 50px;
 	border-top: 10px;
 	

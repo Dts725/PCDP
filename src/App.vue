@@ -4,8 +4,9 @@
       </mt-header>
 
 			  <div :class="isAndroid ? 'router-view-android': 'router-view-ios'">
-		
+				  <keep-alive>
 				   <router-view></router-view>
+				   </keep-alive>
 		
         </div>   
        
@@ -44,11 +45,11 @@ export default {
 	  isAndroid : 1 //默认是安卓设备
     };
   },
-  created () {
+  activated() {
 	 this.isAndroid = coo.whtasPhone();
 	  
   },
-  computed: {
+  activated : {
     signIco() {
       return this.$store.state.tips.signNumber;
     },

@@ -9,7 +9,7 @@
 	<div class="wrap">
 		<mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  infinite-scroll-distance = "100" :bottom-all-loaded="allLoaded" v-infinite-scroll="loadMoreMore"
   			infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true" >
-    			<ul>
+    			<ul class="wrap-ul">
       				<li  class = "info-entry"  v-for="item in dataList" :key="item.entryList" >
           				<img class="icon-entry" v-if="item.deliveryStatus === '2'" v-cloak src="../../../../img/yitijiao@2x.png">
           				<img  class="icon-entry" v-else v-cloak src="../../../../img/yikaidan@2x.png">
@@ -206,6 +206,7 @@ export default {
 .iconfont {
 	font-size: 100%;
 }
+
 .details-bottom {
 
 	width: 100%;
@@ -229,8 +230,6 @@ export default {
 	box-sizing: border-box;
 	padding: 5px 10px;
 	font-size: 80%;
-	margin-bottom: 5px;
-
 }
 .wrap{
 width: 100%;
@@ -259,14 +258,18 @@ overflow: auto;
 	transform: translate(-20px,-50%);
 }
 .info-entry {
-	border-top: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
+width: 98%;
+margin: 0 auto;
+border: 1px solid #ccc;
+/* box-shadow: 0px 0px 5px -3px #5e5e5e; */
+border-radius: 5px;
+margin-top: 5px;
 }
 .refresh-bottom{
 	height: 50px;
 	font-size: 14px;
 	text-align: center;
-	color:  rgb(182, 171, 171);
+	color:  #ddd;
 	line-height: 50px;
 	border-top: 10px;
 	

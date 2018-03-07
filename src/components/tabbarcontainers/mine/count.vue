@@ -186,17 +186,19 @@ z-index: 9999;
   z-index: -2;
 }
 #query-data-item {
+	width: 98%;
+	margin: auto;
   position: relative;
   top: 0;
   left: 0;
   font-size: 70%;
   padding: 5px 15px;
   /* border: 1px solid #ddd; */
-  margin-bottom: 2px;
+  margin-top: 4px;
   list-style: none;
   /* box-shadow: 0px 1px 5px 1px #ddd ; */
-  border: 1px solid #ddd;
-  border-radius: 2px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
   box-sizing: border-box;
 }
 #query-data-item li {
