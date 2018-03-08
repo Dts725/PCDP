@@ -120,8 +120,6 @@ export default {
           if (res.data.success == true && res.status) {
             //    console.log("就来执行了");
             coo.setCache("accessToken", res.data.accessToken);
-			console.log(res.data.accessToken);
-			
             coo.setCache("cooperateCode", res.data.cooperateCode);
             coo.setCache("mobileUserName", res.data.mobileUserName);
             coo.setCache("roleAuth", res.data.roleAuth);

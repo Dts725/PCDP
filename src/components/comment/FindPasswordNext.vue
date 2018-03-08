@@ -51,9 +51,7 @@ export default {
          }
         }
     },
-    created () {
-    
-    },
+   
     methods : {
 		//密码显示隐藏
 	  passWordFn : function () {

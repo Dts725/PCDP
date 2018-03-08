@@ -57,7 +57,7 @@ export default {
             
         }
     },
-    created () {
+    activated () {
         this.refreshImg()
     },
     methods : {
