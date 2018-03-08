@@ -45,11 +45,11 @@ export default {
 	  isAndroid : 1 //默认是安卓设备
     };
   },
-  activated() {
+  created () {
 	 this.isAndroid = coo.whtasPhone();
 	  
   },
-  activated : {
+  computed: {
     signIco() {
       return this.$store.state.tips.signNumber;
     },

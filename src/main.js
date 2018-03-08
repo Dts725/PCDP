@@ -65,8 +65,7 @@ router.beforeResolve ((to, from, next) => {
 		// console.log(to.meta.requireAuth)
 		Indicator.close();//每个路由切换前关闭过度状态
         if (to.meta.requireAuth) { // 判断该路由是否需要登录权限
-            if (coo.getCache("accessToken")) { // 通过vuex state获取当前的token是否存在
-
+            if (coo.getCache("accessToken")) { 
 
 
                 // 添加响应拦截器

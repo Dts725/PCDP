@@ -72,7 +72,7 @@ export default {
       detailNumber: []
     };
   },
-  created() {
+  activated() {
     this.queryDatePost();
   },
   watch: {
