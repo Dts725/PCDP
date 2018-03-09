@@ -169,7 +169,16 @@ const modulesEntry = {
 		}
 	}
 }
-
+const keepAlive = {
+	state : {
+		keepAliveData : []
+	},
+	mutations : {
+		keepAliveCommit (state , msg ){
+			state.keepAliveData = msg;
+		}
+	}
+}
 
 
 
@@ -181,8 +190,8 @@ const store = new Vuex.Store({
         sign        : moduleSign,
 		detention   : moduleDetention,
 		entry		: modulesEntry,
-		querExpress : moduleQueryExpress
-        
+		querExpress : moduleQueryExpress,
+        keepAlive	: keepAlive
     }
 })
 

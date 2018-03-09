@@ -15,10 +15,10 @@
           				<img  class="icon-entry" v-else v-cloak src="../../../../img/yikaidan@2x.png">
            			<ul class="ifon-item-entry">
                   		<li><span>姓名  </span><span > :   {{item.partnerName}} </span></li>
-                  		<li><span class="iconfont" v-cloak>联系方式 : <a :href="'tel:' +item.phoneNumber">{{item.phoneNumber}}</a> </span></li>
-                  		<li><span class="iconfont" v-cloak>货物信息 :&nbsp; {{item.goodsInformation}}   </span></li>
-                  		<li><span class="iconfont" v-cloak>发货地址 :  &nbsp; {{item.deliveryAddress}}   </span></li>
-                  		<li><span class="iconfont" v-cloak >提交时间 :&nbsp;&nbsp; {{item.createTime | formatDate}}  </span></li>
+                  		<li><span  v-cloak>联系方式 : <a :href="'tel:' +item.phoneNumber">{{item.phoneNumber}}</a> </span></li>
+                  		<li><span  v-cloak>货物信息 :&nbsp; {{item.goodsInformation}}   </span></li>
+                  		<li><span  v-cloak>发货地址 :  &nbsp; {{item.deliveryAddress}}   </span></li>
+                  		<li><span  v-cloak >提交时间 :&nbsp;&nbsp; {{item.createTime | formatDate}}  </span></li>
               		</ul>
           		</li>
 			<li v-show="totalpage === pageNo" @click="topRefresh"  v-cloak class="refresh-bottom">到底啦 点击更新数据 !</li>
@@ -203,6 +203,8 @@ export default {
   height: 0;
   clear: both;
 } */
+
+	
 .iconfont {
 	font-size: 100%;
 }

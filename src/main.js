@@ -76,7 +76,8 @@ router.beforeResolve ((to, from, next) => {
                             path: '/login',
                             query: { redirect: to.VueRouter } // 将跳转的路由path作为参数，登录成功后跳转到该路由
                         })
-                        window.localStorage.removeItem("accessToken");
+						window.localStorage.removeItem("accessToken");
+						// this.$destroy();
                         Toast({
                             message     :  '登录失效 请重新登录 !',
                             position    : 'middle',

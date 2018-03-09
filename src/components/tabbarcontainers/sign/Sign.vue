@@ -54,6 +54,7 @@ import { Toast } from "mint-ui";
 
 
 export default {
+ name : "sign",
   data() {
     return {
 	  refreshFlag    : 0, //师傅首次刷新 默认为0  不是刷新
@@ -73,14 +74,23 @@ export default {
       totalpage: 0 //计算出来应有的 刷新次数
     };
   },
-
+mounted () {
+	console.log("9898989");
+	
+	this.isKeepAlive();
+    this.mountedSign();
+    this.wrapperHeight =
+    document.documentElement.clientHeight -
+	this.$refs.wrapper.getBoundingClientRect().top; //组件更新动态计算页面scroll 数据  	
+},
   activated () {
+	this.isKeepAlive();
     this.mountedSign();
     this.wrapperHeight =
     document.documentElement.clientHeight -
 	this.$refs.wrapper.getBoundingClientRect().top; //组件更新动态计算页面scroll 数据  	
   },
-  deactivated () {
+  deactivated  () {
     this.beforeDestroySign();
   },
   filters: {
@@ -233,6 +243,19 @@ export default {
 		coo.tipNumber(data,coo.LoginUrl+'pcpmobile/queryTotalCount.action',that)
 		
     
+	},
+
+	isKeepAlive () {
+				//判断是否使用keepalive
+		let status = this.$store.state.keepAlive.keepAliveData;
+		if(status.length === 0) {
+			this.$store.commit("keepAliveCommit",['sign'])
+		} else if(JSON.stringify(status)!== JSON.stringify(['sign'])) {
+			//此处判断条件仅此处可用 勿改动 !!!!!!!!!!!
+			this.$store.commit("keepAliveCommit",['sign','detention'])
+		} else {
+			return
+		}
 	},
 	//状态管理
     mountedSign() {

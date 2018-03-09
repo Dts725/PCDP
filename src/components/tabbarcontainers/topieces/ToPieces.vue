@@ -47,10 +47,10 @@ export default {
       roleAuth: coo.getCache("roleAuth")
     };
   },
-  activated  () {
+  mounted  () {
     this.createdToPieces();
   },
-  deactivated () {
+  beforeDestroy () {
     this.beforeDestroyTopieces();
   },
 

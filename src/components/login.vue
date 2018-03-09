@@ -75,7 +75,7 @@ export default {
 	};
   },
   //页面元素显示前执行内容
-  activated () {
+  mounted () {
     this.refreshImg();
     this.userName = coo.getCache("mobileUserName");
     this.userPassword = coo.getCache("userPassword");
@@ -118,7 +118,8 @@ export default {
         .then(res => {
 			
           if (res.data.success == true && res.status) {
-            //    console.log("就来执行了");
+			//    console.log("就来执行了");
+			this.$store.commit("keepAliveCommit", []);
             coo.setCache("accessToken", res.data.accessToken);
             coo.setCache("cooperateCode", res.data.cooperateCode);
             coo.setCache("mobileUserName", res.data.mobileUserName);

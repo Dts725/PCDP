@@ -53,6 +53,7 @@ import { Indicator } from 'mint-ui';
 import { Toast } from "mint-ui";
 
 export default {
+name : "detention",
   data() {
     return {
 	  isHidden : 0,//点击滞留页面 签收退件的时候 默认不显示	
@@ -80,8 +81,16 @@ export default {
 	//   isBottom 			: 0 //标记是否点击底部刷新 默认0 不是底部点击刷新
      };
   },
-
+mounted () {
+	this.isKeepAlive(); 
+	// coo.routerViewHeight('.fall-scoll');
+    this.mountedDetention();
+    this.wrapperHeight =
+    document.documentElement.clientHeight -
+    this.$refs.wrapper.getBoundingClientRect().top; //组件更新动态计算页面scroll 数据
+},
   activated () {
+	this.isKeepAlive(); 
 	// coo.routerViewHeight('.fall-scoll');
     this.mountedDetention();
     this.wrapperHeight =
@@ -255,7 +264,19 @@ export default {
 
           console.log(err);
         });
-    },
+	},
+	isKeepAlive () {
+				//判断是否使用keepalive
+		let status = this.$store.state.keepAlive.keepAliveData;
+		if(status.length === 0) {
+			this.$store.commit("keepAliveCommit",['detention'])
+		} else if(JSON.stringify(status) !== JSON.stringify(['detention'])) {
+			//此处判断条件仅此处可用 勿改动 !!!!!!!!!!!
+			this.$store.commit("keepAliveCommit",['sign','detention'])
+		} else {
+			return
+		}
+	},
 
     // 状态管理
     detentionStore() {

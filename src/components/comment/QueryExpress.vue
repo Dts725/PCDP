@@ -272,7 +272,7 @@ border-radius: 6px;
 }
 .details-list-query{
 	overflow: hidden;
-	margin-top: 170px;
+	margin-top: 190px;
 
 }
 .color{
@@ -283,8 +283,9 @@ border-radius: 6px;
 	top: 0;
 	left: 0;
 	background-color: #fff;
-	height: 170px;
+	height: 190px;
 	width: 100%;
+	border-bottom: 1px solid #ccc;
 
 }
 .exit{

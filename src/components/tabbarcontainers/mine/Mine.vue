@@ -45,7 +45,7 @@ export default {
             userPhone   :   null
       }
     },
-    activated ()  {
+    mounted ()  {
         this.userName = coo.getCache("cooperateName");
         this.userPhone = (coo.getCache("mobileUserName").substr(0,3)+ '****' +coo.getCache("mobileUserName").substr(-4));
     },

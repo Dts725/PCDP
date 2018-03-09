@@ -4,7 +4,7 @@
       </mt-header>
 
 			  <div :class="isAndroid ? 'router-view-android': 'router-view-ios'">
-				  <keep-alive>
+				  <keep-alive :include ="this.$store.state.keepAlive.keepAliveData">
 				   <router-view></router-view>
 				   </keep-alive>
 		
