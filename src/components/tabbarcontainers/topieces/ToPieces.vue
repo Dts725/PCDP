@@ -2,25 +2,22 @@
  
   <div class="top-pieces">
 
-    
-    <div>
+	<div class="warp-topieces">
+   	 	<div>
         <mt-search v-model.trim="value" cancel-text="取消" placeholder="请输入运单号">
         </mt-search>
           <div id="scan-topieces" @click="scanTopeieces"></div>
-    </div >
-    <div class="query">
-        <mt-button  class="query-button"  @click="openToast()" size="large">查询运单</mt-button>
-    </div>
-
-    <div>
+    	</div >
+    	<div class="query">
+        <mt-button  class="query-button"  @click="openToast()" :disabled="isDisabled" size="large">查询运单</mt-button>
+    	</div>
+</div>
+    <div class="data-list-warp">
         <ul class="data-list">
-            <li v-for = "(item,index) in dataList" :key="item.index">
-                <ul>
-                    <li v-cloak>运单号 : {{item.wayBillNo}}</li>
-                    <li v-cloak>签收人 : {{item.recipients}}</li>
-                    <li @click="toPieces(item.id,item.wayBillNo,index)">到件</li>
-                </ul>
-            </li>
+             <li v-for ="(item,index) in dataList" :key="item.topiexesId">
+                    <span>运单号 : {{item.wayBillNo}} &nbsp;&nbsp;&nbsp;签收人 : {{item.recipients}}</span>
+                    <span @click="toPieces(item.id,item.wayBillNo,index)">到件</span> 	
+            </li> 
         </ul>
     </div>
     
@@ -37,6 +34,7 @@ import { Search } from "mint-ui";
 export default {
   data() {
     return {
+		isDisabled : false,// 默认是可以点击的
       flagTopieces: 1,
       value: "",
       dataList: [],
@@ -59,9 +57,11 @@ export default {
     scanTopeieces: function() {
       let that = this;
       window.NativeConn.NativeScanBar(function(datas) {
+		 
         scanWaybillNumberFn(datas);
       });
       let scanWaybillNumberFn = function(datas) {
+		  console.log(datas)
         //  console.log(datas);
         let valueTmp = that.dataPiecesValueList.indexOf(datas);
         //禁止重复查询订单-----------------------------------------------------------------------------------------------------
@@ -87,9 +87,16 @@ export default {
           .then(res => {
             if (res.status == 200) {
               if (res.data.success == true) {
-                that.dataList.unshift(res.data.wayBillInfo);
-                //缓存去重的数组
-                that.dataPiecesValueList.unshift(res.data.searchWayBillNo);
+				let tmp = res.data.wayBillInfo;
+				console.log(tmp);
+				
+                that.dataList.push(tmp);
+				//缓存去重的数组
+				console.log(that.dataList);
+				
+				that.dataPiecesValueList.unshift(res.data.searchWayBillNo);
+				console.log(that.dataPiecesValueList);
+				
                 that.value = null;
               } else {
                 Toast({
@@ -110,7 +117,9 @@ export default {
             that.value = null;
             console.log(err);
           });
-      };
+	  };
+	  //跳转空白页
+	//   this.$router.push('/Opacity')
     },
 
     toPieces(itemId, wayBillNo, $index) {
@@ -154,7 +163,9 @@ export default {
             this.value = null;
             console.log(err);
           });
-      });
+	  });
+	//   this.$router.push('/Opacity')
+	  
     },
     openToast() {
       if (this.value == "") {
@@ -178,7 +189,7 @@ export default {
       }
 
       //发送查询请求
-
+       this.isDisabled = true;
       let data = {
         searchWayBillNo: parseInt(this.value),
         accessToken: this.accessToken,
@@ -192,22 +203,26 @@ export default {
         .then(res => {
           if (res.status == 200) {
             if (res.data.success == true) {
-              // console.log(res.data);
+				// console.log(res.data);
               this.dataList.unshift(res.data.wayBillInfo);
               //缓存去重的数组
               this.dataPiecesValueList.unshift(res.data.searchWayBillNo);
               this.value = null;
+				this.isDisabled = false;
             } else {
-              this.value = null;
+				this.value = null;
               Toast({
-                message: res.data.message,
+				  message: res.data.message,
                 position: "middle",
                 duration: 1000
               });
+		     this.isDisabled = false;
             }
           }
         })
         .catch(err => {
+		this.isDisabled = false;
+			
           Toast({
             message: "查询运单信息失败请重试 !",
             position: "middle",
@@ -215,7 +230,8 @@ export default {
           });
           this.value = null;
           console.log(err);
-        });
+		});
+		
     },
     //creatd 中的函数
     createdToPieces() {
@@ -312,49 +328,49 @@ button:enabled:active {
 ul {
   list-style: none;
 }
+.warp-topieces {
+	 position: fixed;
+	top: 40px;
+	left: 0;
+	width: 100%; 
+	z-index: 555;
+	/* margin-top: 140px; */
+	height: 140px;
+	background-color: #fff;
+
+}
 .data-list {
-  margin-top: 1em;
+	/* overflow: auto; */
+-webkit-overflow-scrolling: touch;
+  margin-top: 10px;
 }
-.data-list li > ul {
-  /* position: relative; */
-  /* z-index: 999; */
-  padding: 0 0.1em;
-  /* background-color: green; */
-  border-bottom: 1px solid #ddd;
-  border-top: 1px solid #ddd;
-  letter-spacing: 0.1em;
-  font-weight: 500;
-  font-size: 70%;
-  margin-top: 0.3em;
-  /* height: 2.5em; */
-  line-height: 3em;
-  display: flex;
-  justify-content: space-around;
-  flex: 1;
+.data-list li {
+	letter-spacing: 0;
+	/* border-radius: 5px; */
+	font-size: 14px;
+	height: 51px;
+	box-sizing: border-box;
+	padding: 10px 5px;
+	border: 1px solid #ccc;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 5px;
 }
-.data-list li > ul > li:nth-of-type(3) {
-  border: 1px solid #387ef5;
-  border-radius: 3px;
-  padding: 0 0.5em;
-  /* background-color: rgb(221, 101, 21); */
-  line-height: 2em;
-  height: 2em;
-  align-self: center;
-  /* width: 18%; */
+.data-list li > span {
+
 }
-.data-list li > ul > li:nth-of-type(2) {
-  /* background-color: red; */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 28%;
+.data-list li >span:nth-of-type(2) {
+	padding: 1px 10px;
+	font-size: 12px;
+	border: 1px solid #26a2ff;
+	text-align: center;
+	flex: none;
 }
-.data-list li > ul > li:nth-of-type(1) {
-  /* background-color: red; */
-  /* overflow: hidden;
-    text-overflow:ellipsis;
-    white-space: nowrap; */
-  width: 46%;
+.data-list li > span:nth-of-type(1) {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .mint-search-list {
   overflow: auto;
@@ -374,10 +390,15 @@ ul {
   z-index: 2;
 }
 .top-pieces {
+	overflow: hidden;
 	margin-top: 40px;
 }
 .mintui-search:before{
 	line-height: 31px;
 }
-
+.data-list-warp {
+	margin-top: 140px;
+	margin-bottom: 50px;
+	overflow: hidden;
+}
 </style>

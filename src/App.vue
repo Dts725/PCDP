@@ -47,6 +47,9 @@ export default {
   },
   created () {
 	 this.isAndroid = coo.whtasPhone();
+	 if (coo.getCache("accessToken")) {
+	this.$router.push("/pieces?0")
+}
 	  
   },
   computed: {

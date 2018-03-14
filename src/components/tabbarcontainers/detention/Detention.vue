@@ -15,11 +15,9 @@
                   <li><span class="iconfont" v-cloak>&#xe610; :&nbsp; {{item.recipients}}   </span></li>
                   <li><span class="iconfont" v-cloak>&#xe632; : <a :href="'tel:' +item.recipientsPhone">{{item.recipientsPhone}}</a> </span></li>
                   <li><span class="iconfont" v-cloak >&#xe606; : &nbsp;到件操作  &nbsp; {{item.arriveTime | formatDate}}  </span></li>
-                  <!-- <li><span class="iconfont" v-if = "item.status === '10' || item.status === '9' || item.status === '11' || item.stautus === '7'" v-cloak >&#xe606; : &nbsp;滞留操作  &nbsp; {{item.retentionTime | formatDate}}  </span></li> -->
-                  <li><span class="iconfont" v-if = "item.status !== '3'" v-cloak >&#xe606; : &nbsp;滞留操作  &nbsp; {{item.retentionTime | formatDate}}  </span></li>
-                  <li><span class="iconfont" v-if = "item.status === '10' || item.stautus === '7' || isShow" v-cloak >&#xe606; : &nbsp;滞留签收  &nbsp; {{getDate(item.retentionSignTime) | formatDate}}  </span></li>
-                  <!-- <li><span class="iconfont" v-if = "item.status === '11'" v-cloak >&#xe606; : &nbsp;滞留操作 &nbsp; {{item.retentionTime | formatDate}}  </span></li> -->
-                  <li><span class="iconfont" v-if = "item.status === '11' || isHidden" v-cloak >&#xe606; : &nbsp;退件操作 &nbsp; {{getDate(item.fetchBackTime) | formatDate}}  </span></li>
+                  <li><span class="iconfont" v-cloak >&#xe606; : &nbsp;滞留操作  &nbsp; {{item.retentionTime | formatDate}}  </span></li>
+                  <li><span class="iconfont" v-if ="item.retentionSignTime || item.status === '7'" v-cloak >&#xe606; : &nbsp;滞留签收  &nbsp; {{getDate(item.retentionSignTime) | formatDate}}  </span></li>
+                  <li><span class="iconfont" v-if ="item.fetchBackTime || item.status === '11'" v-cloak >&#xe606; : &nbsp;退件操作 &nbsp; {{getDate(item.fetchBackTime) | formatDate}}  </span></li>
                   <li><span  class="iconfont" v-cloak>&#xe620; : &nbsp;{{item.receiveAddress}}  </span></li>
                   <li v-show="item.status == 9" class = "sign-detention"  @click="getSignInfo(index,item.id,item.wayBillNo)">  
                        <mt-button @click.native="openConfirm('是否进行退件操作?','1001')" size="large">
@@ -56,8 +54,6 @@ export default {
 name : "detention",
   data() {
     return {
-	  isHidden : 0,//点击滞留页面 签收退件的时候 默认不显示	
-	  isShow : 0, //点击滞留页面 签收退件的时候 默认不显示		
       $index			: 0, //获取当前项的index
       $id				: "",
       $wayBillNo		: 0, //获取当前项的id
@@ -163,14 +159,10 @@ mounted () {
             if (res.status == 200 && res.data.success == true) {
               if (statusCode === "910") {
                 this.proCopyright[this.$index].status = "7";
-				this.isHidden =0;
-				this.isShow =1;
 				this.openToast("已签收");
 				
               } else {
                 this.proCopyright[this.$index].status = "11";
-				this.isShow = 0;
-				this.isHidden = 1;
 				this.openToast("已退件");
 			  }
             }

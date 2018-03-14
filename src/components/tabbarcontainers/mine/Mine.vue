@@ -53,6 +53,15 @@ export default {
         quick : function () {
 			MessageBox.confirm('确定执行此操作?').then(action => {
 				window.localStorage.removeItem("accessToken")
+		 this.$store.dispatch("dataListToPiecesActions", ""); //页面展示数据
+		this.$store.dispatch("dataListSignActions", "");
+		this.$store.dispatch("flagSignCommitActions", 1);
+		this.$store.dispatch("dataDetentionListActions", "");
+        this.$store.dispatch("flagSignCommitActions", 0);
+        this.$store.dispatch(
+          "dataPiecesValueListActions",
+          ""
+        ); //运单
             	this.$router.push('/login')
 			});
         },

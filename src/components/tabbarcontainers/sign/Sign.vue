@@ -14,7 +14,7 @@
                   <li><span class="iconfont" v-cloak>&#xe632; : <a :href="'tel:' +item.recipientsPhone">{{item.recipientsPhone}}</a> </span></li>
                    <!-- <li><span class="iconfont"> &#xe632;</span><span v-cloak> : &nbsp;{{item.recipientsPhone}}</span></li> -->
                   <li><span class="iconfont" v-cloak>&#xe61c; : &nbsp;到件操作  &nbsp; {{item.arriveTime | formatDate}}   </span></li>
-                  <li v-if="item.status === '7'"><span class="iconfont" v-cloak >&#xe606; : &nbsp;签收操作  &nbsp; {{getDate(item.signforTime) | formatDate}}  </span></li>
+                  <li v-if="item.signforTime || item.status === '7'"><span class="iconfont" v-cloak >&#xe606; : &nbsp;签收操作  &nbsp; {{getDate(item.signforTime) | formatDate}}  </span></li>
                   <li><span  class="iconfont" v-cloak>&#xe620; : &nbsp;{{item.receiveAddress}}  </span></li>
                   <li v-if="item.status == 3"  class = "sign-detention">  
                        <mt-button   @click.native="openConfirm('是否进行签收操作?','700',item.id,item.wayBillNo,index)" size="large">

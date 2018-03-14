@@ -24,7 +24,7 @@
             <img  @click="refreshImg" v-bind:src="VerificationImg"     class="loginSecurityCode"  alt="验证码获取失败">
         </div>
    
-      <mt-button type="primary"  @click="loading" size="large" style="text-align : center">登录</mt-button>
+      <mt-button type="primary"  @click="loading" size="large"  style="text-align : center">登录</mt-button>
     
     </div>
     <router-link style= "  font-size: 80%;
@@ -53,7 +53,7 @@ export default {
       sessionId: "",
       userName: "",
       userPassword: "",
-      Verification: "",
+	  Verification: "",
 
       openToast: () => {
         Toast("请检查输入");
@@ -74,6 +74,8 @@ export default {
       }
 	};
   },
+
+
   //页面元素显示前执行内容
   mounted () {
     this.refreshImg();
@@ -93,7 +95,7 @@ export default {
 	},
     //登陆
     loading() {
-      //检查输入是否为空
+	  //检查输入是否为空
       if (
         this.Verification === "" ||
         this.userName === "" ||
@@ -101,7 +103,7 @@ export default {
       ) {
         this.openToast();
         return;
-      }
+	  }
       this.info = {
         userReq: {
           mobileLoginName: this.userName,
@@ -119,6 +121,7 @@ export default {
 			
           if (res.data.success == true && res.status) {
 			//    console.log("就来执行了");
+	
 			this.$store.commit("keepAliveCommit", []);
             coo.setCache("accessToken", res.data.accessToken);
             coo.setCache("cooperateCode", res.data.cooperateCode);
@@ -127,21 +130,24 @@ export default {
             coo.setCache("userPassword", this.userPassword);
 			coo.setCache("cooperateName", res.data.cooperateName);
 			if (res.data.roleAuth === '2') {
+				
 				this.$router.push("/quryExpress")
+				
 			} else {
-
+							
 				this.$router.push("/pieces?0");
 			}
           } else {
-            this.refreshImg();
-            coo.setCache("message", res.data.message);
-            this.openToastWithIcon();
+            	this.refreshImg();
+            	coo.setCache("message", res.data.message);
+            	this.openToastWithIcon();
           }
         })
         .catch(err => {
-          this.openToastWithIcon();
-          console.log(err);
-        });
+          	this.openToastWithIcon();
+            console.log(err);
+		});
+		
     },
     //图片刷新
     refreshImg() {

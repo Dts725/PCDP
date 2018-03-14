@@ -205,7 +205,7 @@ z-index: 9999;
   letter-spacing: 1px;
 }
 #query-data-item > li:nth-of-type(1) > span {
-  font-weight: 700;
+
 }
 #query-data-item > li:nth-of-type(2) {
   /* float: left; */
@@ -223,7 +223,7 @@ z-index: 9999;
   margin-top: 25px;
 }
 #query-data-item > li:nth-of-type(3) a {
-  font-size: 70%;
+  font-size: 14px;
 }
 #title-count {
   z-index: 555;

@@ -9,6 +9,7 @@ Vue.use(VueRouter)
 // import Detention from "../components/tabbarcontainers/detention/Detention.vue"
 // import Mine from "../components/tabbarcontainers/mine/Mine.vue"
 import Login from "../components/Login.vue"
+import Opacity from '../components/tabbarcontainers/topieces/opacity.vue'
 // import Reset from "../components/comment/PasswordReset.vue"
 // import Count from "../components/tabbarcontainers/mine/Count.vue"
 // import ResetNext from "../components/comment/FindPasswordNext.vue"
@@ -17,19 +18,18 @@ import Login from "../components/Login.vue"
 // import QuryExpress from '../components/comment/QueryExpress.vue'
 
 
-
 export default new VueRouter({
 
     routes: [
             {
             path: "/",
-			// component: resolve => require(["../components/Login.vue"], resolve)
-			component : Login
+			component: resolve => require(["../components/Login.vue"], resolve)
+			// component : Login
         },
         {
             path: "/login",
-			// component: resolve => require(["../components/Login.vue"], resolve)
-			component : Login
+			component: resolve => require(["../components/Login.vue"], resolve)
+			// component : Login
 
         },
        
@@ -50,7 +50,11 @@ export default new VueRouter({
                 requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
             },
 			component: resolve => require(["../components/tabbarcontainers/topieces/ToPieces.vue"], resolve)         
-        },
+		},
+		{
+			path: "/Opacity",
+			component: Opacity
+		},
         {
             path: "/sign",
             meta: {
