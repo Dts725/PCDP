@@ -357,9 +357,6 @@ ul {
 	align-items: center;
 	margin-bottom: 5px;
 }
-.data-list li > span {
-
-}
 .data-list li >span:nth-of-type(2) {
 	padding: 1px 10px;
 	font-size: 12px;
