@@ -75,8 +75,6 @@ export default {
     };
   },
 mounted () {
-	console.log("9898989");
-	
 	this.isKeepAlive();
     this.mountedSign();
     this.wrapperHeight =
