@@ -10,9 +10,9 @@
           <img  v-else   src='../../../img/imgWatie@2x.png' alt="">
            <ul>
                           
-		<input type="checkbox" :id="item.id" :value="index" v-model="checkedNames">
-  <label :for="item.id">Jack</label>
-  <span>Checked names: {{ checkedNames }}</span>
+		<input type="checkbox" :id="item.id" :value="index" v-model="checkedNames" v-checkbox>
+  		<label :for="item.id">Jack</label>
+  		<span>Checked names: {{ checkedNames }}</span>
             </ul>
           </li>
 			<li v-show="totalpage === pageNo" @click="topRefresh"  v-cloak class="refresh-bottom">到底啦 点击更新数据 !</li>
@@ -22,7 +22,7 @@
 
   </mt-loadmore>
   	<div class="checkbox-botton">
-		<span class="iconfont" v-if="checkedNames.length !== 5" queryAll(checkedNames.length)> &#xe660;  全选</span>
+		<span class="iconfont" v-if="checkedNames.length !== 5"> &#xe660;  全选</span>
 		<span class="iconfont" v-if="checkedNames.length === 5"> &#xe626;  全选</span>
 		<span>到件</span>
 	</div>
@@ -45,6 +45,8 @@ export default {
  name : "sign",
   data() {
     return {
+	  vflag1 : true,
+	  vflag2 : false,
 	  checkedNames : [],
 	  refreshFlag    : 0, //首次刷新 默认为0  不是刷新
       flagSign: 1,
@@ -64,7 +66,6 @@ export default {
     };
   },
 mounted () {
-	console.log("9898989");
 	
     this.mountedSign();
     this.wrapperHeight =
@@ -91,6 +92,8 @@ mounted () {
 
 	  //是否全选
 	  queryAll :  () => {
+		
+		
 
 	  },
 	// 获取当前时间 用来填签收时间

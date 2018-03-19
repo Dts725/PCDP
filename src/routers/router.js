@@ -9,7 +9,6 @@ Vue.use(VueRouter)
 // import Detention from "../components/tabbarcontainers/detention/Detention.vue"
 // import Mine from "../components/tabbarcontainers/mine/Mine.vue"
 import Login from "../components/Login.vue"
-import Opacity from '../components/tabbarcontainers/topieces/opacity.vue'
 // import Reset from "../components/comment/PasswordReset.vue"
 // import Count from "../components/tabbarcontainers/mine/Count.vue"
 // import ResetNext from "../components/comment/FindPasswordNext.vue"
@@ -50,10 +49,6 @@ export default new VueRouter({
                 requireAuth: true, // 添加该字段，表示进入这个路由是需要登录的
             },
 			component: resolve => require(["../components/tabbarcontainers/topieces/ToPieces.vue"], resolve)         
-		},
-		{
-			path: "/Opacity",
-			component: Opacity
 		},
         {
             path: "/sign",

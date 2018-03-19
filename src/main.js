@@ -1,5 +1,6 @@
 import 'babel-polyfill'
 import Vue from 'vue'
+import   './directives/checkbox.js'
 //引入根组件
 //解决ios的300ms延迟
 import fastclick from 'fastclick'  
