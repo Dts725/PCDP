@@ -3,9 +3,9 @@
 export default {
     //判断是否显示app 首页的组件
     //var LoginUrl = 'http://10.224.66.135:8081/pcp-web/'; //涛爷本地环境IP地址
-	LoginUrl : 'http://10.230.34.166:8080/pcp-web/',//测试环境IP地址
+	// LoginUrl : 'http://10.230.34.166:8080/pcp-web/',//测试环境IP地址
 	// LoginUrl: 'http://10.224.66.25:8081/pcp-web/',//本地测试环境IP地址
-    //var LoginUrl ='https://pcp.deppon.com/pcp-web/';//线上地址；
+	LoginUrl  : 'https://pcp.deppon.com/pcp-web/',//线上地址；
     depponVersion : '0.0.1.0' ,//版本号；
 	sysCode  : "APP",
 	//http:10.224.66.14:8081/pcp-web/pcpmobile/insetInputClue.action
