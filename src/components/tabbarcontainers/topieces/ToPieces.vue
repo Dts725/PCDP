@@ -1,197 +1,202 @@
 <template>
- 
-  <div class="top-pieces">
+<div  class="fall-scoll" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
 
-	<div class="warp-topieces">
-   	 	<div>
-        <mt-search v-model.trim="value" cancel-text="取消" placeholder="请输入运单号">
-        </mt-search>
-          <div id="scan-topieces" @click="scanTopeieces"></div>
-    	</div >
-    	<div class="query">
-        <mt-button  class="query-button"  @click="openToast()" :disabled="isDisabled" size="large">查询运单</mt-button>
-    	</div>
-</div>
-    <div class="data-list-warp">
-        <ul class="data-list">
-             <li v-for ="(item,index) in dataList" :key="item.topiexesId">
-                    <span>运单号 : {{item.wayBillNo}} &nbsp;&nbsp;&nbsp;签收人 : {{item.recipients}}</span>
-                    <span @click="toPieces(item.id,item.wayBillNo,index)">到件</span> 	
-            </li> 
-        </ul>
-    </div>
-    
+
+   <mt-loadmore :top-method="loadTop"  :auto-fill = "false" ref="loadmore"  infinite-scroll-distance = "100" v-infinite-scroll="loadMoreMore" infinite-scroll-disabled="loading" infinite-scroll-immediate-check = "true" >
+    <ul class="wrap">
+      <li   class = "info-sign"  v-for="(item,index) in 5" :key="item.id" >
+          <!-- 这样添加水印图片 不然webpack 打包会报错找不到图片路径 -->
+          <img  v-if="item.status === '7'"    src='../../../img/imgQian@2x.png' alt="">
+          <img  v-else   src='../../../img/imgWatie@2x.png' alt="">
+           <ul>
+                          
+		<input type="checkbox" :id="item.id" :value="index" v-model="checkedNames">
+  <label :for="item.id">Jack</label>
+  <span>Checked names: {{ checkedNames }}</span>
+            </ul>
+          </li>
+			<li v-show="totalpage === pageNo" @click="topRefresh"  v-cloak class="refresh-bottom">到底啦 点击更新数据 !</li>
+
+
+    </ul>
+
+  </mt-loadmore>
+  	<div class="checkbox-botton">
+		<span class="iconfont" v-if="checkedNames.length !== 5" queryAll(checkedNames.length)> &#xe660;  全选</span>
+		<span class="iconfont" v-if="checkedNames.length === 5"> &#xe626;  全选</span>
+		<span>到件</span>
+	</div>
   </div>
 </template>
 
 <script>
-import { Toast } from "mint-ui";
-import coo from "../../../config.js";
-import { MessageBox } from "mint-ui";
+import { Loadmore } from "mint-ui";
+import { wrapper } from "mint-ui";
+import { formatDate } from "../../../date.js";
 import axios from "axios";
-import { Search } from "mint-ui";
-// import  '../../../store.js';
+import coo from "../../../config.js";
+import { MessageBox } from "mint-ui"; //confirm
+import { Indicator } from 'mint-ui';
+import { Toast } from "mint-ui";
+
+
+
 export default {
+ name : "sign",
   data() {
     return {
-		isDisabled : false,// 默认是可以点击的
-      flagTopieces: 1,
-      value: "",
-      dataList: [],
-      dataPiecesValueList: [],
+	  checkedNames : [],
+	  refreshFlag    : 0, //首次刷新 默认为0  不是刷新
+      flagSign: 1,
+      loading: false, //默认false 滑动加载
+      wrapperHeight: 0, //页面scroll 数据
+      start: 0, //数据加载开始的位置
+      limit: 20, // 每页允许的加载数据条数
       accessToken: coo.getCache("accessToken"),
       cooperateCode: coo.getCache("cooperateCode"),
       mobileUserName: coo.getCache("mobileUserName"),
-      roleAuth: coo.getCache("roleAuth")
+      roleAuth: coo.getCache("roleAuth"),
+      pageNo: 1, //加载的页数  判断刷新次数 pangeNo ++
+      proCopyright: [], //用来存储后台接受的数据
+
+      scrollMode: "auto", //移动端弹性滚动效果，touch为弹性滚动，auto是非弹性滚动
+      totalpage: 0 //计算出来应有的 刷新次数
     };
   },
-  mounted  () {
-    this.createdToPieces();
+mounted () {
+	console.log("9898989");
+	
+    this.mountedSign();
+    this.wrapperHeight =
+    document.documentElement.clientHeight -
+	this.$refs.wrapper.getBoundingClientRect().top; //组件更新动态计算页面scroll 数据  	
+},
+//   activated () {
+// 	this.isKeepAlive();
+//     this.mountedSign();
+//     this.wrapperHeight =
+//     document.documentElement.clientHeight -
+// 	this.$refs.wrapper.getBoundingClientRect().top; //组件更新动态计算页面scroll 数据  	
+//   },
+  beforeDestroy  () {
+    this.beforeDestroySign();
   },
-  beforeDestroy () {
-    this.beforeDestroyTopieces();
+  filters: {
+    formatDate(time) {
+      let date = new Date(time);
+      return formatDate(date, "yyyy-MM-dd hh:mm");
+    }
   },
-
   methods: {
-	  //调用原生扫描valueTmp
-    scanTopeieces: function() {
-      let that = this;
-      window.NativeConn.NativeScanBar(function(datas) {
-		 
-        scanWaybillNumberFn(datas);
-      });
-      let scanWaybillNumberFn = function(datas) {
-		  console.log(datas)
-        //  console.log(datas);
-        let valueTmp = that.dataPiecesValueList.indexOf(datas);
-        //禁止重复查询订单-----------------------------------------------------------------------------------------------------
-        if (valueTmp != -1) {
-          Toast({
-            message: "请勿重复输入该订单!",
-            position: "middle",
-            duration: 1000
-          });
-          that.value = null;
-          return;
-        }
-        let data = {
-          searchWayBillNo: parseInt(datas),
-          accessToken: that.accessToken,
-          cooperateCode: that.cooperateCode,
-          mobileUserName: that.mobileUserName,
-          roleAuth: that.roleAuth
-        };
-        data = JSON.stringify(data);
-        coo
-          .sign(data, coo.LoginUrl + "pcpmobile/searchWayBill.action")
-          .then(res => {
-            if (res.status == 200) {
-              if (res.data.success == true) {
-				let tmp = res.data.wayBillInfo;
-				console.log(tmp);
-				
-                that.dataList.push(tmp);
-				//缓存去重的数组
-				console.log(that.dataList);
-				
-				that.dataPiecesValueList.unshift(res.data.searchWayBillNo);
-				console.log(that.dataPiecesValueList);
-				
-                that.value = null;
-              } else {
-                Toast({
-                  message: res.data.message,
-                  position: "middle",
-                  duration: 1000
-                });
-                that.value = null;
-              }
-            }
-          })
-          .catch(err => {
-            Toast({
-              message: "查询运单信息失败请重试 !",
-              position: "middle",
-              duration: 1200
-            });
-            that.value = null;
-            console.log(err);
-          });
-	  };
-	  //跳转空白页
-	//   this.$router.push('/Opacity')
-    },
 
-    toPieces(itemId, wayBillNo, $index) {
-      MessageBox.confirm("确定执行到件操作?").then(action => {
-        //到件请求函数
+	  //是否全选
+	  queryAll :  () => {
+
+	  },
+	// 获取当前时间 用来填签收时间
+	getDate: (times) => {
+		times === null ? times = new Date().valueOf() : times;
+		return times
+	},
+	topRefresh : function () {
+
+	  this.proCopyright =[];
+	//底部刷新返回到底部刷新事件
+      this.pageNo =1;
+	  this.totalpage =0;
+      this.start = 0;
+	  this.upLoadMore();	
+	},
+    openToast(msg) {
+      Toast({
+        message: msg,
+        duration: 900,
+        className: "open-tosat"
+      });
+    },
+    openConfirm(msg, statusCode, $id, $wayBillNo, $index) {
+      //提示信息
+      MessageBox.confirm(msg).then(action => {
         let data = {
           accessToken: this.accessToken,
           cooperateCode: this.cooperateCode,
           mobileUserName: this.mobileUserName,
-          roleAuth: this.roleAuth,
           operationRequest: {
-            operationId: itemId,
-            operationStatus: "300",
-            operationWayBillNo: wayBillNo
+            operationId: $id,
+            operationStatus: statusCode,
+            operationWayBillNo: $wayBillNo
           }
         };
         data = JSON.stringify(data);
+        let signUrl = "";
+        if (statusCode === "700") {
+          signUrl = "pcpmobile/signforWayBill.action"; //签收接口
+        } else {
+          signUrl = "pcpmobile/retentionWayBill.action"; //滞留接口
+        }
+        //调用签收接口
         coo
-          .sign(data, coo.LoginUrl + "pcpmobile/arriveWayBill.action")
+          .sign(data, coo.LoginUrl + signUrl)
           .then(res => {
+            // console.log(res);
             if (res.status == 200 && res.data.success == true) {
-              this.dataList.splice($index, 1);
-              //删除对应的缓存数组元素
-              this.dataPiecesValueList.splice($index, 1);
-              this.flagTopieces = 0;
-			  this.$store.commit("signNumberCommit", this.$store.state.tips.signNumber+1);
-              Toast({
-                message: "操作成功",
-                iconClass: "icon icon-success",
-                position: "middle",
-                duration: 500
-              });
+              if (statusCode === "700") {
+                this.proCopyright[$index].status = "7";
+                this.openToast("已签收");
+              } else {
+                this.proCopyright[$index].status = "7";
+                this.openToast("已滞留");
+                this.proCopyright.splice($index, 1);
+              }
+              this.flagSign = 0;
+              //-------------------------------状态管理天至此处-------------------------------------
+			this.signStore();
+			
             }
           })
           .catch(err => {
-            Toast({
-              message: "到件操作失败,请重试 !",
-              position: "middle",
-              duration: 1200
-            });
-            this.value = null;
+            // console.log("你干嘛进来");
+            if (statusCode === "700") {
+              this.openToast("签收失败 请重试!");
+            } else {
+              this.openToast("滞留失败 请重试!");
+            }
             console.log(err);
           });
-	  });
-	//   this.$router.push('/Opacity')
-	  
+      });
+	},
+	//滚动加载
+    loadMoreMore: function() {
+    //   console.log("出发了scroll");
+      // this.loading =true;
+		this.refreshFlag = 0;
+        //   console.log("more方法查询的")
+		if (this.totalpage > this.pageNo) {
+			 this.pageNo = this.pageNo + 1;
+        	 this.start = this.start + 20;
+        	 this.upLoadMore();
+		}
     },
-    openToast() {
-      if (this.value == "") {
-        Toast({
-          message: "请输入运单号查询!",
-          position: "middle",
-          duration: 1000
-        });
-        return;
-      }
-      let valueTmp = this.dataPiecesValueList.indexOf(this.value);
-      //禁止重复查询订单
-      if (valueTmp != -1) {
-        Toast({
-          message: "请勿重复输入该订单!",
-          position: "middle",
-          duration: 1000
-        });
-        this.value = null;
-        return;
-      }
+    loadTop: function() {
+	  this.refreshFlag = 1;
+      this.pageNo = 1;
+      this.start = 0;
+      this.upLoadMore();
+      setTimeout(() => {
+        this.$refs.loadmore.onTopLoaded();
+      }, 300);
+    },
+    upLoadMore: function() {
 
-      //发送查询请求
-       this.isDisabled = true;
+	  //封装刷新加载函数
+	    Indicator.open({
+  			text: '加载中...',
+ 		 	spinnerType: 'fading-circle'
+		});
+			
       let data = {
-        searchWayBillNo: parseInt(this.value),
+        limit: this.limit,
+        start: this.start,
         accessToken: this.accessToken,
         cooperateCode: this.cooperateCode,
         mobileUserName: this.mobileUserName,
@@ -199,42 +204,27 @@ export default {
       };
       data = JSON.stringify(data);
       coo
-        .sign(data, coo.LoginUrl + "pcpmobile/searchWayBill.action")
+        .sign(data, coo.LoginUrl + "pcpmobile/querySignWayBillInfo.action")
         .then(res => {
-          if (res.status == 200) {
-            if (res.data.success == true) {
-				// console.log(res.data);
-              this.dataList.unshift(res.data.wayBillInfo);
-              //缓存去重的数组
-              this.dataPiecesValueList.unshift(res.data.searchWayBillNo);
-              this.value = null;
-				this.isDisabled = false;
-            } else {
-				this.value = null;
-              Toast({
-				  message: res.data.message,
-                position: "middle",
-                duration: 1000
-              });
-		     this.isDisabled = false;
-            }
+          if (res.status == "200" && res.data.success == true) {
+			  if (this.refreshFlag) {
+				  	this.proCopyright =res.data.wayBillInfoList;
+            		this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数	  
+			  } else {
+            		this.totalpage = Math.ceil(res.data.totalCount / this.limit); //计算出需要刷新的次数				  	
+            	 	this.proCopyright = this.proCopyright.concat(res.data.wayBillInfoList);
+			  }
+			this.signStore();
+			Indicator.close();
           }
         })
         .catch(err => {
-		this.isDisabled = false;
-			
-          Toast({
-            message: "查询运单信息失败请重试 !",
-            position: "middle",
-            duration: 1200
-          });
-          this.value = null;
           console.log(err);
-		});
-		
+        });
     },
-    //creatd 中的函数
-    createdToPieces() {
+
+    //状态管理
+    signStore() {
 		let that = this;
 		//待处理件数
 		let data = {
@@ -244,158 +234,79 @@ export default {
 		}
 		JSON.stringify(data);
 		coo.tipNumber(data,coo.LoginUrl+'pcpmobile/queryTotalCount.action',that)
-	
 		
-		//页面是否走缓存
-      if (this.$store.state.toPieces.dataListToPieces) {
-        this.dataList = this.$store.state.toPieces.dataListToPieces;
-      }
-      if (this.$store.state.toPieces.dataPiecesValueList) {
-        this.dataPiecesValueList = this.$store.state.toPieces.dataPiecesValueList;
-      }
-      this.$store.dispatch("flagTopiecesActions", 1);
-    },
-    beforeDestroyTopieces() {
+    
+	},
+
+	//状态管理
+    mountedSign() {
       try {
-        this.$store.dispatch("dataListToPiecesActions", this.dataList); //页面展示数据
-        this.$store.dispatch(
-          "dataPiecesValueListActions",
-          this.dataPiecesValueList
-        ); //运单信息
-        this.$store.dispatch("flagTopiecesActions", this.flagTopieces); //页面刷新
+        if (
+          this.$store.state.sign.dataListSign.length > 0 &&
+          this.$store.state.toPieces.flagTopieces
+        ) {	
+		  this.proCopyright = this.$store.state.sign.dataListSign; //使用缓存
+		  this.pageNo = this.totalpage;
+          this.signStore(); //提示数字
+        } else {
+		 this.refreshFlag = 1;
+          this.upLoadMore(); //初始换查询
+        }
       } catch (error) {
-        console.log(error);
+        console.error(error);
+	  }	
+      this.$store.dispatch("flagSignCommitActions", 1);
+	},
+	//状态管理
+    beforeDestroySign() {
+      // console.log(this.proCopyright);
+      try {
+        this.$store.dispatch("dataListSignActions", this.proCopyright);
+        this.$store.dispatch("flagSignCommitActions", this.flagSign);
+        this.$store.dispatch("flagTopiecesActions", 1);
+      } catch (error) {
+        console.error(error);
       }
     }
   }
 };
 </script>
-
-<style>
-input[type="search"] {
-  margin-bottom: 0;
-  font-size: 16px;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  height: 34px;
-  text-align: center;
-  border: 0;
-  border-radius: 6px;
-  background-color: rgba(130, 201, 0, 0);
+<style scoped >
+.checkbox-botton {
+	position: fixed;
+	bottom: 50px;
+	width: 100%;
+	padding: 0 15px;
+	height: 40px;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: space-between;
+	align-items:  center;
+	background-color: #efefef;
+	font-size: 14px;
 }
-.mint-search {
-  height: 100%;
-  height: 100%;
-  overflow: hidden;
+.checkbox-botton  span:nth-of-type(1){
+	height: 100%;
+	line-height: 40px;
 }
-.query {
-  margin: 0 auto;
-  margin-top: 15px;
-  width: 80%;
-}
-.mint-searchbar-inner {
-  height: 36px;
-  /* background-color: red; */
-}
-
-.query-button.mint-button--default {
-  font-weight: 700;
-  margin: 0 auto;
-  margin-top: 1em;
-  background-color: #d9d9d912;
-  width: 80%;
-  font-size: 95%;
-  height: 2.2em;
-  border-radius: 3px;
-  text-align: center;
-  color: #8c7d76;
-  box-shadow: 0px 0px 2px 1px #898d9242;
-}
-.mint-button::after {
-  background-color: #f6f0f0;
-  content: " ";
-  opacity: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  position: absolute;
-}
-button:enabled:active {
-  color: #4a4747;
-  background-color: #bfbfbf21;
-}
-ul {
-  list-style: none;
-}
-.warp-topieces {
-	 position: fixed;
-	top: 40px;
-	left: 0;
-	width: 100%; 
-	z-index: 555;
-	/* margin-top: 140px; */
-	height: 140px;
+.checkbox-botton  span:nth-of-type(2){
+	padding: 2px 10px;
+	border: 1px solid red;
+	font-size: 14px;
+	border-radius: 5px;
 	background-color: #fff;
 
 }
-.data-list {
-	/* overflow: auto; */
--webkit-overflow-scrolling: touch;
-  margin-top: 10px;
+.checkbox-botton  span:nth-of-type(3){
+
 }
-.data-list li {
-	letter-spacing: 0;
-	/* border-radius: 5px; */
-	font-size: 14px;
-	height: 51px;
-	box-sizing: border-box;
-	padding: 10px 5px;
-	border: 1px solid #ccc;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 5px;
+.checkbox-botton-action {
+	background-color: #387ef5; 
 }
-.data-list li >span:nth-of-type(2) {
-	padding: 1px 10px;
-	font-size: 12px;
-	border: 1px solid #26a2ff;
-	text-align: center;
-	flex: none;
-}
-.data-list li > span:nth-of-type(1) {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-.mint-search-list {
-  overflow: auto;
-  padding-top: 0;
-}
-.mint-msgbox {
-  width: 75%;
-  font-size: 90%;
-}
-#scan-topieces {
-  /* background: red; */
-  width: 36px;
-  height: 36px;
-  position: absolute;
-  margin: -44px 0px 0px 13px;
-  /* transform: translate(13px,-44px); */
-  z-index: 2;
-}
-.top-pieces {
-	overflow: hidden;
+.fall-scoll {
 	margin-top: 40px;
-}
-.mintui-search:before{
-	line-height: 31px;
-}
-.data-list-warp {
-	margin-top: 140px;
-	margin-bottom: 50px;
-	overflow: hidden;
+	margin-bottom: 90px;
+	overflow: auto;
 }
 </style>
+
