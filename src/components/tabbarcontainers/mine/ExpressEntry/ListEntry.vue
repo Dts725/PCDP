@@ -11,7 +11,7 @@
 				<li v-cloak><span>联系电话</span><input type="number" pattern=[/^[0-9]{10}$/] v-model="phoneNumber" placeholder="请输入联系电话" ></li>
 				<li v-cloak><span>货物信息</span> <input type="text" v-model="goodsInformation" placeholder="请输入货物信息" ></li>
 				<li v-cloak><span>发货地址</span> <input  readonly = "value" type="text" @click="isShow" v-model="selectStr" placeholder="省/市/区" ></li>
-				<li v-cloak><textarea cols="20"	rows="6" placeholder="请将输入字数限制在150字之内" v-model="detailsInfo" maxlength="150"> 
+				<li v-cloak><textarea cols="20"	rows="6" placeholder="请输入详细地址,最大字数为150字" v-model="detailsInfo" maxlength="150"> 
 			</textarea></li>
 			</ul>
 		</div>
