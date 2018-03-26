@@ -10,7 +10,7 @@
           <img  v-else   src='../../../img/imgWatie@2x.png' alt="">
            <ul>
                           
-		<input type="checkbox" :id="item.id" :value="index" v-model="checkedNames" v-checkbox>
+		<input type="checkbox" :id="item.id" :value="index" v-model="checkedNames" checked=true>
   		<label :for="item.id">Jack</label>
   		<span>Checked names: {{ checkedNames }}</span>
             </ul>
@@ -22,8 +22,8 @@
 
   </mt-loadmore>
   	<div class="checkbox-botton">
-		<span class="iconfont" v-if="checkedNames.length !== 5"> &#xe660;  全选</span>
-		<span class="iconfont" v-if="checkedNames.length === 5"> &#xe626;  全选</span>
+		<span class="iconfont" v-if="checkedNames.length !== 5" @click="queryAll"> &#xe660;  全选</span>
+		<span class="iconfont" v-if="checkedNames.length === 5" @click="queryAll"> &#xe626;  全选</span>
 		<span>到件</span>
 	</div>
   </div>
@@ -45,6 +45,7 @@ export default {
  name : "sign",
   data() {
     return {
+	checked  : true,
 	  vflag1 : true,
 	  vflag2 : false,
 	  checkedNames : [],
@@ -91,8 +92,7 @@ mounted () {
   methods: {
 
 	  //是否全选
-	  queryAll :  () => {
-		
+	  queryAll :  () => {	
 		
 
 	  },
